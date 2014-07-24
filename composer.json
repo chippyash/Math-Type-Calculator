@@ -1,0 +1,23 @@
+{
+    "name": "chippyash/math-type-calculator",
+    "description": "Calculators for the chippyash/strong-type numberic types",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Ashley Kitson",
+            "email": "ashley@zf4.biz"
+        }
+    ],
+    "require": {
+        "chippyash/strong-type": "~1.0.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7.37",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "chippyash\\Math\\Type\\": "src/"
+        }
+    }
+}
