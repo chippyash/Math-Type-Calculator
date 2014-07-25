@@ -5,6 +5,10 @@
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
 
+Build coverage only 96% due to inability of coverage engine to understand that
+closing brackets on a method are part of the method, even if they are never
+reached !
+
 ## What?
 
 Provides arithmetic calculation support for chippyash/strong-type numeric types.
@@ -100,7 +104,7 @@ NB. Make sure you rebase to HEAD before your pull request
 ## Where?
 
 The library is hosted at [Github](https://github.com/chippyash/Math-Type-Calculator). It is
-available at [Packagist.org](https://packagist.org/packages/chippyash/chippyash/math-type-calculator)
+available at [Packagist.org](https://packagist.org/packages/chippyash/math-type-calculator)
 
 ### Installation
 
