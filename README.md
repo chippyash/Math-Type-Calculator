@@ -43,9 +43,6 @@ library which builds on the chippyash/matrix library.
 The current library covers arithmetic operations using PHP native math support.
 Future versions will add support for the popular math extensions (gmp, bcmath etc).
 
-Support for complex number arithmetic is currently limited to using complex
-operands only.  Support for other types allows mixing of operand types.
-
 If you want more, either suggest it, or better still, fork it and provide a pull request.
 
 ## How
