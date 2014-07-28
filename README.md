@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
 
-Build coverage only 96% due to inability of coverage engine to understand that
+Build coverage only <100% due to inability of coverage engine to understand that
 closing brackets on a method are part of the method, even if they are never
 reached !
 
@@ -115,7 +115,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.0.0"
+    "chippyash/math-type-calculator": ">=1.0.1"
 </pre>
 
 to your composer.json "requires" section
@@ -142,3 +142,5 @@ To run the tests:
 V0...  pre releases
 
 V1.0.0 Original release
+
+V1.0.1 Add ability to mix complex and non complex types as operands

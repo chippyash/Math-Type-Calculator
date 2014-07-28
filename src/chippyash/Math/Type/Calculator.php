@@ -77,8 +77,6 @@ class Calculator
      *
      *
      * @return chippyash\Type\Number\NumericTypeInterface
-     *
-     * @throws \BadMethodCallException
      */
     public function add($a, $b)
     {
@@ -97,9 +95,10 @@ class Calculator
                 return $this->calcEngine->rationalAdd($a, $b);
             case 'complex':
                 return $this->calcEngine->complexAdd($a, $b);
-            case 'notcomplex':
-                $pairing = $this->getTypePairing($a, $b);
-                throw new \BadMethodCallException('Complex addition not available for operand parameter pattern: ' . $pairing);
+            case 'complex:numeric':
+                return $this->calcEngine->complexAdd($a, $b->toComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexAdd($a->toComplex(), $b);
         }
     }
 
@@ -127,9 +126,10 @@ class Calculator
                 return $this->calcEngine->rationalSub($a, $b);
             case 'complex':
                 return $this->calcEngine->complexSub($a, $b);
-            case 'notcomplex':
-                $pairing = $this->getTypePairing($a, $b);
-                throw new \BadMethodCallException('Complex subtraction not available for operand parameter pattern: ' . $pairing);
+            case 'complex:numeric':
+                return $this->calcEngine->complexSub($a, $b->toComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexSub($a->toComplex(), $b);
         }
     }
 
@@ -157,9 +157,10 @@ class Calculator
                 return $this->calcEngine->rationalMul($a, $b);
             case 'complex':
                 return $this->calcEngine->complexMul($a, $b);
-            case 'notcomplex':
-                $pairing = $this->getTypePairing($a, $b);
-                throw new \BadMethodCallException('Complex multiplication not available for operand parameter pattern: ' . $pairing);
+            case 'complex:numeric':
+                return $this->calcEngine->complexMul($a, $b->toComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexMul($a->toComplex(), $b);
         }
     }
 
@@ -179,9 +180,10 @@ class Calculator
                 return $this->calcEngine->rationalDiv($a, $b);
             case 'complex':
                 return $this->calcEngine->complexDiv($a, $b);
-            case 'notcomplex':
-                $pairing = $this->getTypePairing($a, $b);
-                throw new \BadMethodCallException('Complex division not available for operand parameter pattern: ' . $pairing);
+            case 'complex:numeric':
+                return $this->calcEngine->complexDiv($a, $b->toComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexDiv($a->toComplex(), $b);
             default:
                 return $this->calcEngine->floatDiv($a, $b);
         }
@@ -232,8 +234,11 @@ class Calculator
         if ($pairing == 'complex:complex') {
             return 'complex';
         }
-        if (strstr($pairing, 'complex') !== false) {
-            return 'notcomplex';
+        if (strpos($pairing, 'complex') === 0) {
+            return 'complex:numeric';
+        }
+        if (strpos($pairing, 'complex') !== false) {
+            return 'numeric:complex';
         }
         if (strstr($pairing, 'rational') !== false) {
             return 'rational';
