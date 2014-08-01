@@ -267,10 +267,10 @@ class CalculatorMulTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
-     * @dataProvider badComplexCombinations
+     * @dataProvider nonComplexNumbers
+     * @param numeric $nonComplex
      */
-    public function testMulComplexNumbersWithNonComplexNumberThrowsException($nonComplex)
+    public function testMulComplexNumbersWithNonComplexNumberReturnsComplexNumber($nonComplex)
     {
         $this->assertInstanceOf(
                 'chippyash\Type\Number\Complex\ComplexType',
@@ -278,8 +278,8 @@ class CalculatorMulTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
-     * @dataProvider badComplexCombinations
+     * @dataProvider nonComplexNumbers
+     * @param numeric $nonComplex
      */
     public function testMulNonComplexNumbersWithComplexNumberThrowsException($nonComplex)
     {
@@ -287,19 +287,19 @@ class CalculatorMulTest extends \PHPUnit_Framework_TestCase
                 'chippyash\Type\Number\Complex\ComplexType',
                 $this->object->mul($nonComplex, ComplexTypeFactory::create(1,5)));
     }
-
-    public function badComplexCombinations()
+    public function nonComplexNumbers()
     {
         return [
             [2],
             [-2.4],
-            [new IntType(2)],
+            [new FloatType(2)],
             [new FloatType(2.6)],
             [RationalTypeFactory::create(1,5)],
             [new WholeIntType(3)],
             [new NaturalIntType(6)],
         ];
     }
+
 
     public function testMultiplicationIsCommutative()
     {
