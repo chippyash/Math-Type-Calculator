@@ -59,7 +59,8 @@ $w = F::create('whole', 21);
 $n = F::create('natural', 13);
 $f = F::create('float', 2.26);
 $r = F::Create('rational','2/3');
-$items = [$iphp, $i, $w, $n, $fphp, $f, $r];
+$c = F::create('complex', '2+6i');
+$items = [$iphp, $i, $w, $n, $fphp, $f, $r, $c];
 
 echo "Library supported arithmetic operations and return types\n";
 echo "Non complex numbers\n";
@@ -92,13 +93,3 @@ echo "\nReciprocal\n\n";
 foreach ($items as $a) {
     display('reciprocal', $a);
 }
-
-
-echo "\nComplex Numbers\n\n";
-$c1 = F::create('complex','2+3i');
-$c2 = F::create('complex','5-2i');
-display('add', $c1, $c2);
-display('sub', $c1, $c2);
-display('mul', $c1, $c2);
-display('div', $c1, $c2);
-display('reciprocal', $c1);

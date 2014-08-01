@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
 
-Build coverage only 96% due to inability of coverage engine to understand that
+Build coverage only <100% due to inability of coverage engine to understand that
 closing brackets on a method are part of the method, even if they are never
 reached !
 
@@ -42,9 +42,6 @@ library which builds on the chippyash/matrix library.
 
 The current library covers arithmetic operations using PHP native math support.
 Future versions will add support for the popular math extensions (gmp, bcmath etc).
-
-Support for complex number arithmetic is currently limited to using complex
-operands only.  Support for other types allows mixing of operand types.
 
 If you want more, either suggest it, or better still, fork it and provide a pull request.
 
@@ -115,7 +112,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.0.0"
+    "chippyash/math-type-calculator": ">=1.0.1"
 </pre>
 
 to your composer.json "requires" section
@@ -142,3 +139,5 @@ To run the tests:
 V0...  pre releases
 
 V1.0.0 Original release
+
+V1.0.1 Add ability to mix complex and non complex types as operands

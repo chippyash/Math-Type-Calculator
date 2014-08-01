@@ -243,10 +243,10 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
-     * @dataProvider badComplexCombinations
+     * @dataProvider nonComplexNumbers
+     * @param numeric $nonComplex
      */
-    public function testDivComplexNumbersWithNonComplexNumberThrowsException($nonComplex)
+    public function testDivComplexNumbersWithNonComplexNumberReturnsComplexNumber($nonComplex)
     {
         $this->assertInstanceOf(
                 'chippyash\Type\Number\Complex\ComplexType',
@@ -254,8 +254,8 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
-     * @dataProvider badComplexCombinations
+     * @dataProvider nonComplexNumbers
+     * @param numeric $nonComplex
      */
     public function testDivNonComplexNumbersWithComplexNumberThrowsException($nonComplex)
     {
@@ -263,8 +263,7 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
                 'chippyash\Type\Number\Complex\ComplexType',
                 $this->object->div($nonComplex, ComplexTypeFactory::create(1,5)));
     }
-
-    public function badComplexCombinations()
+    public function nonComplexNumbers()
     {
         return [
             [2],
