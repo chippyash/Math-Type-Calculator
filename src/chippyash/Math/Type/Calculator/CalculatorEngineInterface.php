@@ -45,6 +45,15 @@ interface CalculatorEngineInterface
     public function intMul(NI $a, NI $b);
 
     /**
+     * Integer division
+     * 
+     * @param \chippyash\Type\Number\NumericTypeInterface $a
+     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @return \chippyash\Type\Number\Rational\RationalType
+     */
+    public function intDiv(NI $a, NI $b);
+    
+    /**
      * Float addition
      *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
