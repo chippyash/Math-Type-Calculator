@@ -10,6 +10,7 @@ namespace chippyash\Math\Type\Calculator;
 
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Type\Number\NumericTypeInterface as NI;
+use chippyash\Type\TypeFactory;
 use chippyash\Type\Number\IntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\WholeIntType;
@@ -25,7 +26,7 @@ use chippyash\Type\Number\Complex\ComplexTypeFactory;
 class Native implements CalculatorEngineInterface
 {
     /**
-     * Integer addition
+     * Integer type addition
      *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
@@ -33,11 +34,13 @@ class Native implements CalculatorEngineInterface
      */
     public function intAdd(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
+        
         return new IntType($a() + $b());
     }
 
     /**
-     * Integer subtraction
+     * Integer type subtraction
      *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
@@ -45,11 +48,13 @@ class Native implements CalculatorEngineInterface
      */
     public function intSub(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
+        
         return new IntType($a() - $b());
     }
 
     /**
-     * Integer multiplication
+     * Integer type multiplication
      *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
@@ -57,6 +62,8 @@ class Native implements CalculatorEngineInterface
      */
     public function intMul(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
+        
         return new IntType($a() * $b());
     }
     
@@ -83,6 +90,7 @@ class Native implements CalculatorEngineInterface
      */
     public function floatAdd(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkFloatTypes($a, $b);
         return new FloatType($a() + $b());
     }
 
@@ -95,6 +103,7 @@ class Native implements CalculatorEngineInterface
      */
     public function floatSub(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkFloatTypes($a, $b);
         return new FloatType($a() - $b());
     }
 
@@ -107,6 +116,7 @@ class Native implements CalculatorEngineInterface
      */
     public function floatMul(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkFloatTypes($a, $b);
         return new FloatType($a() * $b());
     }
 
@@ -119,6 +129,7 @@ class Native implements CalculatorEngineInterface
      */
     public function floatDiv(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkFloatTypes($a, $b);
         return new FloatType($a() / $b());
     }
 
@@ -141,6 +152,7 @@ class Native implements CalculatorEngineInterface
      */
     public function wholeAdd(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new WholeIntType($a() + $b());
     }
 
@@ -153,6 +165,7 @@ class Native implements CalculatorEngineInterface
      */
     public function wholeSub(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new WholeIntType($a() - $b());
     }
 
@@ -165,6 +178,7 @@ class Native implements CalculatorEngineInterface
      */
     public function wholeMul(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new WholeIntType($a() * $b());
     }
 
@@ -177,6 +191,7 @@ class Native implements CalculatorEngineInterface
      */
     public function naturalAdd(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new NaturalIntType($a() + $b());
     }
 
@@ -189,6 +204,7 @@ class Native implements CalculatorEngineInterface
      */
     public function naturalSub(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new NaturalIntType($a() - $b());
     }
 
@@ -201,6 +217,7 @@ class Native implements CalculatorEngineInterface
      */
     public function naturalMul(NI $a, NI $b)
     {
+        list($a, $b) = $this->checkIntTypes($a, $b);
         return new NaturalIntType($a() * $b());
     }
 
@@ -236,12 +253,7 @@ class Native implements CalculatorEngineInterface
      */
     public function rationalSub(NI $a, NI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = RationalTypeFactory::create($a);
-        }
-        if (!$b instanceof RationalType) {
-            $b = RationalTypeFactory::create($b);
-        }
+        list($a, $b) = $this->checkRationalTypes($a, $b);
         $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
@@ -259,12 +271,7 @@ class Native implements CalculatorEngineInterface
      */
     public function rationalMul(NI $a, NI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = RationalTypeFactory::create($a);
-        }
-        if (!$b instanceof RationalType) {
-            $b = RationalTypeFactory::create($b);
-        }
+        list($a, $b) = $this->checkRationalTypes($a, $b);
         $n = $this->intMul($a->numerator(), $b->numerator());
         $d = $this->intMul($a->denominator(), $b->denominator());
 
@@ -280,12 +287,7 @@ class Native implements CalculatorEngineInterface
      */
     public function rationalDiv(NI $a, NI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = RationalTypeFactory::create($a);
-        }
-        if (!$b instanceof RationalType) {
-            $b = RationalTypeFactory::create($b);
-        }
+        list($a, $b) = $this->checkRationalTypes($a, $b);
         $n = $this->intMul($a->numerator(), $b->denominator());
         $d = $this->intMul($a->denominator(), $b->numerator());
 
@@ -425,5 +427,68 @@ class Native implements CalculatorEngineInterface
     private function lcm($a, $b)
     {
         return \abs(($a * $b) / $this->gcd($a, $b));
+    }
+    
+    /**
+     * Check for rational type, converting if necessary
+     * 
+     * @param \chippyash\Type\Number\NumericTypeInterface $a
+     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @return array [RationalType, RationalType]
+     */
+    private function checkRationalTypes(NI $a, NI $b)
+    {
+        if (!$a instanceof RationalType) {
+            $a = RationalTypeFactory::create($a);
+        }
+        if (!$b instanceof RationalType) {
+            $b = RationalTypeFactory::create($b);
+        }
+        
+        return [$a, $b];
+    }
+    
+    /**
+     * Check for integer type, converting if necessary
+     * 
+     * @param \chippyash\Type\Number\NumericTypeInterface $a
+     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @return array [IntType, IntType]
+     */
+    private function checkIntTypes(NI $a, NI $b)
+    {
+        if (!$a instanceof IntType) {
+            $a = TypeFactory::createInt($a);
+        }
+        if (!$b instanceof IntType) {
+            $b = TypeFactory::createInt($b);
+        }
+        
+        return [$a, $b];
+    }
+    
+    /**
+     * Check for float type, converting if necessary
+     * 
+     * @param \chippyash\Type\Number\NumericTypeInterface $a
+     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @return array [FloatType, FloatType]
+     */
+    private function checkFloatTypes(NI $a, NI $b)
+    {
+        if (!$a instanceof FloatType) {
+            if ($a instanceof IntType) {
+                $a = $a();
+            }
+            $a = TypeFactory::createFloat($a);
+        }
+        if (!$b instanceof FloatType) {
+            if ($b instanceof IntType) {
+                $b = $b();
+            }
+            $b = TypeFactory::createFloat($b);
+        }
+        
+        return [$a, $b];
     }
 }
