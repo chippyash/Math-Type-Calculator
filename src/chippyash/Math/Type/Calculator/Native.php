@@ -18,12 +18,15 @@ use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexType;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Math\Type\Comparator\Traits\NativeConvertNumeric;
 
 /**
  * PHP Native calculation
  */
 class Native implements CalculatorEngineInterface
 {
+    use NativeConvertNumeric;
+
     /**
      * Integer addition
      *
@@ -362,21 +365,6 @@ class Native implements CalculatorEngineInterface
         $i = $a->i() / $div;
 
         return ComplexTypeFactory::create($r, $i);
-    }
-
-    /**
-     * Convert float or int into relevant strong type
-     *
-     * @param numeric $num
-     * @return \chippyash\Type\Number\FloatType|\chippyash\Type\Number\IntType
-     */
-    public function convertNumeric($num)
-    {
-        if (is_float($num)) {
-            return new FloatType($num);
-        }
-        //default
-        return new IntType($num);
     }
 
     /**

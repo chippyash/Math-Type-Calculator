@@ -11,6 +11,7 @@ namespace chippyash\Math\Type;
 use chippyash\Type\Number\NumericTypeInterface;
 use chippyash\Math\Type\Calculator\Native;
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
+use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
 
 /**
  * Generic calculator for strong type support
@@ -29,6 +30,8 @@ use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
  */
 class Calculator
 {
+    use ArbitrateTwoTypes;
+
     const ENGINE_NATIVE = 0;
 
     const NS = 'chippyash\Math\Type\Calculator\\';
@@ -220,51 +223,4 @@ class Calculator
         $type = (is_object($num) ? get_class($num) : gettype($num));
         throw new \BadMethodCallException('No solution for unknown type: ' . $type);
     }
-
-    /**
-     * Arbitrate the return type from the calculation
-     *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyashr\Type\Number\NumericTypeInterface $b
-     * @return string
-     */
-    protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)
-    {
-        $pairing = $this->getTypePairing($a, $b);
-        if ($pairing == 'complex:complex') {
-            return 'complex';
-        }
-        if (strpos($pairing, 'complex') === 0) {
-            return 'complex:numeric';
-        }
-        if (strpos($pairing, 'complex') !== false) {
-            return 'numeric:complex';
-        }
-        if (strstr($pairing, 'rational') !== false) {
-            return 'rational';
-        }
-        if (strstr($pairing, 'float') !== false) {
-            return 'float';
-        }
-        if (strstr($pairing, 'wholeint') !== false) {
-            return 'whole';
-        }
-        if (strstr($pairing, 'naturalint') !== false) {
-            return 'natural';
-        }
-        if ($pairing == 'int:int') {
-            return 'int';
-        }
-    }
-
-    private function getTypePairing(NumericTypeInterface $a, NumericTypeInterface $b)
-    {
-        $search = ['chippyash\Type\Number\Rational\\','chippyash\Type\Number\Complex\\','chippyash\Type\Number\\', 'Type'];
-        $replace = ['','','',''];
-        $tA = strtolower(str_replace($search, $replace, get_class($a)));
-        $tB =  strtolower(str_replace($search, $replace, get_class($b)));
-
-        return "{$tA}:{$tB}";
-    }
-
 }
