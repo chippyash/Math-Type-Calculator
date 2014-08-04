@@ -35,7 +35,7 @@ class Native implements CalculatorEngineInterface
     public function intAdd(NI $a, NI $b)
     {
         list($a, $b) = $this->checkIntTypes($a, $b);
-        
+
         return new IntType($a() + $b());
     }
 
@@ -49,7 +49,7 @@ class Native implements CalculatorEngineInterface
     public function intSub(NI $a, NI $b)
     {
         list($a, $b) = $this->checkIntTypes($a, $b);
-        
+
         return new IntType($a() - $b());
     }
 
@@ -63,13 +63,13 @@ class Native implements CalculatorEngineInterface
     public function intMul(NI $a, NI $b)
     {
         list($a, $b) = $this->checkIntTypes($a, $b);
-        
+
         return new IntType($a() * $b());
     }
-    
+
     /**
      * Integer division
-     * 
+     *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Rational\RationalType
@@ -225,17 +225,18 @@ class Native implements CalculatorEngineInterface
      * Rational number addition
      *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $nonR
+     * @param \chippyash\Type\Number\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Rational\RationalType
      */
     public function rationalAdd(NI $a, NI $b)
     {
         if (!$a instanceof RationalType) {
-            $a = RationalTypeFactory::create($a);
+            $a = $a->asRational();
         }
         if (!$b instanceof RationalType) {
-            $b = RationalTypeFactory::create($b);
+            $b = $b->asRational();
         }
+
         $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
@@ -258,7 +259,7 @@ class Native implements CalculatorEngineInterface
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
         $n = $this->intSub(new IntType($nn), new IntType($nd));
-        
+
         return RationalTypeFactory::create($n, $d->numerator());
     }
 
@@ -428,10 +429,10 @@ class Native implements CalculatorEngineInterface
     {
         return \abs(($a * $b) / $this->gcd($a, $b));
     }
-    
+
     /**
      * Check for rational type, converting if necessary
-     * 
+     *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
      * @return array [RationalType, RationalType]
@@ -439,18 +440,18 @@ class Native implements CalculatorEngineInterface
     private function checkRationalTypes(NI $a, NI $b)
     {
         if (!$a instanceof RationalType) {
-            $a = RationalTypeFactory::create($a);
+            $a = $a->asRational();
         }
         if (!$b instanceof RationalType) {
-            $b = RationalTypeFactory::create($b);
+            $b = $b->asRational();
         }
-        
+
         return [$a, $b];
     }
-    
+
     /**
      * Check for integer type, converting if necessary
-     * 
+     *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
      * @return array [IntType, IntType]
@@ -458,18 +459,18 @@ class Native implements CalculatorEngineInterface
     private function checkIntTypes(NI $a, NI $b)
     {
         if (!$a instanceof IntType) {
-            $a = TypeFactory::createInt($a);
+            $a1 = $a->asIntType();
         }
         if (!$b instanceof IntType) {
-            $b = TypeFactory::createInt($b);
+            $b1 = $b->asIntType();
         }
-        
-        return [$a, $b];
+
+        return [$a1, $b1];
     }
-    
+
     /**
      * Check for float type, converting if necessary
-     * 
+     *
      * @param \chippyash\Type\Number\NumericTypeInterface $a
      * @param \chippyash\Type\Number\NumericTypeInterface $b
      * @return array [FloatType, FloatType]
@@ -488,7 +489,7 @@ class Native implements CalculatorEngineInterface
             }
             $b = TypeFactory::createFloat($b);
         }
-        
+
         return [$a, $b];
     }
 }

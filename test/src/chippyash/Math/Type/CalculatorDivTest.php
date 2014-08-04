@@ -21,17 +21,17 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
         $this->object = new Calculator();
     }
 
-    public function testDivTwoIntsReturnsFloatType()
+    public function testDivTwoIntsReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(2, 3));
     }
 
-    public function testDivTwoIntTypesReturnsFloatType()
+    public function testDivTwoIntTypesReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new IntType(2), new IntType(3)));
     }
 
@@ -112,10 +112,10 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
                 $this->object->div(new FloatType(3.4), new IntType(2)));
     }
 
-    public function testDivTwoWholeFloatTypesReturnsFloatType()
+    public function testDivTwoWholeFloatTypesReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new WholeIntType(2), new WholeIntType(5)));
     }
 
@@ -139,20 +139,20 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
                 $this->object->div(5.5, new WholeIntType(2)));
     }
 
-    public function testDivTwoNaturalIntTypesReturnsFloatType()
+    public function testDivTwoNaturalIntTypesReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new NaturalIntType(2), new NaturalIntType(5)));
     }
 
-    public function testDivNaturalIntTypeAndFloatReturnsFloatType()
+    public function testDivNaturalIntTypeAndFloatReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new NaturalIntType(2), 5));
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(5, new NaturalIntType(2)));
     }
 
@@ -166,17 +166,17 @@ class CalculatorDivTest extends \PHPUnit_Framework_TestCase
                 $this->object->div(new FloatType(5), new NaturalIntType(2)));
     }
 
-    public function testDivNaturalIntTypeAndWholeIntReturnsFloatType()
+    public function testDivNaturalIntTypeAndWholeIntReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new NaturalIntType(2), new WholeIntType(5)));
     }
 
-    public function testDivWholeIntTypeAndNaturalIntTypeReturnsFloatType()
+    public function testDivWholeIntTypeAndNaturalIntTypeReturnsRationalType()
     {
         $this->assertInstanceOf(
-                'chippyash\Type\Number\FloatType',
+                'chippyash\Type\Number\Rational\RationalType',
                 $this->object->div(new WholeIntType(5), new NaturalIntType(2)));
     }
 
