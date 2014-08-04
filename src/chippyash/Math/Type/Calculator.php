@@ -85,6 +85,7 @@ class Calculator
     {
         $a = $this->convert($a);
         $b = $this->convert($b);
+
         switch ($this->arbitrate($a, $b)) {
             case 'int':
                 return $this->calcEngine->intAdd($a, $b);
@@ -99,9 +100,9 @@ class Calculator
             case 'complex':
                 return $this->calcEngine->complexAdd($a, $b);
             case 'complex:numeric':
-                return $this->calcEngine->complexAdd($a, $b->toComplex());
+                return $this->calcEngine->complexAdd($a, $b->asComplex());
             case 'numeric:complex':
-                return $this->calcEngine->complexAdd($a->toComplex(), $b);
+                return $this->calcEngine->complexAdd($a->asComplex(), $b);
         }
     }
 
@@ -130,9 +131,9 @@ class Calculator
             case 'complex':
                 return $this->calcEngine->complexSub($a, $b);
             case 'complex:numeric':
-                return $this->calcEngine->complexSub($a, $b->toComplex());
+                return $this->calcEngine->complexSub($a, $b->asComplex());
             case 'numeric:complex':
-                return $this->calcEngine->complexSub($a->toComplex(), $b);
+                return $this->calcEngine->complexSub($a->asComplex(), $b);
         }
     }
 
@@ -161,9 +162,9 @@ class Calculator
             case 'complex':
                 return $this->calcEngine->complexMul($a, $b);
             case 'complex:numeric':
-                return $this->calcEngine->complexMul($a, $b->toComplex());
+                return $this->calcEngine->complexMul($a, $b->asComplex());
             case 'numeric:complex':
-                return $this->calcEngine->complexMul($a->toComplex(), $b);
+                return $this->calcEngine->complexMul($a->asComplex(), $b);
         }
     }
 
@@ -179,14 +180,18 @@ class Calculator
         $a = $this->convert($a);
         $b = $this->convert($b);
         switch ($this->arbitrate($a, $b)) {
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intDiv($a, $b);
             case 'rational':
                 return $this->calcEngine->rationalDiv($a, $b);
             case 'complex':
                 return $this->calcEngine->complexDiv($a, $b);
             case 'complex:numeric':
-                return $this->calcEngine->complexDiv($a, $b->toComplex());
+                return $this->calcEngine->complexDiv($a, $b->asComplex());
             case 'numeric:complex':
-                return $this->calcEngine->complexDiv($a->toComplex(), $b);
+                return $this->calcEngine->complexDiv($a->asComplex(), $b);
             default:
                 return $this->calcEngine->floatDiv($a, $b);
         }
