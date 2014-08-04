@@ -112,7 +112,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": ">=1.0.1"
+    "chippyash/math-type-calculator": ">=1.0.2"
 </pre>
 
 to your composer.json "requires" section
@@ -141,3 +141,5 @@ V0...  pre releases
 V1.0.0 Original release
 
 V1.0.1 Add ability to mix complex and non complex types as operands
+
+V1.0.2 Utilise chippyash/strong-type >= 1.0.10
