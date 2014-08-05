@@ -10,7 +10,6 @@ namespace chippyash\Math\Type\Calculator;
 
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Type\Number\NumericTypeInterface as NI;
-use chippyash\Type\TypeFactory;
 use chippyash\Type\Number\IntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\WholeIntType;
@@ -19,7 +18,10 @@ use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexType;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
-use chippyash\Math\Type\Comparator\Traits\NativeConvertNumeric;
+use chippyash\Math\Type\Traits\NativeConvertNumeric;
+use chippyash\Math\Type\Traits\CheckRationalTypes;
+use chippyash\Math\Type\Traits\CheckIntTypes;
+use chippyash\Math\Type\Traits\CheckFloatTypes;
 
 /**
  * PHP Native calculation
@@ -27,6 +29,9 @@ use chippyash\Math\Type\Comparator\Traits\NativeConvertNumeric;
 class Native implements CalculatorEngineInterface
 {
     use NativeConvertNumeric;
+    use CheckRationalTypes;
+    use CheckIntTypes;
+    use CheckFloatTypes;
 
     /**
      * Integer type addition
@@ -416,68 +421,5 @@ class Native implements CalculatorEngineInterface
     private function lcm($a, $b)
     {
         return \abs(($a * $b) / $this->gcd($a, $b));
-    }
-
-    /**
-     * Check for rational type, converting if necessary
-     *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
-     * @return array [RationalType, RationalType]
-     */
-    private function checkRationalTypes(NI $a, NI $b)
-    {
-        if (!$a instanceof RationalType) {
-            $a = $a->asRational();
-        }
-        if (!$b instanceof RationalType) {
-            $b = $b->asRational();
-        }
-
-        return [$a, $b];
-    }
-
-    /**
-     * Check for integer type, converting if necessary
-     *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
-     * @return array [IntType, IntType]
-     */
-    private function checkIntTypes(NI $a, NI $b)
-    {
-        if (!$a instanceof IntType) {
-            $a1 = $a->asIntType();
-        }
-        if (!$b instanceof IntType) {
-            $b1 = $b->asIntType();
-        }
-
-        return [$a1, $b1];
-    }
-
-    /**
-     * Check for float type, converting if necessary
-     *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
-     * @return array [FloatType, FloatType]
-     */
-    private function checkFloatTypes(NI $a, NI $b)
-    {
-        if (!$a instanceof FloatType) {
-            if ($a instanceof IntType) {
-                $a = $a();
-            }
-            $a = TypeFactory::createFloat($a);
-        }
-        if (!$b instanceof FloatType) {
-            if ($b instanceof IntType) {
-                $b = $b();
-            }
-            $b = TypeFactory::createFloat($b);
-        }
-
-        return [$a, $b];
     }
 }

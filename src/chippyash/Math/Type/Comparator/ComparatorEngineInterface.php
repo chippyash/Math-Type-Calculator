@@ -27,13 +27,4 @@ interface ComparatorEngineInterface
      * @return int
      */
     public function compare(NI $a, NI $b);
-
-    /**
-     * Convert float or int into relevant strong type
-     *
-     * @param numeric $num
-     * 
-     * @return \chippyash\Type\Number\NumericInterface
-     */
-    public function convertNumeric($num);
 }

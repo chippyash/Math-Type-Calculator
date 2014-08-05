@@ -6,7 +6,7 @@
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type\Comparator\Traits;
+namespace chippyash\Math\Type\Traits;
 
 use chippyash\Type\Number\NumericTypeInterface;
 

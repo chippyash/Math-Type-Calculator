@@ -42,6 +42,7 @@ testSuiteLoaderFile="/path/to/StandardTestSuiteLoader.php"
             <directory>../vendor</directory>
             <!-- don't cover interfaces -->
             <file>../src/chippyash/Math/Type/Calculator/CalculatorEngineInterface.php</file>
+            <file>../src/chippyash/Math/Type/Comparator/ComparatorEngineInterface.php</file>
         </blacklist>
     </filter>
 

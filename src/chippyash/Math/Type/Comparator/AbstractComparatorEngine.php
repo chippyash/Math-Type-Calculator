@@ -10,6 +10,7 @@ namespace chippyash\Math\Type\Comparator;
 
 use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
 use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
+use chippyash\Type\Number\NumericTypeInterface as NI;
 
 /**
  * Basic implementation of a comparator engine
@@ -118,12 +119,4 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
      */
     abstract public function compare(NI $a, NI $b);
 
-    /**
-     * Convert float or int into relevant strong type
-     *
-     * @param numeric $num
-     *
-     * @return \chippyash\Type\Number\NumericInterface
-     */
-    abstract public function convertNumeric($num);
 }

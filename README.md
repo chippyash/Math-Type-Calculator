@@ -30,6 +30,7 @@ Provides arithmetic calculation support for chippyash/strong-type numeric types.
 *  multiplication
 *  division
 *  reciprocal
+*  equality comparison
 
 The library is released under the [GNU GPL V3 or later license](http://www.gnu.org/copyleft/gpl.html)
 
@@ -49,10 +50,12 @@ If you want more, either suggest it, or better still, fork it and provide a pull
 
 ### Coding Basics
 
+#### Calculations
+
 Using the calculator is simplicity itself:
 
 <pre>
-    use chippyash/Math/Type/Calculator;
+    use chippyash\Math\Type\Calculator;
 
     $calc = new Calculator()
 </pre>
@@ -60,7 +63,7 @@ Using the calculator is simplicity itself:
 Then you simply fire calculation requests at it:
 
 <pre>
-    use chippyash/Type/TypeFactory;
+    use chippyash\Type\TypeFactory;
 
     $r = TypeFactory::create('rational', 2, 3);
     $i = TypeFactory::create('int', 23);
@@ -80,8 +83,66 @@ Then you simply fire calculation requests at it:
     echo $calc->add($r, $w) . PHP_EOL;
 </pre>
 
+The Calculator supports the following methods (all operands are NumericTypeInterface, or PHP int or PHP float):
+
+*  add($a, $b) : NumericTypeInterface
+*  sub($a, $b) : NumericTypeInterface
+*  mul($a, $b  : NumericTypeInterface
+*  div($a, $b) : NumericTypeInterface
+*  reciprocal($a) : NumericTypeInterface
+
+The Calculator will arbitrate between types and return the lowest possible type based on the operand types.
+The order of precedence is
+
+*  ComplexType
+*  RationalType
+*  FloatType
+*  IntType (including WholeIntType and NaturalIntType)
+
 For a demonstration of all the available operations between types and their
 resultant types run the examples/example-calc.php file
+
+#### Comparisons
+
+To compare two numeric types:
+
+<pre>
+    use chippyash\Math\Type\Comparator;
+    use chippyash\Type\TypeFactory;
+
+    $r = TypeFactory::create('rational', 2, 3);
+    $i = TypeFactory::create('int', 23);
+    $w = TypeFactory::create('whole', 3);
+    $n = TypeFactory::create('natural', 56);
+    $f = TypeFactory::create('float', 19.6);
+    $c1 = TypeFactory::create('complex', '2+3i');
+    $c2 = TypeFactory::create('complex', '-6+4i');
+
+    $comp = new Comparator();
+
+    if ($comp->compare($r, $i) == 0) {...}
+    if ($comp->compare($c1, $c2) == -1) {...}
+    if ($comp->compare($w, $n) == 1) {...}
+</pre>
+
+The Comparator::compare($a, $b) method takes two NumericTypeInterface types and returns
+
+    a == b: 0
+    a < b : -1
+    a > b : 1
+
+It has convenience methods (all operands are NumericTypeInterface):
+
+*  eq($a, $b) : boolean: $a == $b
+*  neq($a, $b) : boolean: $a != $b
+*  lt($a, $b) : boolean: $a < $b
+*  lte($a, $b) : boolean: $a <= $b
+*  gt($a, $b) : boolean: $a > $b
+*  gte($a, $b) : boolean: $a >= $b
+
+<pre>
+    if ($comp->gt($w, $f) { ... }
+</pre>
 
 ### Changing the library
 
@@ -112,7 +173,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": ">=1.0.2"
+    "chippyash/math-type-calculator": ">=1.1.0"
 </pre>
 
 to your composer.json "requires" section
@@ -143,3 +204,5 @@ V1.0.0 Original release
 V1.0.1 Add ability to mix complex and non complex types as operands
 
 V1.0.2 Utilise chippyash/strong-type >= 1.0.10
+
+V1.1.0 Add comparator class for equality comparison
