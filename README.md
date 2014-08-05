@@ -99,6 +99,8 @@ The order of precedence is
 *  FloatType
 *  IntType (including WholeIntType and NaturalIntType)
 
+Be careful with complex types, they can only be converted down if they are real, i.e. the imaginary part == 0
+
 For a demonstration of all the available operations between types and their
 resultant types run the examples/example-calc.php file
 
