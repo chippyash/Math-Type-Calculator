@@ -99,9 +99,4 @@ class Comparator implements ComparatorEngineInterface
         throw new \BadMethodCallException('Unsupported comparator method: ' . $name);
     }
 
-    public function convertNumeric($num)
-    {
-        
-    }
-
 }
