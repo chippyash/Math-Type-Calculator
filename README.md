@@ -175,7 +175,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": ">=1.1.0"
+    "chippyash/math-type-calculator": ">=1.1.1"
 </pre>
 
 to your composer.json "requires" section
@@ -208,3 +208,5 @@ V1.0.1 Add ability to mix complex and non complex types as operands
 V1.0.2 Utilise chippyash/strong-type >= 1.0.10
 
 V1.1.0 Add comparator class for equality comparison
+
+V1.1.1 Fix bad comparator construction
