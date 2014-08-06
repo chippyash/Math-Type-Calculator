@@ -53,13 +53,13 @@ class Comparator implements ComparatorEngineInterface
         } elseif (is_int($compEngine) && array_key_exists($compEngine, $this->supportedEngines)) {
             $className = self::NS . $this->supportedEngines[$compEngine];
             $this->compEngine = new $className();
-        } elseif ($compEngine instanceof CalculatorEngineInterface) {
+        } elseif ($compEngine instanceof ComparatorEngineInterface) {
             $this->compEngine = $compEngine;
         }
 
         $this->isAbstractComparatorEngine = ($this->compEngine instanceof AbstractComparatorEngine);
 
-        if (empty($compEngine)) {
+        if (empty($this->compEngine)) {
             throw new \InvalidArgumentException('No known comparator engine');
         }
     }
@@ -93,7 +93,7 @@ class Comparator implements ComparatorEngineInterface
     public function __call($name, $arguments)
     {
         if ($this->isAbstractComparatorEngine && method_exists($this->compEngine, $name)) {
-            return call_user_method_array($name, $this->compEngine, $arguments);
+            return call_user_func_array(array($this->compEngine, $name), $arguments);
         }
 
         throw new \BadMethodCallException('Unsupported comparator method: ' . $name);
