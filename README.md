@@ -220,3 +220,5 @@ V1.0.2 Utilise chippyash/strong-type >= 1.0.10
 V1.1.0 Add comparator class for equality comparison
 
 V1.1.1 Fix bad comparator construction
+
+V1.1.2 Fix native int/float comparison by casting to rational

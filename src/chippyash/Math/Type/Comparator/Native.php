@@ -11,6 +11,7 @@ namespace chippyash\Math\Type\Comparator;
 use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
 use chippyash\Type\Number\NumericTypeInterface as NI;
 use chippyash\Type\Number\Rational\RationalType;
+use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexType;
 use chippyash\Math\Type\Calculator\Native as Calc;
 use chippyash\Math\Type\Traits\CheckRationalTypes;
@@ -69,13 +70,9 @@ class Native extends AbstractComparatorEngine
      */
     protected function intFloatCompare(NI $a, NI $b)
     {
-        if ($a() == $b()) {
-            return 0;
-        }
-        if ($a() < $b()) {
-            return -1;
-        }
-        return 1;
+        return $this->rationalCompare(
+                RationalTypeFactory::fromFloat($a()),
+                RationalTypeFactory::fromFloat($b()));
     }
 
     /**
