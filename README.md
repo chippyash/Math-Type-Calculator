@@ -46,6 +46,16 @@ Future versions will add support for the popular math extensions (gmp, bcmath et
 
 If you want more, either suggest it, or better still, fork it and provide a pull request.
 
+Check out [chippyash/Strong-Type](https://github.com/chippyashl/Strong-Type) for strong type including numeric,
+rational and complex type support, that this library operates on
+
+Check out [chippyash/Matrix](https://github.com/chippyash/Matrix) for Matrix data type support.
+
+Check out [chippyash/Logical-Matrix](https://github.com/chippyash/Logical-matrix) for logical matrix operations
+
+Check out [chippyash/Math-Matrix](https://github.com/chippyash/Math-Matrix) for mathematical matrix operations
+
+
 ## How
 
 ### Coding Basics
