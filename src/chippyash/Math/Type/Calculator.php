@@ -74,12 +74,12 @@ class Calculator
     /**
      * Return addition of two types: a + b
      *
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $b
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      *
      *
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function add($a, $b)
     {
@@ -109,9 +109,9 @@ class Calculator
     /**
      * Return subtraction of two types: a - b
      *
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $b
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function sub($a, $b)
     {
@@ -140,9 +140,9 @@ class Calculator
     /**
      * Return multiplication of two types: a * b
      *
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $b
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function mul($a, $b)
     {
@@ -171,9 +171,9 @@ class Calculator
     /**
      * Return division of two types: a / b
      *
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $b
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function div($a, $b)
     {
@@ -200,8 +200,8 @@ class Calculator
     /**
      * Return reciprocal of the type: 1/a
      *
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function reciprocal($a)
     {
@@ -218,9 +218,9 @@ class Calculator
 
     /**
      * 
-     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param \chippyash\Math\Type\NumericTypeInterface $exp
-     * @return chippyash\Type\Number\NumericTypeInterface
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function pow($a, $exp)
     {

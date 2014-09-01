@@ -23,7 +23,7 @@ class CalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider numericTypes
-     * @param chippyash\Type\Number\NumericTypeInterface $n
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $n
      */
     public function testReciprocalOfNumberTypesReturnsFloatType($n)
     {
