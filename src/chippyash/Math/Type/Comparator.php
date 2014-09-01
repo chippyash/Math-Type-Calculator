@@ -8,7 +8,7 @@
  */
 namespace chippyash\Math\Type;
 
-use chippyash\Type\Number\NumericTypeInterface;
+use chippyash\Type\Interfaces\NumericTypeInterface;
 use chippyash\Math\Type\Comparator\Native;
 use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
 use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
@@ -69,8 +69,8 @@ class Comparator implements ComparatorEngineInterface
      * a < b = -1
      * a > b = 1
      *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return int
      */

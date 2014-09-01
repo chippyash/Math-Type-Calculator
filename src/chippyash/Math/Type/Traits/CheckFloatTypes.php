@@ -10,8 +10,7 @@
 
 namespace chippyash\Math\Type\Traits;
 
-use chippyash\Type\Number\NumericTypeInterface;
-use chippyash\Type\TypeFactory;
+use chippyash\Type\Interfaces\NumericTypeInterface;
 use chippyash\Type\Number\FloatType;
 
 /**
@@ -22,8 +21,8 @@ trait CheckFloatTypes
     /**
      * Check for float type, converting if necessary
      *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return array [FloatType, FloatType]
      */
     protected function checkFloatTypes(NumericTypeInterface $a, NumericTypeInterface $b)

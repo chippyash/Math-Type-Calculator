@@ -8,7 +8,7 @@
  */
 namespace chippyash\Math\Type;
 
-use chippyash\Type\Number\NumericTypeInterface;
+use chippyash\Type\Interfaces\NumericTypeInterface;
 use chippyash\Math\Type\Calculator\Native;
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
@@ -216,6 +216,29 @@ class Calculator
         }
     }
 
+    /**
+     * 
+     * @param numeric|chippyash\Type\Number\NumericTypeInterface $a
+     * @param \chippyash\Math\Type\NumericTypeInterface $exp
+     * @return chippyash\Type\Number\NumericTypeInterface
+     */
+    public function pow($a, $exp)
+    {
+        $a = $this->convert($a);
+        switch ($this->arbitrate($a, $a)) {
+            case 'rational':
+                return $this->calcEngine->rationalPow($a, $exp);
+            case 'complex':
+                return $this->calcEngine->complexPow($a, $exp);
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intPow($a, $exp);
+            default :
+                return $this->calcEngine->floatPow($a, $exp);
+        }
+    }
+    
     protected function convert($num)
     {
         if ($num instanceof NumericTypeInterface) {

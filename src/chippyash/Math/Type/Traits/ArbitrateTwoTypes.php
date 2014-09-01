@@ -8,7 +8,7 @@
  */
 namespace chippyash\Math\Type\Traits;
 
-use chippyash\Type\Number\NumericTypeInterface;
+use chippyash\Type\Interfaces\NumericTypeInterface;
 
 /**
  * Arbitrate the types of two operand types and return a string
@@ -19,8 +19,8 @@ trait ArbitrateTwoTypes
     /**
      * Arbitrate the return type from the operation
      *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyashr\Type\Number\NumericTypeInterface $b
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return string
      */
     protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)

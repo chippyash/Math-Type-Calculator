@@ -9,7 +9,7 @@
 namespace chippyash\Math\Type\Comparator;
 
 use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
-use chippyash\Type\Number\NumericTypeInterface as NI;
+use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexType;
@@ -36,8 +36,8 @@ class Native extends AbstractComparatorEngine
      * a < b = -1
      * a > b = 1
      *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return int
      */
@@ -64,8 +64,8 @@ class Native extends AbstractComparatorEngine
     /**
      * Compare int and float types
      *
-     * @param \chippyash\Type\Number\NumericTypeInterface $a
-     * @param \chippyash\Type\Number\NumericTypeInterface $b
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return int
      */
     protected function intFloatCompare(NI $a, NI $b)

@@ -185,7 +185,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": ">=1.1.1"
+    "chippyash/math-type-calculator": ">=1.1.3"
 </pre>
 
 to your composer.json "requires" section
@@ -222,3 +222,5 @@ V1.1.0 Add comparator class for equality comparison
 V1.1.1 Fix bad comparator construction
 
 V1.1.2 Fix native int/float comparison by casting to rational
+
+V1.1.3 Refactor for dependent library
