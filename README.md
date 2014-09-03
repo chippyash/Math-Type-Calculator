@@ -223,4 +223,7 @@ V1.1.1 Fix bad comparator construction
 
 V1.1.2 Fix native int/float comparison by casting to rational
 
-V1.1.3 Refactor for dependent library
+V1.1.4 Refactor for dependent library
+
+V1.1.5 Update dependent version number
+
