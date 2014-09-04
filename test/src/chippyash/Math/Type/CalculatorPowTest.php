@@ -66,6 +66,20 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
                 $this->object->pow(new FloatType(3.2), new FloatType(3.2)));
     }
 
+    public function testPowWithFloatBaseAndRationalExponentReturnsFloatType()
+    {
+        $this->assertInstanceOf(
+                'chippyash\Type\Number\FloatType',
+                $this->object->pow(new FloatType(3.2), RationalTypeFactory::fromFloat(3.2)));
+    }
+
+    public function testPowWithFloatBaseAndComplexExponentReturnsComplexType()
+    {
+        $this->assertInstanceOf(
+                'chippyash\Type\Number\Complex\ComplexType',
+                $this->object->pow(new FloatType(3.2), ComplexTypeFactory::fromString('3.2+1i')));
+    }
+
     public function testPowWithRationalBaseReturnsRationalType()
     {
         $r = RationalTypeFactory::fromFloat(2.5);
@@ -84,4 +98,6 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
         $p = $this->object->pow($c1, new IntType(3));
         $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p);
     }
+    
+    
 }
