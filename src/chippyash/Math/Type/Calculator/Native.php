@@ -190,7 +190,7 @@ class Native implements CalculatorEngineInterface
     public function floatPow(FloatType $a, NI $exp)
     {
         if ($exp instanceof RationalType) {
-            $b = new RationalType(clone $a, new IntType(1));
+            $b = RationalTypeFactory::fromFloat($a());
             return $this->rationalPow($b, $exp)->asFloatType();
         }
         
