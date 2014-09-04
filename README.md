@@ -113,9 +113,7 @@ The order of precedence is
 
 Be careful with complex types, they can only be converted down if they are real, i.e. the imaginary part == 0
 
-Please note that as of version 1.1.6 using pow() with a complex base AND complex exponent
-will throw an exception.  This functionality will appear in a future release.  The sqrt()
-method is provided as a convenience, you can use pow(n, 1/e) e.g. pow(4, 1/2) == sqrt(4)
+The sqrt() method is provided as a convenience, you can use pow(n, 1/e) e.g. pow(4, 1/2) == sqrt(4)
 
 For a demonstration of all the available operations between types and their
 resultant types run the examples/example-calc.php file
@@ -191,7 +189,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.1.6"
+    "chippyash/math-type-calculator": "~1.1.7"
 </pre>
 
 to your composer.json "requires" section
@@ -235,3 +233,4 @@ V1.1.5 Update dependent version number
 
 V1.1.6 Add pow and square root functionality
 
+V1.1.7 Add complex pow using complex exponent

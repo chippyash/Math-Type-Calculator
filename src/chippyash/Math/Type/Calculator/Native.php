@@ -22,6 +22,7 @@ use chippyash\Math\Type\Traits\NativeConvertNumeric;
 use chippyash\Math\Type\Traits\CheckRationalTypes;
 use chippyash\Math\Type\Traits\CheckIntTypes;
 use chippyash\Math\Type\Traits\CheckFloatTypes;
+use chippyash\Math\Type\Comparator;
 
 /**
  * PHP Native calculation
@@ -542,17 +543,33 @@ class Native implements CalculatorEngineInterface
     public function complexPow(ComplexType $a, NI $exp)
     {
         if ($exp instanceof ComplexType) {
-            throw new \InvalidArgumentException('Cannot raise complex number to complex exponent - no single answer');
+            $comp = new Comparator();
+            $zero = new IntType(0);
+            if ($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero)) {
+                $real = 0;
+                $imaginary = 0;
+            } else {
+                $er = $exp->r()->get();
+                $ei = $exp->i()->get();
+                $logr = log($a->modulus()->get());
+                $theta = $a->theta()->get();
+                $rho = exp($logr * $er - $ei * $theta);
+                $beta = $theta * $er + $ei * $logr;
+                $real = $rho * cos($beta);
+                $imaginary = $rho * sin($beta);
+            }
+        } else {
+            //non complex
+            //de moivres theorum
+            //z^n = r^n(cos(n.theta) + sin(n.theta)i)
+            //where z is a complex number, r is the radius
+            $n = $exp();
+            $nTheta = $n * $a->theta()->get();
+            $pow = pow($a->modulus()->get(), $n);
+            $real = cos($nTheta) * $pow;
+            $imaginary = sin($nTheta) * $pow;
         }
         
-        //de moivres theorum
-        //z^n = r^n(cos(n.theta) + sin(n.theta)i)
-        //where z is a complex number, r is the radius
-        $n = $exp();
-        $nTheta = $n * $a->theta()->get();
-        $pow = pow($a->modulus()->get(), $n);
-        $real = cos($nTheta) * $pow;
-        $imaginary = sin($nTheta) * $pow;
         return new ComplexType(
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
