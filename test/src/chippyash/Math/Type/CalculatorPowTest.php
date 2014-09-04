@@ -115,6 +115,20 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
         $c1 = ComplexTypeFactory::fromString('3+3i');
         $p = $this->object->pow($c1, new IntType(3));
         $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p);
+        
+        $c2 = ComplexTypeFactory::fromString('3+3i');
+        $p2 = $this->object->pow($c1, $c2);
+        $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p2);
+        
+    }
+    
+    public function testPowWithZeroComplexBaseAndComplexExponentReturnsZeroComplex()
+    {
+        $c1 = ComplexTypeFactory::fromString('0+0i');
+        $c2 = ComplexTypeFactory::fromString('3+3i');
+        $p = $this->object->pow($c1, $c2);
+        $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p);
+        $this->assertTrue($p->isZero());
     }
     
     public function testCanComputeRootsUsingPow()
