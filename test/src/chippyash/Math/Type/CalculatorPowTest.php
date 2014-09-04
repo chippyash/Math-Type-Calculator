@@ -52,6 +52,15 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testPowWithIntTypeBaseAndZeroComplexExponentReturnsIntTypeOne()
+    {
+        $test = $this->object->pow(new IntType(56), ComplexTypeFactory::fromString('0+0i'));
+        $this->assertInstanceOf(
+                'chippyash\Type\Number\IntType',
+                $test);
+        $this->assertEquals(1, $test());
+    }
+    
     public function testPowWithFloatBaseAndIntegerExponentReturnsFloatType()
     {
         $this->assertInstanceOf(
@@ -73,6 +82,15 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
                 $this->object->pow(new FloatType(3.2), RationalTypeFactory::fromFloat(3.2)));
     }
 
+    public function testPowWithFloatTypeBaseAndZeroComplexExponentReturnsIntTypeOne()
+    {
+        $test = $this->object->pow(new FloatType(56), ComplexTypeFactory::fromString('0+0i'));
+        $this->assertInstanceOf(
+                'chippyash\Type\Number\FloatType',
+                $test);
+        $this->assertEquals(1, $test());
+    }
+    
     public function testPowWithFloatBaseAndComplexExponentReturnsComplexType()
     {
         $this->assertInstanceOf(
@@ -99,5 +117,21 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p);
     }
     
-    
+    public function testCanComputeRootsUsingPow()
+    {
+        $this->assertEquals(
+                3, 
+                $this->object->pow(
+                        new IntType(27), RationalTypeFactory::create(1, 3))
+                ->get());
+        $this->assertEquals(
+                '3/4', 
+                (string) $this->object->pow(
+                RationalTypeFactory::create(27, 64), RationalTypeFactory::create(1, 3)));
+        $this->assertEquals(
+                '32479891/17872077+17872077/32479891i',
+                (string) $this->object->pow(
+                ComplexTypeFactory::fromString('3+2i'),
+                RationalTypeFactory::create(1, 2)));
+    }
 }

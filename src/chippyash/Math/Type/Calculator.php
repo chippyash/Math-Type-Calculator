@@ -239,6 +239,28 @@ class Calculator
         }
     }
     
+    /**
+     * 
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     */
+    public function sqrt($a)
+    {
+        $a = $this->convert($a);
+        switch ($this->arbitrate($a, $a)) {
+            case 'rational':
+                return $this->calcEngine->rationalSqrt($a);
+            case 'complex':
+                return $this->calcEngine->complexSqrt($a);
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intSqrt($a);
+            default :
+                return $this->calcEngine->floatSqrt($a);
+        }
+    }
+    
     protected function convert($num)
     {
         if ($num instanceof NumericTypeInterface) {
