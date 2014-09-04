@@ -1,6 +1,7 @@
 {
     "name": "chippyash/math-type-calculator",
     "description": "Calculators for the chippyash/strong-type numeric types",
+    "keywords": ["type","calculator","maths", "complex", "polar"],
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -8,8 +9,9 @@
             "email": "ashley@zf4.biz"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-        "chippyash/strong-type": "1.1.1"
+        "chippyash/strong-type": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.37",
