@@ -118,6 +118,23 @@ class Native implements CalculatorEngineInterface
     }
     
     /**
+     * Integer sqrt
+     * Return IntType for perfect squares, else RationalType
+     * 
+     * @param \chippyash\Type\Number\IntType $a
+     * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
+     */
+    public function intSqrt(IntType $a)
+    {
+        $res = $this->rationalSqrt(new RationalType($a, new IntType(1)));
+        if ($res->isInteger()) {
+            return $res->numerator();
+        } else {
+            return $res;
+        }
+    }
+    
+    /**
      * Float addition
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
@@ -204,6 +221,17 @@ class Native implements CalculatorEngineInterface
         return new FloatType($p);
     }
     
+    /**
+     * Float sqrt
+     * 
+     * @param \chippyash\Type\Number\FloatType $a
+     * @return \chippyash\Type\Number\FloatType result
+     */
+    public function floatSqrt(FloatType $a)
+    {
+        return new FloatType(sqrt($a()));
+    }
+
     /**
      * Whole number addition
      *
@@ -396,6 +424,21 @@ class Native implements CalculatorEngineInterface
         
     }
     
+    /**
+     * Rational sqrt
+     * 
+     * @param \chippyash\Type\Number\Rational\RationalType $a
+     * @return \chippyash\Type\Number\Rational\RationalType result
+     */
+    public function rationalSqrt(RationalType $a)
+    {
+        $num = sqrt($a->numerator()->get());
+        $den = sqrt($a->denominator()->get());
+        return $this->rationalDiv(
+                RationalTypeFactory::fromFloat($num), 
+                RationalTypeFactory::fromFloat($den));
+    }
+    
 
     /**
      * Complex number addition
@@ -514,6 +557,17 @@ class Native implements CalculatorEngineInterface
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
                 );        
+    }
+    
+    /**
+     * Complex sqrt
+     * 
+     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @return \chippyash\Type\Number\Complex\ComplexType result
+     */
+    public function complexSqrt(ComplexType $a)
+    {
+        return $this->complexPow($a, RationalTypeFactory::create(1, 2));
     }
     
     private function intComplexPow($a, ComplexType $exp)

@@ -65,6 +65,15 @@ interface CalculatorEngineInterface
     public function intPow(IntType $a, NI $exp);
     
     /**
+     * Integer sqrt
+     * Return IntType for perfect squares, else RationalType
+     * 
+     * @param \chippyash\Type\Number\IntType $a
+     * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
+     */
+    public function intSqrt(IntType $a);
+    
+    /**
      * Float addition
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
@@ -116,7 +125,14 @@ interface CalculatorEngineInterface
      */
     public function floatPow(FloatType $a, NI $exp);
     
-
+    /**
+     * Float sqrt
+     * 
+     * @param \chippyash\Type\Number\FloatType $a
+     * @return \chippyash\Type\Number\FloatType result
+     */
+    public function floatSqrt(FloatType $a);
+    
     /**
      * Whole number addition
      *
@@ -225,6 +241,15 @@ interface CalculatorEngineInterface
     public function rationalPow(RationalType $a, NI $exp);
     
     /**
+     * Rational sqrt
+     * 
+     * @param \chippyash\Type\Number\Rational\RationalType $a
+     * @return \chippyash\Type\Number\Rational\RationalType result
+     */
+    public function rationalSqrt(RationalType $a);
+    
+
+    /**
      * Complex number addition
      *
      * @param \chippyash\Type\Number\Complex\ComplexType $a
@@ -279,6 +304,14 @@ interface CalculatorEngineInterface
      */
     public function complexPow(ComplexType $a, NI $exp);
 
+    /**
+     * Complex sqrt
+     * 
+     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @return \chippyash\Type\Number\Complex\ComplexType result
+     */
+    public function complexSqrt(ComplexType $a);
+    
     /**
      * Convert float or int into relevant strong type
      *
