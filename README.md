@@ -189,7 +189,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.1.7"
+    "chippyash/math-type-calculator": "~1.1.9"
 </pre>
 
 to your composer.json "requires" section
@@ -234,3 +234,7 @@ V1.1.5 Update dependent version number
 V1.1.6 Add pow and square root functionality
 
 V1.1.7 Add complex pow using complex exponent
+
+V1.1.8 Update dependent version number
+
+V1.1.9 Update dependent version number
