@@ -106,7 +106,6 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
         return ($this->compare($a, $b) != -1);
     }
 
-
     /**
      * a == b = 0
      * a < b = -1

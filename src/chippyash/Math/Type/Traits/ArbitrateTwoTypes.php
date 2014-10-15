@@ -59,6 +59,6 @@ trait ArbitrateTwoTypes
         $tA = strtolower(str_replace($search, $replace, get_class($a)));
         $tB =  strtolower(str_replace($search, $replace, get_class($b)));
 
-        return "{$tA}:{$tB}";
+        return str_replace('gmp', '', "{$tA}:{$tB}");
     }
 }

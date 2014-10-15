@@ -1,16 +1,17 @@
 <?php
 namespace chippyash\Test\Math\Type\Comparator;
 
+use chippyash\Type\TypeFactory;
 use chippyash\Type\Number\IntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Complex\ComplexType;
-use chippyash\Math\Type\Comparator\Native;
+use chippyash\Math\Type\Comparator\NativeEngine;
 
 /**
  *
  */
-class NativeTest extends \PHPUnit_Framework_TestCase
+class NativeEngineTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
@@ -29,7 +30,8 @@ class NativeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->object = new Native();
+        TypeFactory::setNumberType(TypeFactory::TYPE_NATIVE);
+        $this->object = new NativeEngine();
 
         $this->smallInt = new IntType(2);
         $this->bigInt = new IntType(12);

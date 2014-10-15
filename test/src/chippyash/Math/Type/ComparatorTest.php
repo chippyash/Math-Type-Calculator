@@ -2,40 +2,35 @@
 namespace chippyash\Test\Math\Type;
 
 use chippyash\Math\Type\Comparator;
-use chippyash\Math\Type\Comparator\Native;
+use chippyash\Math\Type\Comparator\NativeEngine;
 use chippyash\Type\Number\IntType;
-use chippyash\Type\Number\WholeIntType;
-use chippyash\Type\Number\NaturalIntType;
-use chippyash\Type\Number\FloatType;
-use chippyash\Type\Number\Rational\RationalTypeFactory;
-use chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Math\Type\Calculator;
 
 /**
  *
  */
 class ComparatorTest extends \PHPUnit_Framework_TestCase
 {
+    
+    public function setUp()
+    {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
+    }
+    
     public function testConstructWithNoParameterReturnsComparator()
     {
         $this->assertInstanceOf(
                 'chippyash\Math\Type\Comparator', new Comparator());
     }
 
-    public function testConstructWithValidEngineTypeReturnsComparator()
-    {
-        $this->assertInstanceOf(
-                'chippyash\Math\Type\Comparator', new Comparator(Comparator::ENGINE_NATIVE));
-    }
-
     public function testConstructWithComparatorEngineInterfaceTypeReturnsComparator()
     {
         $this->assertInstanceOf(
-                'chippyash\Math\Type\Comparator', new Comparator(new Native()));
+                'chippyash\Math\Type\Comparator', new Comparator(new NativeEngine()));
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessa No known comparator engine
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testConstructWithInvalidComparatorEngineThrowsException()
     {
@@ -73,6 +68,5 @@ class ComparatorTest extends \PHPUnit_Framework_TestCase
         $one = new IntType(1);
         $c = new Comparator(); //use default engine
         $this->assertEquals(true, $c->foo($one, $one));
-
     }
 }

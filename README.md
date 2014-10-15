@@ -15,12 +15,15 @@ Provides arithmetic calculation support for chippyash/strong-type numeric types.
 
 ### Types supported
 
-*  FloatType
-*  ComplexType
 *  IntType
+*  GMPIntType
 *  NaturalIntType
 *  WholeIntType
 *  RationalType
+*  GMPRationalType
+*  FloatType
+*  ComplexType
+*  GMPComplexType
 *  Conversion of PHP int and float to IntType and FloatType respectively
 
 ### Arithmetic support provided
@@ -30,13 +33,24 @@ Provides arithmetic calculation support for chippyash/strong-type numeric types.
 *  multiplication
 *  division
 *  reciprocal
-*  equality comparison
+*  pow
+*  sqrt
+
+### Comparison support provided
+
+*  eq  a == b
+*  neq a != b
+*  lt  a < b
+*  lte a <= b
+*  gt  a > b
+*  gte a >= b
+*  compare a == b = 0, a < b = -1, a > b = 1
 
 The library is released under the [GNU GPL V3 or later license](http://www.gnu.org/copyleft/gpl.html)
 
 ## Why?
 
-Complements the strong-type library and a precursor to the forthcoming chippyash/math-matrix
+Complements the strong-type library and a precursor to the developing chippyash/math-matrix
 library which builds on the chippyash/matrix library.
 
 ## When
@@ -159,6 +173,27 @@ It has convenience methods (all operands are NumericTypeInterface):
 <pre>
     if ($comp->gt($w, $f) { ... }
 </pre>
+
+### Support for GMP extension - V2 onwards only
+
+The library automatically recognises the availability of the gmp extension and
+will use it for int, rational and complex types.  There is no gmp support for 
+WholeIntType, NaturalIntType or FloatType - so be careful!.  You can force the 
+library to use PHP native types by calling
+
+<pre>
+    Calculator::setNumberType(Calculator::TYPE_NATIVE);
+</pre>
+
+at the start of you code. This will in turn call the setNumberType methods on the
+type factories, so you don't need to do that.  The Comparator will use the type
+specified for the Calculator.
+
+If you want to get the gmp typed value of a number you can call its gmp() method.
+
+See the documentation for [chippyash/Strong-Type](https://github.com/chippyashl/Strong-Type)
+for further information.
+
 
 ### Changing the library
 
