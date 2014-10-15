@@ -18,6 +18,7 @@ class CalculatorSubTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         $this->object = new Calculator();
     }
 

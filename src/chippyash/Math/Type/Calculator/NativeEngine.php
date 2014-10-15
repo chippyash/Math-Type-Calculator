@@ -27,7 +27,7 @@ use chippyash\Math\Type\Comparator;
 /**
  * PHP Native calculation
  */
-class Native implements CalculatorEngineInterface
+class NativeEngine implements CalculatorEngineInterface
 {
     use NativeConvertNumeric;
     use CheckRationalTypes;

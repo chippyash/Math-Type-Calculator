@@ -9,9 +9,11 @@
 namespace chippyash\Math\Type;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
-use chippyash\Math\Type\Calculator\Native;
+use chippyash\Math\Type\Calculator\NativeEngine;
+use chippyash\Math\Type\Calculator\GmpEngine;
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
+use chippyash\Type\TypeFactory;
 
 /**
  * Generic calculator for strong type support
@@ -31,15 +33,32 @@ use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
 class Calculator
 {
     use ArbitrateTwoTypes;
-
-    const ENGINE_NATIVE = 0;
-
-    const NS = 'chippyash\Math\Type\Calculator\\';
-
-    protected $supportedEngines = [
-        self::ENGINE_NATIVE => 'Native'
-    ];
-
+    
+    /**
+     * numeric base types
+     * same as TypeFactory
+     */
+    const TYPE_DEFAULT = 'auto';
+    const TYPE_NATIVE = 'native';
+    const TYPE_GMP = 'gmp';
+    
+    /**
+     * Client requested numeric base type support
+     * @var string
+     */
+    protected static $supportType = self::TYPE_DEFAULT;
+    /**
+     * Numeric base types we can support
+     * @var array
+     */
+    protected static $validTypes = [self::TYPE_DEFAULT, self::TYPE_GMP, self::TYPE_NATIVE];
+    
+    /**
+     * The actual base type we are going to return
+     * @var string
+     */
+    protected static $requiredType = null;
+    
     /**
      * Calculation engine
      * @var chippyash\Math\Type\Calculator\CalculatorEngineInterface
@@ -51,24 +70,22 @@ class Calculator
      * Constructor
      * Set up the calculation engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|chippyash\Math\Type\Calculator\CalculatorEngineInterface $calcEngine Calculation engine to use - default == Native
-     * @throws \InvalidArgumentException
+     * @param chippyash\Math\Type\Calculator\CalculatorEngineInterface $calcEngine Calculation engine to use - default == Native
      */
-    public function __construct($calcEngine = null)
+    public function __construct(CalculatorEngineInterface $calcEngine = null)
     {
-        if (is_null($calcEngine)) {
-            $this->calcEngine = new Native();
-            return;
-        } elseif (is_int($calcEngine) && array_key_exists($calcEngine, $this->supportedEngines)) {
-            $className = self::NS . $this->supportedEngines[$calcEngine];
-            $this->calcEngine = new $className();
-            return;
-        } elseif ($calcEngine instanceof CalculatorEngineInterface) {
+        if ($calcEngine instanceof CalculatorEngineInterface) {
             $this->calcEngine = $calcEngine;
             return;
         }
-
-        throw new \InvalidArgumentException('No known calculator engine');
+        
+        if (self::getRequiredType() == self::TYPE_GMP) {
+            $this->calcEngine = new GmpEngine();
+            return;
+        }
+        
+        $this->calcEngine = new NativeEngine();
+        
     }
 
     /**
@@ -259,6 +276,52 @@ class Calculator
             default :
                 return $this->calcEngine->floatSqrt($a);
         }
+    }
+    
+    /**
+     * Set the required number type to return
+     * By default this is self::TYPE_DEFAULT  which is 'auto', meaning that
+     * the factory will determine if GMP is installed and use that else use 
+     * PHP native types
+     * 
+     * @param string $requiredType
+     * @throws \InvalidArgumentException
+     */
+    public static function setNumberType($requiredType)
+    {
+        if (!in_array($requiredType, self::$validTypes)) {
+            throw new \InvalidArgumentException("{$requiredType} is not a supported number type");
+        }
+        if ($requiredType == self::TYPE_GMP && !extension_loaded('gmp')) {
+            throw new \InvalidArgumentException('GMP not supported');
+        }
+        self::$supportType = $requiredType;
+        TypeFactory::setNumberType($requiredType);
+    }
+    
+    /**
+     * Get the required type base to return
+     * This is also used by the comparator to determine type
+     * 
+     * @return string
+     */
+    public static function getRequiredType()
+    {
+        if (self::$requiredType != null) {
+            return self::$requiredType;
+        }
+        
+        if (self::$supportType == self::TYPE_DEFAULT) {
+            if (extension_loaded('gmp')) {
+                self::$requiredType = self::TYPE_GMP;
+            } else {
+                self::$requiredType = self::TYPE_NATIVE;
+            }
+        } else {
+            self::$requiredType = self::$supportType;
+        }
+        
+        return self::$requiredType;
     }
     
     protected function convert($num)

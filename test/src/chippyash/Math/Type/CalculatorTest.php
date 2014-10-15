@@ -2,13 +2,7 @@
 namespace chippyash\Test\Math\Type;
 
 use chippyash\Math\Type\Calculator;
-use chippyash\Math\Type\Calculator\Native;
-use chippyash\Type\Number\IntType;
-use chippyash\Type\Number\WholeIntType;
-use chippyash\Type\Number\NaturalIntType;
-use chippyash\Type\Number\FloatType;
-use chippyash\Type\Number\Rational\RationalTypeFactory;
-use chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Math\Type\Calculator\NativeEngine;
 
 /**
  *
@@ -21,24 +15,51 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 'chippyash\Math\Type\Calculator', new Calculator());
     }
 
-    public function testConstructWithValidEngineTypeReturnsCalculator()
-    {
-        $this->assertInstanceOf(
-                'chippyash\Math\Type\Calculator', new Calculator(Calculator::ENGINE_NATIVE));
-    }
-
     public function testConstructWithCalculatorEngineInterfaceTypeReturnsCalculator()
     {
         $this->assertInstanceOf(
-                'chippyash\Math\Type\Calculator', new Calculator(new Native()));
+                'chippyash\Math\Type\Calculator', new Calculator(new NativeEngine()));
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessa No known calculator engine
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testConstructWithInvalidCalculatorEngineThrowsException()
     {
         $c = new Calculator('foo');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage foo is not a supported number type
+     */
+    public function testSetNumberTypeWithInvalidTypeThrowsException()
+    {
+        Calculator::setNumberType('foo');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage GMP not supported
+     */
+    public function testSetNumberTypeWillThrowExceptionIfGmpRequestedAndGmpNotLoaded()
+    {
+        if (extension_loaded('gmp')) {
+            $this->markTestSkipped('GMP loaded - test skipped');
+        }
+        Calculator::setNumberType(Calculator::TYPE_GMP);
+    }
+    
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCalculatorAutomaticallyReturnsCorrectNumbersDependingOnGmpBeingLoaded()
+    {
+        $c = new Calculator();
+        if (extension_loaded('gmp')) {
+            $this->assertInstanceOf('chippyash\Type\Number\GMPIntType', $c->add(2, 2));
+        } else {
+            $this->assertInstanceOf('chippyash\Type\Number\IntType', $c->add(2, 2));
+        }
     }
 }

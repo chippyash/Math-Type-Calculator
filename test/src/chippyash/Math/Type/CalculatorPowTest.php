@@ -18,6 +18,7 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         $this->object = new Calculator();
     }
 
@@ -108,6 +109,32 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
         $p1 = $this->object->pow($r, new FloatType(3.2));
         $this->assertInstanceOf('chippyash\Type\Number\Rational\RationalType', $p1);
         $this->assertEquals('9893770810229553/527173799766761', (string) $p1);
+        
+    }
+
+    public function testPowWithRationalBaseAndComplexExponentReturnsComplexType()
+    {
+        $r = RationalTypeFactory::fromFloat(2.5);
+        $c = ComplexTypeFactory::fromString('1+5i');
+        $p = $this->object->pow($r, $c);
+        $this->assertInstanceOf('chippyash\Type\Number\Complex\ComplexType', $p);
+    }
+    
+    public function testPowWithRationalBaseAndRealComplexExponentReturnsRationalType()
+    {
+        $r = RationalTypeFactory::fromFloat(2.5);
+        $c = ComplexTypeFactory::fromString('1+0i');
+        $p = $this->object->pow($r, $c);
+        $this->assertInstanceOf('chippyash\Type\Number\Rational\RationalType', $p);
+    }
+    
+    public function testPowWithRationalBaseAndZeroComplexExponentReturnsRationalTypeWithValueOne()
+    {
+        $r = RationalTypeFactory::fromFloat(2.5);
+        $c = ComplexTypeFactory::fromString('0+0i');
+        $p = $this->object->pow($r, $c);
+        $this->assertInstanceOf('chippyash\Type\Number\Rational\RationalType', $p);
+        $this->assertEquals(1, $p());
     }
     
     public function testPowWithComplexBaseReturnsComplexType()

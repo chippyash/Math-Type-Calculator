@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for chippyash Strong Types
  *
  * @author Ashley Kitson <akitson@zf4.biz>
@@ -9,23 +9,18 @@
 namespace chippyash\Math\Type;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
-use chippyash\Math\Type\Comparator\Native;
+use chippyash\Math\Type\Comparator\NativeEngine;
 use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
-use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
+use chippyash\Math\Type\Calculator;
 
 /**
  * Generic comparator for strong type support
+ * 
+ * NB - this uses the Calculator to determine correct base types
  */
 class Comparator implements ComparatorEngineInterface
-{
-    const ENGINE_NATIVE = 0;
-
-    const NS = 'chippyash\Math\Type\Comparator\\';
-
-    protected $supportedEngines = [
-        self::ENGINE_NATIVE => 'Native'
-    ];
-
+{    
+  
     /**
      * Comparator engine
      * @var chippyash\Math\Type\Comparator\ComparatorEngineInterface
@@ -33,35 +28,24 @@ class Comparator implements ComparatorEngineInterface
     protected $compEngine;
 
     /**
-     * Is the engine based on AbstractComparatorEngine
-     *
-     * @var boolean
-     */
-    protected $isAbstractComparatorEngine = false;
-
-    /**
      * Constructor
      * Set up the comparator engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|chippyash\Math\Type\Comparator\ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
-     * @throws \InvalidArgumentException
+     * @param chippyash\Math\Type\Comparator\ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
      */
-    public function __construct($compEngine = null)
+    public function __construct(ComparatorEngineInterface $compEngine = null)
     {
-        if (is_null($compEngine)) {
-            $this->compEngine = new Native();
-        } elseif (is_int($compEngine) && array_key_exists($compEngine, $this->supportedEngines)) {
-            $className = self::NS . $this->supportedEngines[$compEngine];
-            $this->compEngine = new $className();
-        } elseif ($compEngine instanceof ComparatorEngineInterface) {
+        if ($compEngine instanceof ComparatorEngineInterface) {
             $this->compEngine = $compEngine;
+            return;
         }
-
-        $this->isAbstractComparatorEngine = ($this->compEngine instanceof AbstractComparatorEngine);
-
-        if (empty($this->compEngine)) {
-            throw new \InvalidArgumentException('No known comparator engine');
+        
+        if (self::getRequiredType() == Calculator::TYPE_GMP) {
+            $this->compEngine = new GmpEngine();
+            return;
         }
+        
+        $this->compEngine = new NativeEngine();
     }
 
     /**
@@ -92,11 +76,21 @@ class Comparator implements ComparatorEngineInterface
      */
     public function __call($name, $arguments)
     {
-        if ($this->isAbstractComparatorEngine && method_exists($this->compEngine, $name)) {
+        if (method_exists($this->compEngine, $name)) {
             return call_user_func_array(array($this->compEngine, $name), $arguments);
         }
 
         throw new \BadMethodCallException('Unsupported comparator method: ' . $name);
     }
-
+  
+    /**
+     * Get the required type base to return
+     * 
+     * @return string
+     */
+    protected static function getRequiredType()
+    {
+        return Calculator::getRequiredType();
+    }
+    
 }

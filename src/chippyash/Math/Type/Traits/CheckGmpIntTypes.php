@@ -11,16 +11,18 @@
 namespace chippyash\Math\Type\Traits;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
+use chippyash\Type\Interfaces\GMPInterface;
+use chippyash\Type\Number\GMPIntType;
 use chippyash\Type\Number\IntType;
 
 /**
- * Check for Int type, converting if necessary
+ * Check for GMP Int type, converting if necessary
  */
-trait CheckIntTypes
+trait CheckGmpIntTypes
 {
 
     /**
-     * Check for integer type, converting if necessary
+     * Check for gmp integer type, converting if necessary
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
@@ -28,14 +30,13 @@ trait CheckIntTypes
      */
     protected function checkIntTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        
-        if (!$a instanceof IntType) {
-            $a1 = $a->asIntType();
+        if (!$a instanceof GMPIntType) {
+            $a1 = new GMPIntType($a());
         } else {
             $a1 = $a;
         }
-        if (!$b instanceof IntType) {
-            $b1 = $b->asIntType();
+        if (!$b instanceof GMPIntType) {
+            $b1 = new GMPIntType($b());
         } else {
             $b1 = $b;
         }

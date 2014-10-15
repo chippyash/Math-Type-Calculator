@@ -11,35 +11,35 @@
 namespace chippyash\Math\Type\Traits;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
-use chippyash\Type\Number\IntType;
+use chippyash\Type\Number\Rational\GmpRationalType;
 
 /**
- * Check for Int type, converting if necessary
+ * Check for rational type, converting if necessary
  */
-trait CheckIntTypes
+trait CheckGmpRationalTypes
 {
 
     /**
-     * Check for integer type, converting if necessary
+     * Check for rational type, converting if necessary
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return array [IntType, IntType]
+     * @return array [RationalType, RationalType]
      */
-    protected function checkIntTypes(NumericTypeInterface $a, NumericTypeInterface $b)
+    protected function checkRationalTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        
-        if (!$a instanceof IntType) {
-            $a1 = $a->asIntType();
+        if (!$a instanceof GmpRationalType) {
+            $a1 = $a->asRational();
         } else {
             $a1 = $a;
         }
-        if (!$b instanceof IntType) {
-            $b1 = $b->asIntType();
+        if (!$b instanceof GmpRationalType) {
+            $b1 = $b->asRational();
         } else {
             $b1 = $b;
         }
 
         return [$a1, $b1];
     }
+
 }

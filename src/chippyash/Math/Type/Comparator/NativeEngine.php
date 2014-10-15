@@ -13,14 +13,14 @@ use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexType;
-use chippyash\Math\Type\Calculator\Native as Calc;
+use chippyash\Math\Type\Calculator\NativeEngine as Calc;
 use chippyash\Math\Type\Traits\CheckRationalTypes;
 
 /**
  * PHP Native maths comparator
  *
  */
-class Native extends AbstractComparatorEngine
+class NativeEngine extends AbstractComparatorEngine
 {
     use CheckRationalTypes;
 

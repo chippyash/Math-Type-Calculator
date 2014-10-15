@@ -10,10 +10,11 @@
         }
     ],
     "require": {
-        "chippyash/strong-type": "~1.1.3"
+        "chippyash/strong-type": "~2.0.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7.37",
+        "phpunit/phpunit": "~4.2.6",
+        "phpunit/phpunit-skeleton-generator": "~2.0.1",
         "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
