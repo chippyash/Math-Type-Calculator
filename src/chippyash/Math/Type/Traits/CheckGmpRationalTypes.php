@@ -28,18 +28,19 @@ trait CheckGmpRationalTypes
      */
     protected function checkRationalTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        if (!$a instanceof GmpRationalType) {
-            $a1 = $a->asRational();
-        } else {
-            $a1 = $a;
-        }
-        if (!$b instanceof GmpRationalType) {
-            $b1 = $b->asRational();
-        } else {
-            $b1 = $b;
-        }
-
-        return [$a1, $b1];
+        return [$this->checkRationalType($a), $this->checkRationalType($b)];
     }
 
+    /**
+     * Check and convert to RationalType if required
+     * @param NumericTypeInterface $a
+     * @return GmpRationalType
+     */
+    protected function checkRationalType(NumericTypeInterface $a)
+    {
+        if (!$a instanceof GmpRationalType) {
+            return $a->asRational();
+        } 
+        return $a;
+    }    
 }

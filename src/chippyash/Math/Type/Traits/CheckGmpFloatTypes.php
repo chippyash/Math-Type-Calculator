@@ -12,18 +12,20 @@ namespace chippyash\Math\Type\Traits;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
 use chippyash\Type\Number\FloatType;
+use chippyash\Type\Number\Rational\RationalTypeFactory;
+use chippyash\Type\Number\Rational\GMPRationalType;
 
 /**
- * Check for Float type, converting if necessary
+ * Check for Float type, converting to GmpRationalType if necessary
  */
-trait CheckFloatTypes
+trait CheckGmpFloatTypes
 {
     /**
      * Check for float type, converting if necessary
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return array [FloatType, FloatType]
+     * @return array [GmpRationalType, GmpRationalType]
      */
     protected function checkFloatTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
@@ -32,8 +34,8 @@ trait CheckFloatTypes
     
     protected function checkFloatType(NumericTypeInterface $a)
     {
-        if (!$a instanceof FloatType) {
-            return $a->asFloatType();
+        if (!$a instanceof GMPRationalType) {
+            return RationalTypeFactory::fromFloat($a());
         }
         
         return $a;

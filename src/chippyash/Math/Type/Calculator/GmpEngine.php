@@ -8,31 +8,34 @@
  */
 namespace chippyash\Math\Type\Calculator;
 
+use chippyash\Math\Type\Calculator\AbstractEngine;
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
+use chippyash\Type\TypeFactory;
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\GMPIntType;
 use chippyash\Type\Number\FloatType;
-use chippyash\Type\Number\WholeIntType;
-use chippyash\Type\Number\NaturalIntType;
-use chippyash\Type\Number\Rational\RationalType;
+use chippyash\Type\Number\Rational\GMPRationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
-use chippyash\Type\Number\Complex\ComplexType;
+use chippyash\Type\Number\Complex\AbstractComplexType;
+use chippyash\Type\Number\Complex\GMPComplexType;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
 use chippyash\Math\Type\Traits\GmpConvertNumeric;
 use chippyash\Math\Type\Traits\CheckGmpRationalTypes;
 use chippyash\Math\Type\Traits\CheckGmpIntTypes;
-use chippyash\Math\Type\Traits\CheckFloatTypes;
+use chippyash\Math\Type\Traits\CheckGmpFloatTypes;
+use chippyash\Math\Type\Traits\CheckGmpComplexTypes;
 use chippyash\Math\Type\Comparator;
 
 /**
  * GMP calculation
  */
-class GmpEngine implements CalculatorEngineInterface
+class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
 {
     use GmpConvertNumeric;
     use CheckGmpRationalTypes;
     use CheckGmpIntTypes;
-    use CheckFloatTypes;
+    use CheckGmpFloatTypes;
+    use CheckGmpComplexTypes;
 
     /**
      * Integer type addition
@@ -78,6 +81,8 @@ class GmpEngine implements CalculatorEngineInterface
 
     /**
      * Integer division
+     * Integer division is simply a case of creating a rational
+     * number i.e. a/b
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
@@ -85,34 +90,33 @@ class GmpEngine implements CalculatorEngineInterface
      */
     public function intDiv(NI $a, NI $b)
     {
-        $ra = RationalTypeFactory::create($a);
-        $rb = RationalTypeFactory::create($b);
-        return $this->rationalDiv($ra, $rb);
+        list($a, $b) = $this->checkIntTypes($a, $b);
+        return RationalTypeFactory::create($a, $b);
     }
     
     /**
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
      * 
-     * @param \chippyash\Type\Number\IntType $a
+     * @todo Implement taylor series POW method
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function intPow(IntType $a, NI $exp)
+    public function intPow(NI $a, NI $exp)
     {
-        if ($exp instanceof RationalType) {
-            $b = new RationalType(clone $a, new IntType(1));
-            return $this->rationalPow($b, $exp);
+        if ($exp instanceof GMPRationalType) {
+            return $this->rationalPow(RationalTypeFactory::create(clone $a), $exp);
         }
         
-        if ($exp instanceof ComplexType) {
-            return $this->intComplexPow($a(), $exp);
+        if ($exp instanceof GMPComplexType) {
+            return $this->intComplexPow($a, $exp);
         }
         
         //int and float types
         $p = pow($a(), $exp());
         if (($p - intval($p)) === 0) {
-            return new IntType($p);
+            return new GMPIntType($p);
         }
         
         return RationalTypeFactory::fromFloat($p);
@@ -120,14 +124,14 @@ class GmpEngine implements CalculatorEngineInterface
     
     /**
      * Integer sqrt
-     * Return IntType for perfect squares, else RationalType
+     * Return GmpIntType for perfect squares, else GMPRationalType
      * 
-     * @param \chippyash\Type\Number\IntType $a
-     * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return \chippyash\Type\Number\GmpIntType|\chippyash\Type\Number\Rational\GMPRationalType result
      */
-    public function intSqrt(IntType $a)
+    public function intSqrt(NI $a)
     {
-        $res = $this->rationalSqrt(new RationalType($a, new IntType(1)));
+        $res = $this->rationalSqrt(RationalTypeFactory::create($a));
         if ($res->isInteger()) {
             return $res->numerator();
         } else {
@@ -140,12 +144,13 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatAdd(NI $a, NI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        return new FloatType($a() + $b());
+        
+        return $this->rationalAdd($a, $b);
     }
 
     /**
@@ -153,12 +158,13 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatSub(NI $a, NI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        return new FloatType($a() - $b());
+        
+        return $this->rationalSub($a, $b);
     }
 
     /**
@@ -166,12 +172,13 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatMul(NI $a, NI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        return new FloatType($a() * $b());
+        
+        return $this->rationalMul($a, $b);
     }
 
     /**
@@ -179,158 +186,148 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatDiv(NI $a, NI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        return new FloatType($a() / $b());
+        
+        return $this->rationalDiv($a, $b);
     }
 
     /**
      * Float reciprocal i.e. 1/a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatReciprocal(NI $a)
     {
-        return $this->floatDiv(new IntType(1), $a);
+        return $this->rationalReciprocal($this->checkFloatType($a));
     }
 
     /**
      * Float Pow - raise number to the exponent
      * Will return a float type
      * 
-     * @param \chippyash\Type\Number\FloatType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return \chippyash\Type\Number\FloatType
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
-    public function floatPow(FloatType $a, NI $exp)
+    public function floatPow(NI $a, NI $exp)
     {
-        if ($exp instanceof RationalType) {
-            $b = RationalTypeFactory::fromFloat($a());
-            return $this->rationalPow($b, $exp)->asFloatType();
-        }
-        
-        if ($exp instanceof ComplexType) {
-            return $this->floatComplexPow($a(), $exp);
-        }
-        
-        //int and float types
-        $p = pow($a(), $exp());
-        
-        return new FloatType($p);
+        return $this->rationalPow($this->checkFloatType($a), $exp);
     }
     
     /**
      * Float sqrt
      * 
-     * @param \chippyash\Type\Number\FloatType $a
-     * @return \chippyash\Type\Number\FloatType result
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
-    public function floatSqrt(FloatType $a)
+    public function floatSqrt(NI $a)
     {
-        return new FloatType(sqrt($a()));
+        return $this->rationalSqrt($this->checkFloatType($a));
     }
 
     /**
      * Whole number addition
-     *
+     * Proxy to intAdd
+     * NB you lose the protection of whole types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\WholeIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function wholeAdd(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new WholeIntType($a() + $b());
+        return $this->intAdd($a, $b);
     }
 
     /**
      * Whole number subtraction
-     *
+     * Proxy to intSub
+     * NB you lose the protection of whole types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\WholeIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function wholeSub(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new WholeIntType($a() - $b());
+        return $this->intSub($a, $b);
     }
 
     /**
      * Whole number multiplication
-     *
+     * Proxy to intMul
+     * NB you lose the protection of whole types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\WholeIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function wholeMul(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new WholeIntType($a() * $b());
+        return $this->intMul($a, $b);
     }
 
     /**
      * Natural number addition
-     *
+     * Proxy to IntAdd
+     * NB you lose the protection of natural types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\NaturalIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function naturalAdd(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new NaturalIntType($a() + $b());
+        return $this->intAdd($a, $b);
     }
 
     /**
      * Natural number subtraction
-     *
+     * Proxy to intSub
+     * NB you lose the protection of natural types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\NaturalIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function naturalSub(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new NaturalIntType($a() - $b());
+        return $this->intSub($a, $b);
     }
 
     /**
      * Natural number multiplication
-     *
+     * Proxy to intMul
+     * NB you lose the protection of natural types
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\NaturalIntType
+     * @return \chippyash\Type\Number\GmpIntType
      */
     public function naturalMul(NI $a, NI $b)
     {
-        list($a, $b) = $this->checkIntTypes($a, $b);
-        return new NaturalIntType($a() * $b());
+        return $this->intMul($a, $b);
     }
 
     /**
      * Rational number addition
-     *
+     * 
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Rational\RationalType
      */
     public function rationalAdd(NI $a, NI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = $a->asRational();
-        }
-        if (!$b instanceof RationalType) {
-            $b = $b->asRational();
-        }
+        list($a, $b) = $this->checkRationalTypes($a, $b);
 
         $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
-        $n = $this->intAdd(new IntType($nn), new IntType($nd));
+        $n = $this->intAdd(TypeFactory::createInt($nn), TypeFactory::createInt($nd));
 
         return RationalTypeFactory::create($n, $d->numerator());
     }
@@ -348,7 +345,7 @@ class GmpEngine implements CalculatorEngineInterface
         $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
-        $n = $this->intSub(new IntType($nn), new IntType($nd));
+        $n = $this->intSub(new GMPIntType($nn), new GMPIntType($nd));
 
         return RationalTypeFactory::create($n, $d->numerator());
     }
@@ -388,25 +385,27 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param \\chippyash\Type\Number\Rational\RationalType $a
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
-    public function rationalReciprocal(RationalType $a)
+    public function rationalReciprocal(NI $a)
     {
+        $a = $this->checkRationalType($a);
         return RationalTypeFactory::create($a->denominator(), $a->numerator());
     }
     
     /**
      * Rational Pow - raise number to the exponent
-     * Will return a RationalType
+     * Will return a GMPRationalType
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @return \chippyash\Type\Number\Rational\GMPRationalType
      */
-    public function rationalPow(RationalType $a, NI $exp)
+    public function rationalPow(NI $a, NI $exp)
     {
-        if ($exp instanceof ComplexType) {
+        $a = $this->checkRationalType($a);
+        if ($exp instanceof \chippyash\Type\Number\Complex\GMPComplexType) {
             $r = $this->floatComplexPow($a(), $exp);
             if ($r instanceof FloatType) {
                 return RationalTypeFactory::fromFloat($r());
@@ -428,27 +427,24 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Rational sqrt
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @return \chippyash\Type\Number\Rational\RationalType result
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return \chippyash\Type\Number\Rational\GMPRationalType result
      */
-    public function rationalSqrt(RationalType $a)
+    public function rationalSqrt(NI $a)
     {
-        $num = sqrt($a->numerator()->get());
-        $den = sqrt($a->denominator()->get());
-        return $this->rationalDiv(
-                RationalTypeFactory::fromFloat($num), 
-                RationalTypeFactory::fromFloat($den));
+        $exp = RationalTypeFactory::create(1, 2);
+        return $this->rationalPow($a, $exp);
     }
     
 
     /**
      * Complex number addition
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return chippyash\Type\Number\Complex\GMPComplexType
      */
-    public function complexAdd(ComplexType $a, ComplexType $b)
+    public function complexAdd(NI $a, NI $b)
     {
         $r = $this->rationalAdd($a->r(), $b->r());
         $i = $this->rationalAdd($a->i(), $b->i());
@@ -458,11 +454,11 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number subtraction
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return chippyash\Type\Number\Complex\GMPComplexType
      */
-    public function complexSub(ComplexType $a, ComplexType $b)
+    public function complexSub(NI $a, NI $b)
     {
         $r = $this->rationalSub($a->r(), $b->r());
         $i = $this->rationalSub($a->i(), $b->i());
@@ -472,11 +468,11 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number multiplication
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return \chippyash\Type\Number\Complex\GMPComplexType
      */
-    public function complexMul(ComplexType $a, ComplexType $b)
+    public function complexMul(NI $a, NI $b)
     {
         $r = $this->rationalSub($this->rationalMul($a->r(), $b->r()), $this->rationalMul($a->i(), $b->i()));
         $i = $this->rationalAdd($this->rationalMul($a->i(), $b->r()), $this->rationalMul($a->r(), $b->i()));
@@ -486,12 +482,12 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number division
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return \chippyash\Type\Number\Complex\GMPComplexType
      * @throws \BadMethodCallException
      */
-    public function complexDiv(ComplexType $a, ComplexType $b)
+    public function complexDiv(NI $a, NI $b)
     {
         if ($b->isZero()) {
             throw new \BadMethodCallException('Cannot divide complex number by zero complex number');
@@ -509,11 +505,11 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return \chippyash\Type\Number\Complex\GMPComplexType
      * @throws \BadMethodCallException
      */
-    public function complexReciprocal(ComplexType $a)
+    public function complexReciprocal(NI $a)
     {
         if ($a->isZero()) {
             throw new \BadMethodCallException('Cannot compute reciprocal of zero complex number');
@@ -533,24 +529,27 @@ class GmpEngine implements CalculatorEngineInterface
      * Will return a ComplexType
      * Exponent must be non complex
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * 
-     * @return \chippyash\Type\Number\Complex\ComplexType
+     * @return \chippyash\Type\Number\Complex\GMPComplexType
      * 
      * @throws \InvalidArgumentException If exponent is complex
      */
-    public function complexPow(ComplexType $a, NI $exp)
+    public function complexPow(NI $a, NI $exp)
     {
-        if ($exp instanceof ComplexType) {
+        $a = $this->checkGmpComplexType($a);
+        if ($exp instanceof AbstractComplexType) {
+            $exp = $this->checkGmpComplexType($exp);
             $comp = new Comparator();
-            $zero = new IntType(0);
+            $zero = new GMPIntType(0);
             if ($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero)) {
                 $real = 0;
                 $imaginary = 0;
             } else {
                 $er = $exp->r()->get();
                 $ei = $exp->i()->get();
+                
                 $logr = log($a->modulus()->get());
                 $theta = $a->theta()->get();
                 $rho = exp($logr * $er - $ei * $theta);
@@ -570,7 +569,7 @@ class GmpEngine implements CalculatorEngineInterface
             $imaginary = sin($nTheta) * $pow;
         }
         
-        return new ComplexType(
+        return ComplexTypeFactory::create(
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
                 );        
@@ -579,12 +578,58 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex sqrt
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Complex\ComplexType result
      */
-    public function complexSqrt(ComplexType $a)
+    public function complexSqrt(NI $a)
     {
         return $this->complexPow($a, RationalTypeFactory::create(1, 2));
+    }
+    
+    
+    /**
+     * Return the natural (base e) logarithm for a number
+     * 
+     * This function will use a Taylor Series algorithm to compute the log
+     * for GMP calculator else use PHP inbuilt log() method
+     * 
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * 
+     * @return \chippyash\Type\Numeric\Rational\GMPRationalType
+     */
+    public function natLog(NI $a)
+    {
+        $epsilon = RationalTypeFactory::fromFloat(self::NATLOG_EPSILON);
+        $calc = $this->calculator;
+        $comp = new Comparator();
+        if ($a instanceof \chippyash\Type\Number\Complex\GMPComplexType) {
+            if($a->isReal()) {
+                $y = $a->r();
+            } else {
+                $y = $a->modulus();
+            }
+        } else {
+            $y = $a;
+        }
+        
+        //x = (y-1)/(y+1)
+        $x = $calc->div($calc->sub($y, 1), $calc->add($y, 1));
+        //x = x^2
+        $z = $calc->mul($x, $x);
+        //initial log value
+        $L = RationalTypeFactory::create(0);
+        $two = RationalTypeFactory::create(2);
+
+        //run the Taylor Series until we meet the epsilon limiter
+        for ($k=RationalTypeFactory::create(1); $comp->gt($x, $epsilon); $calc->inc($k, $two)) {
+            //$L += 2 * $x / $k;
+            $calc->inc($L, $calc->div($calc->mul($two, $x), $k));
+            //$x *= $z;
+            $x = $calc->mul($x, $z);
+        }
+
+        return $L;
+
     }
     
     private function intComplexPow($a, ComplexType $exp)

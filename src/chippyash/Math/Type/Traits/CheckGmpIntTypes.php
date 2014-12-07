@@ -30,17 +30,21 @@ trait CheckGmpIntTypes
      */
     protected function checkIntTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
+        return [$this->checkIntType($a), $this->checkIntType($b)];
+    }
+    
+    /**
+     * Check for gmp integer type, converting if necessary
+     * 
+     * @param NumericTypeInterface $a
+     * @return GMPIntType
+     */
+    protected function checkIntType(NumericTypeInterface $a) 
+    {
         if (!$a instanceof GMPIntType) {
-            $a1 = new GMPIntType($a());
-        } else {
-            $a1 = $a;
+            return new GMPIntType($a());
         }
-        if (!$b instanceof GMPIntType) {
-            $b1 = new GMPIntType($b());
-        } else {
-            $b1 = $b;
-        }
-
-        return [$a1, $b1];
+        
+        return $a;
     }
 }

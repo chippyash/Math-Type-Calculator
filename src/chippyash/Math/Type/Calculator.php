@@ -80,11 +80,11 @@ class Calculator
         }
         
         if (self::getRequiredType() == self::TYPE_GMP) {
-            $this->calcEngine = new GmpEngine();
+            $this->calcEngine = new GmpEngine($this);
             return;
         }
         
-        $this->calcEngine = new NativeEngine();
+        $this->calcEngine = new NativeEngine($this);
         
     }
 
@@ -276,6 +276,62 @@ class Calculator
             default :
                 return $this->calcEngine->floatSqrt($a);
         }
+    }
+    
+    /**
+     * Return the natural logarithm (base e) of the number
+     * 
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * 
+     * @return chippyash\Type\Number\Complex\AbstractComplexType
+     */
+    public function natLog($a)
+    {
+        return $this->calcEngine->natLog($this->convert($a));
+    }
+    
+    /**
+     * In place incrementor
+     * 
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * 
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     */
+    public function inc(NumericTypeInterface &$a, $inc = null)
+    {
+        if (!is_null($inc)) {
+            $inc = $this->convert($inc);
+        }
+        
+        return $this->calcEngine->inc($a, $inc);
+    }
+    
+    /**
+     * In place decrementor
+     * 
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * 
+     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     */
+    public function dec(NumericTypeInterface &$a, $inc = null)
+    {
+        if (!is_null($inc)) {
+            $inc = $this->convert($inc);
+        }
+        
+        return $this->calcEngine->dec($a, $inc);
+    }
+    
+    /**
+     * Return the actual calc engine is use
+     * 
+     * @return chippyash\Math\Type\Calculator\CalculatorEngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->calcEngine;
     }
     
     /**

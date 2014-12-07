@@ -35,6 +35,9 @@ Provides arithmetic calculation support for chippyash/strong-type numeric types.
 *  reciprocal
 *  pow
 *  sqrt
+*  natLog
+*  inc
+*  dec
 
 ### Comparison support provided
 
@@ -105,9 +108,15 @@ Then you simply fire calculation requests at it:
     echo $calc->add($r, $w) . PHP_EOL;
     echo $calc->add($r, $w) . PHP_EOL;
     echo $calc->add($r, $w) . PHP_EOL;
+    echo $calc->natLog($r) . PHP_EOL;
+    $calc->inc($w);
+    echo $w . PHP_EOL;
+    $calc->dec(c1, $n);
+    echo $c1 . PHP_EOL;
 </pre>
 
-The Calculator supports the following methods (all operands are NumericTypeInterface, or PHP int or PHP float):
+The Calculator supports the following methods (all operands are NumericTypeInterface, 
+or PHP int or PHP float, except where explicitly stated):
 
 *  add($a, $b) : NumericTypeInterface
 *  sub($a, $b) : NumericTypeInterface
@@ -116,6 +125,11 @@ The Calculator supports the following methods (all operands are NumericTypeInter
 *  reciprocal($a) : NumericTypeInterface
 *  pow($base, $exp) : NumericTypeInterface
 *  sqrt($a) : NumericTypeInterface
+*  natLog($a) : AbstractRationalType
+*  inc(NumericTypeInterface &$a) : NumericTypeInterface
+*  inc(NumericTypeInterface &$a, $inc) : NumericTypeInterface
+*  dec(NumericTypeInterface &$a) : NumericTypeInterface
+*  dec(NumericTypeInterface &$a, $dec) : NumericTypeInterface
 
 The Calculator will arbitrate between types and return the lowest possible type based on the operand types.
 The order of precedence is
@@ -178,8 +192,10 @@ It has convenience methods (all operands are NumericTypeInterface):
 
 The library automatically recognises the availability of the gmp extension and
 will use it for int, rational and complex types.  There is no gmp support for 
-WholeIntType, NaturalIntType or FloatType - so be careful!.  You can force the 
-library to use PHP native types by calling
+FloatType - They will be automatically caste to GmpRationalType. Similarly, 
+there is no support for WholeIntType and NaturalIntType types. If found, they 
+will be automatically caste to GmpIntType. You can force the library to use 
+PHP native types by calling
 
 <pre>
     Calculator::setNumberType(Calculator::TYPE_NATIVE);

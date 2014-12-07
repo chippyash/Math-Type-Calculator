@@ -28,18 +28,21 @@ trait CheckIntTypes
      */
     protected function checkIntTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        
+        return [$this->checkIntType($a), $this->checkIntType($b)];
+    }
+    
+    /**
+     * Check for integer type, converting if necessary
+     * 
+     * @param NumericTypeInterface $a
+     * @return IntType
+     */
+    protected function checkIntType(NumericTypeInterface $a) 
+    {
         if (!$a instanceof IntType) {
-            $a1 = $a->asIntType();
-        } else {
-            $a1 = $a;
+            return $a->asIntType();
         }
-        if (!$b instanceof IntType) {
-            $b1 = $b->asIntType();
-        } else {
-            $b1 = $b;
-        }
-
-        return [$a1, $b1];
+        
+        return $a;
     }
 }

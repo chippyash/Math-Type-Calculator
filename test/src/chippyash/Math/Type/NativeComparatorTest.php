@@ -7,9 +7,9 @@ use chippyash\Type\Number\IntType;
 use chippyash\Math\Type\Calculator;
 
 /**
- *
+ * @runTestsInSeparateProcesses
  */
-class ComparatorTest extends \PHPUnit_Framework_TestCase
+class NativeComparatorTest extends \PHPUnit_Framework_TestCase
 {
     
     public function setUp()

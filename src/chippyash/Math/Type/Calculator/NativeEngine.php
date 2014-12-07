@@ -8,6 +8,7 @@
  */
 namespace chippyash\Math\Type\Calculator;
 
+use chippyash\Math\Type\Calculator\AbstractEngine;
 use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\IntType;
@@ -27,7 +28,7 @@ use chippyash\Math\Type\Comparator;
 /**
  * PHP Native calculation
  */
-class NativeEngine implements CalculatorEngineInterface
+class NativeEngine extends AbstractEngine implements CalculatorEngineInterface
 {
     use NativeConvertNumeric;
     use CheckRationalTypes;
@@ -78,6 +79,7 @@ class NativeEngine implements CalculatorEngineInterface
 
     /**
      * Integer division
+     * Simply create a rational type i.e. a/b
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
@@ -85,20 +87,19 @@ class NativeEngine implements CalculatorEngineInterface
      */
     public function intDiv(NI $a, NI $b)
     {
-        $ra = RationalTypeFactory::create($a);
-        $rb = RationalTypeFactory::create($b);
-        return $this->rationalDiv($ra, $rb);
+        list($aa, $bb) = $this->checkIntTypes($a, $b);
+        return RationalTypeFactory::create($aa, $bb);
     }
     
     /**
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
      * 
-     * @param \chippyash\Type\Number\IntType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function intPow(IntType $a, NI $exp)
+    public function intPow(NI $a, NI $exp)
     {
         if ($exp instanceof RationalType) {
             $b = new RationalType(clone $a, new IntType(1));
@@ -106,7 +107,7 @@ class NativeEngine implements CalculatorEngineInterface
         }
         
         if ($exp instanceof ComplexType) {
-            return $this->intComplexPow($a(), $exp);
+            return $this->intComplexPow($a, $exp);
         }
         
         //int and float types
@@ -122,10 +123,10 @@ class NativeEngine implements CalculatorEngineInterface
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
      * 
-     * @param \chippyash\Type\Number\IntType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
      */
-    public function intSqrt(IntType $a)
+    public function intSqrt(NI $a)
     {
         $res = $this->rationalSqrt(new RationalType($a, new IntType(1)));
         if ($res->isInteger()) {
@@ -201,19 +202,20 @@ class NativeEngine implements CalculatorEngineInterface
      * Float Pow - raise number to the exponent
      * Will return a float type
      * 
-     * @param \chippyash\Type\Number\FloatType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return \chippyash\Type\Number\FloatType
      */
-    public function floatPow(FloatType $a, NI $exp)
+    public function floatPow(NI $a, NI $exp)
     {
+        $a = $this->checkFloatType($a);
         if ($exp instanceof RationalType) {
             $b = RationalTypeFactory::fromFloat($a());
             return $this->rationalPow($b, $exp)->asFloatType();
         }
         
         if ($exp instanceof ComplexType) {
-            return $this->floatComplexPow($a(), $exp);
+            return $this->floatComplexPow($a, $exp);
         }
         
         //int and float types
@@ -225,10 +227,10 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Float sqrt
      * 
-     * @param \chippyash\Type\Number\FloatType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\FloatType result
      */
-    public function floatSqrt(FloatType $a)
+    public function floatSqrt(NI $a)
     {
         return new FloatType(sqrt($a()));
     }
@@ -320,13 +322,7 @@ class NativeEngine implements CalculatorEngineInterface
      */
     public function rationalAdd(NI $a, NI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = $a->asRational();
-        }
-        if (!$b instanceof RationalType) {
-            $b = $b->asRational();
-        }
-
+        list($a, $b) = $this->checkRationalTypes($a, $b);
         $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
         $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
@@ -388,11 +384,12 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param \\chippyash\Type\Number\Rational\RationalType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Rational\RationalType
      */
-    public function rationalReciprocal(RationalType $a)
+    public function rationalReciprocal(NI $a)
     {
+        $a = $this->checkRationalType($a);
         return RationalTypeFactory::create($a->denominator(), $a->numerator());
     }
     
@@ -400,14 +397,15 @@ class NativeEngine implements CalculatorEngineInterface
      * Rational Pow - raise number to the exponent
      * Will return a RationalType
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @return \chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function rationalPow(RationalType $a, NI $exp)
+    public function rationalPow(NI $a, NI $exp)
     {
+        $a = $this->checkRationalType($a);
         if ($exp instanceof ComplexType) {
-            $r = $this->floatComplexPow($a(), $exp);
+            $r = $this->rationalComplexPow($a, $exp);
             if ($r instanceof FloatType) {
                 return RationalTypeFactory::fromFloat($r());
             } else {
@@ -421,18 +419,19 @@ class NativeEngine implements CalculatorEngineInterface
         $denF = pow($a->denominator()->get(), $exp2);
         $numR = RationalTypeFactory::fromFloat($numF);
         $denR = RationalTypeFactory::fromFloat($denF);
-        return $this->rationalDiv($numR, $denR);
         
+        return $this->rationalDiv($numR, $denR);
     }
     
     /**
      * Rational sqrt
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Rational\RationalType result
      */
-    public function rationalSqrt(RationalType $a)
+    public function rationalSqrt(NI $a)
     {
+        $a = $this->checkRationalType($a);
         $num = sqrt($a->numerator()->get());
         $den = sqrt($a->denominator()->get());
         return $this->rationalDiv(
@@ -444,11 +443,11 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex number addition
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexAdd(ComplexType $a, ComplexType $b)
+    public function complexAdd(NI $a, NI $b)
     {
         $r = $this->rationalAdd($a->r(), $b->r());
         $i = $this->rationalAdd($a->i(), $b->i());
@@ -458,11 +457,11 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex number subtraction
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexSub(ComplexType $a, ComplexType $b)
+    public function complexSub(NI $a, NI $b)
     {
         $r = $this->rationalSub($a->r(), $b->r());
         $i = $this->rationalSub($a->i(), $b->i());
@@ -472,11 +471,11 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex number multiplication
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexMul(ComplexType $a, ComplexType $b)
+    public function complexMul(NI $a, NI $b)
     {
         $r = $this->rationalSub($this->rationalMul($a->r(), $b->r()), $this->rationalMul($a->i(), $b->i()));
         $i = $this->rationalAdd($this->rationalMul($a->i(), $b->r()), $this->rationalMul($a->r(), $b->i()));
@@ -486,12 +485,12 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex number division
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      * @throws \BadMethodCallException
      */
-    public function complexDiv(ComplexType $a, ComplexType $b)
+    public function complexDiv(NI $a, NI $b)
     {
         if ($b->isZero()) {
             throw new \BadMethodCallException('Cannot divide complex number by zero complex number');
@@ -509,11 +508,11 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Complex\ComplexType
      * @throws \BadMethodCallException
      */
-    public function complexReciprocal(ComplexType $a)
+    public function complexReciprocal(NI $a)
     {
         if ($a->isZero()) {
             throw new \BadMethodCallException('Cannot compute reciprocal of zero complex number');
@@ -533,14 +532,14 @@ class NativeEngine implements CalculatorEngineInterface
      * Will return a ComplexType
      * Exponent must be non complex
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * 
      * @return \chippyash\Type\Number\Complex\ComplexType
      * 
      * @throws \InvalidArgumentException If exponent is complex
      */
-    public function complexPow(ComplexType $a, NI $exp)
+    public function complexPow(NI $a, NI $exp)
     {
         if ($exp instanceof ComplexType) {
             $comp = new Comparator();
@@ -579,12 +578,33 @@ class NativeEngine implements CalculatorEngineInterface
     /**
      * Complex sqrt
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Complex\ComplexType result
      */
-    public function complexSqrt(ComplexType $a)
+    public function complexSqrt(NI $a)
     {
         return $this->complexPow($a, RationalTypeFactory::create(1, 2));
+    }
+
+    
+    /**
+     * Return the natural (base e) logarithm for a number
+     * 
+     * This function will use a Taylor Series algorithm to compute the log
+     * for GMP calculator else use PHP inbuilt log() method
+     * 
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * 
+     * @return \chippyash\Type\Numeric\Rational\RationalType
+     */
+    public function natLog(NI $a)
+    {
+        if ($a instanceof \chippyash\Type\Number\Complex\ComplexType
+            && !$a->isReal()) {
+            return RationalTypeFactory::fromFloat(\log($a->modulus()->get()));
+        }
+
+        return RationalTypeFactory::fromFloat(\log($a()));
     }
     
     private function intComplexPow($a, ComplexType $exp)
@@ -595,26 +615,53 @@ class NativeEngine implements CalculatorEngineInterface
         return $this->complexExponent($a, $exp);        
     }
     
-    private function floatComplexPow($a, ComplexType $exp)
+    /**
+     * Return Pow of Float with Complex exponent
+     * 
+     * @param FloatType $a
+     * @param ComplexType $exp
+     * @return FloatType|ComplexType
+     */
+    private function floatComplexPow(FloatType $a, ComplexType $exp)
     {
         if ($exp->isZero()) {
             return new FloatType(1);
         }
         return $this->complexExponent($a, $exp);
     }
+
+    /**
+     * Return Pow of Rational with Complex exponent
+     * 
+     * @param RationalType $a
+     * @param ComplexType $exp
+     * @return RationalType|ComplexType
+     */
+    private function rationalComplexPow(RationalType $a, ComplexType $exp)
+    {
+        if ($exp->isZero()) {
+            return RationalTypeFactory::create(1);
+        }
+        return $this->complexExponent($a, $exp);
+    }
     
-    private function complexExponent($base, ComplexType $exp)
+    /**
+     * Return Pow of number with non zero complex exponent
+     * 
+     * @param NumericTypeInterface $base
+     * @param ComplexType $exp
+     * @return RationalType|ComplexType
+     */
+    private function complexExponent(NI $base, ComplexType $exp)
     {
         if ($exp->isReal()) {
-            return $this->rationalPow(
-                    RationalTypeFactory::fromFloat($base), 
-                    $exp->r());
+            return $this->rationalPow($base->asRational(), $exp->r());
         }
         
         //do the imaginary part
         //n^bi = cos(b.lg(n)) + i.sin(b.lg(n))
         $b = $exp->i()->get();
-        $n = log($base);
+        $n = log($base());
         $r = cos($b * $n);
         $i = sin($b * $n);     
         
@@ -626,7 +673,7 @@ class NativeEngine implements CalculatorEngineInterface
         }
         //real and imaginary part
         //n^a+bi = n^a(cos(b.lg(n)) + i.sin(b.lg(n)))
-        $na = pow($base, $exp->r()->get());
+        $na = pow($base(), $exp->r()->get());
         $rr = $na * $r;
         $ii = $na * $i;
         return new ComplexType(

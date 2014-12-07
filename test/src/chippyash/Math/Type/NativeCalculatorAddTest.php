@@ -10,33 +10,19 @@ use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
 
 /**
- *
+ * 
  */
-class CalculatorAddTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
     /**@+
      * Class definitions for number types
      */
     const INT_TYPE = 'chippyash\Type\Number\IntType';
-    const GINT_TYPE = 'chippyash\Type\Number\GMPIntType';
     const WINT_TYPE = 'chippyash\Type\Number\WholeIntType';
     const NINT_TYPE = 'chippyash\Type\Number\NaturalIntType';
     const FLOAT_TYPE = 'chippyash\Type\Number\FloatType';
     const RAT_TYPE = 'chippyash\Type\Number\Rational\RationalType';
-    const GRAT_TYPE = 'chippyash\Type\Number\Rational\GMPRationalType';
     const COMP_TYPE = 'chippyash\Type\Number\Complex\ComplexType';
-    const GCOMP_TYPE = 'chippyash\Type\Number\Complex\GMPComplexType';
-    /**@-*/
-    
-    /**@+
-     * class names
-     */
-    protected $intType;
-    protected $wintType;
-    protected $nintType;
-    protected $floatType;
-    protected $ratType;
-    protected $compType;
     /**@-*/
     
     /**
@@ -47,20 +33,7 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->nintType = self::NINT_TYPE;
-        $this->wintType = self::WINT_TYPE;
-        $this->floatType = self::FLOAT_TYPE;
-        if (extension_loaded('gmp')) {
-            $this->intType = self::GINT_TYPE;
-            $this->ratType = self::GRAT_TYPE;
-            $this->compType = self::GCOMP_TYPE;
-            Calculator::setNumberType(Calculator::TYPE_GMP);
-        } else {
-            $this->intType = self::INT_TYPE;
-            $this->ratType = self::RAT_TYPE;
-            $this->compType = self::COMP_TYPE;
-            Calculator::setNumberType(Calculator::TYPE_NATIVE);
-        }
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         
         $this->object = new Calculator();
     }
@@ -68,182 +41,182 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddTwoIntsReturnsIntType()
     {
         $this->assertInstanceOf(
-                $this->intType,
+                self::INT_TYPE,
                 $this->object->add(2, 3));
     }
 
     public function testAddIntAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(2, 3.4));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(3.4, 2));
     }
 
     public function testAddTwoFloatsReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(2.6, -3.067));
     }
 
     public function testAddTwoIntTypesReturnsIntType()
     {
         $this->assertInstanceOf(
-                $this->intType,
+                self::INT_TYPE,
                 $this->object->add(new IntType(2), new IntType(3)));
     }
 
     public function testAddIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new IntType(2), 3.4));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(3.4, new IntType(2)));
     }
 
     public function testAddIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new IntType(2), new FloatType(3.4)));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new FloatType(3.4), new IntType(2)));
     }
 
     public function testAddTwoFloatTypesReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new FloatType(2.6), new FloatType(-3.067)));
     }
 
     public function testAddFloatTypeAndIntReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(2, new FloatType(3.4)));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new FloatType(3.4), 2));
     }
 
     public function testAddTwoWholeIntTypesReturnsWholeIntType()
     {
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new WholeIntType(2), new WholeIntType(5)));
     }
 
     public function testAddWholeIntTypeAndIntReturnsWholeIntType()
     {
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new WholeIntType(2), 5));
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(5, new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndIntTypeReturnsWholeIntType()
     {
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new WholeIntType(2), new IntType(5)));
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new IntType(5), new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new WholeIntType(2), new FloatType(5.5)));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new FloatType(5.5), new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new WholeIntType(2), 5.5));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(5.5, new WholeIntType(2)));
     }
 
     public function testAddTwoNaturalIntTypesReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
-                $this->nintType,
+                self::NINT_TYPE,
                 $this->object->add(new NaturalIntType(2), new NaturalIntType(5)));
     }
 
     public function testAddNaturalIntTypeAndIntReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
-                $this->nintType,
+                self::NINT_TYPE,
                 $this->object->add(new NaturalIntType(2), 5));
         $this->assertInstanceOf(
-                $this->nintType,
+                self::NINT_TYPE,
                 $this->object->add(5, new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndIntTypeReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
-                $this->nintType,
+                self::NINT_TYPE,
                 $this->object->add(new NaturalIntType(2), new IntType(5)));
         $this->assertInstanceOf(
-                $this->nintType,
+                self::NINT_TYPE,
                 $this->object->add(new IntType(5), new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new NaturalIntType(2), new FloatType(5.5)));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new FloatType(5.5), new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(new NaturalIntType(2), 5.5));
         $this->assertInstanceOf(
-                $this->floatType,
+                self::FLOAT_TYPE,
                 $this->object->add(5.5, new NaturalIntType(2)));
     }
 
     public function testAddWholeIntTypeAndNaturalIntReturnsWholeIntType()
     {
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new WholeIntType(5), new NaturalIntType(2)));
         $this->assertInstanceOf(
-                $this->wintType,
+                self::WINT_TYPE,
                 $this->object->add(new NaturalIntType(2), new WholeIntType(5)));
     }
 
     public function testAddRationalTypeAndIntReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), 2));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(2, RationalTypeFactory::create(1,5)));
 
     }
@@ -251,10 +224,10 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddRationalTypeAndIntTypeReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), new IntType(2)));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(new IntType(2), RationalTypeFactory::create(1,5)));
 
     }
@@ -262,10 +235,10 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddRationalTypeAndWholeIntTypeReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), new WholeIntType(2)));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(new WholeIntType(2), RationalTypeFactory::create(1,5)));
 
     }
@@ -273,10 +246,10 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddRationalTypeAndNaturalIntTypeReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), new NaturalIntType(2)));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(new NaturalIntType(2), RationalTypeFactory::create(1,5)));
 
     }
@@ -284,10 +257,10 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddRationalTypeAndFloatReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), 2.6));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(2.6, RationalTypeFactory::create(1,5)));
 
     }
@@ -295,10 +268,10 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddRationalTypeAndFloatTypeReturnsRationalType()
     {
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(RationalTypeFactory::create(1,5), new FloatType(2.6)));
         $this->assertInstanceOf(
-                $this->ratType,
+                self::RAT_TYPE,
                 $this->object->add(new FloatType(2.6), RationalTypeFactory::create(1,5)));
 
     }
@@ -306,7 +279,7 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddTwoComplexNumbersReturnsComplexNumber()
     {
         $this->assertInstanceOf(
-                $this->compType,
+                self::COMP_TYPE,
                 $this->object->add(ComplexTypeFactory::create(1,5), ComplexTypeFactory::create(5,1)));
     }
 
@@ -317,7 +290,7 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
     public function testAddComplexNumbersWithNonComplexNumberReturnsComplexNumber($nonComplex)
     {
         $this->assertInstanceOf(
-                $this->compType,
+                self::COMP_TYPE,
                 $this->object->add(ComplexTypeFactory::create(1,5), $nonComplex));
     }
 
@@ -325,15 +298,16 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
      * @dataProvider nonComplexNumbers
      * @param numeric $nonComplex
      */
-    public function testAddNonComplexNumbersWithComplexNumberThrowsException($nonComplex)
+    public function testAddNonComplexNumbersWithComplexNumberReturnsComplexNumber($nonComplex)
     {
         $this->assertInstanceOf(
-                $this->compType,
+                self::COMP_TYPE,
                 $this->object->add($nonComplex, ComplexTypeFactory::create(1,5)));
     }
 
     public function nonComplexNumbers()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         return [
             [2],
             [-2.4],
