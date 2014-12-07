@@ -289,3 +289,6 @@ V1.1.7 Add complex pow using complex exponent
 V1.1.8 Update dependent version number
 
 V1.1.9 Update dependent version number
+V1.1.9a Bump to fix failing build
+
+
