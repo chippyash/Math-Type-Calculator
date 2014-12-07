@@ -9,10 +9,6 @@
 namespace chippyash\Math\Type\Calculator;
 
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use chippyash\Type\Number\Complex\ComplexType;
-use chippyash\Type\Number\Rational\RationalType;
-use chippyash\Type\Number\IntType;
-use chippyash\Type\Number\FloatType;
 
 /**
  * Defines an interface that type calculator engines must conform to
@@ -58,20 +54,20 @@ interface CalculatorEngineInterface
     /**
      * Integer Pow - raise number to the exponent
      * 
-     * @param \chippyash\Type\Number\IntType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function intPow(IntType $a, NI $exp);
+    public function intPow(NI $a, NI $exp);
     
     /**
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
      * 
-     * @param \chippyash\Type\Number\IntType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
      */
-    public function intSqrt(IntType $a);
+    public function intSqrt(NI $a);
     
     /**
      * Float addition
@@ -119,19 +115,19 @@ interface CalculatorEngineInterface
     /**
      * Float Pow - raise number to the exponent
      * 
-     * @param \chippyash\Type\Number\FloatType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function floatPow(FloatType $a, NI $exp);
+    public function floatPow(NI $a, NI $exp);
     
     /**
      * Float sqrt
      * 
-     * @param \chippyash\Type\Number\FloatType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\FloatType result
      */
-    public function floatSqrt(FloatType $a);
+    public function floatSqrt(NI $a);
     
     /**
      * Whole number addition
@@ -226,91 +222,91 @@ interface CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param \chippyash\Type\Number\Rational\RationalType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Rational\RationalType
      */
-    public function rationalReciprocal(RationalType $a);
+    public function rationalReciprocal(NI $a);
 
     /**
      * Rational Pow - raise number to the exponent
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @return \chippyash\Type\Interfaces\NumericTypeInterface
      */
-    public function rationalPow(RationalType $a, NI $exp);
+    public function rationalPow(NI $a, NI $exp);
     
     /**
      * Rational sqrt
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Rational\RationalType result
      */
-    public function rationalSqrt(RationalType $a);
+    public function rationalSqrt(NI $a);
     
 
     /**
      * Complex number addition
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexAdd(ComplexType $a, ComplexType $b);
+    public function complexAdd(NI $a, NI $b);
 
     /**
      * Complex number subtraction
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexSub(ComplexType $a, ComplexType $b);
+    public function complexSub(NI $a, NI $b);
 
     /**
      * Complex number multiplication
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexMul(ComplexType $a, ComplexType $b);
+    public function complexMul(NI $a, NI $b);
 
     /**
      * Complex number division
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return \chippyash\Type\Number\Complex\ComplexType
      * @throws \BadMethodCallException
      */
-    public function complexDiv(ComplexType $a, ComplexType $b);
+    public function complexDiv(NI $a, NI $b);
 
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Complex\ComplexType
      * @throws \BadMethodCallException
      */
-    public function complexReciprocal(ComplexType $a);
+    public function complexReciprocal(NI $a);
 
     /**
      * Complex Pow - raise number to the exponent
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
      * @return \chippyash\Type\Number\Complex\ComplexType
      */
-    public function complexPow(ComplexType $a, NI $exp);
+    public function complexPow(NI $a, NI $exp);
 
     /**
      * Complex sqrt
      * 
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
+     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @return \chippyash\Type\Number\Complex\ComplexType result
      */
-    public function complexSqrt(ComplexType $a);
+    public function complexSqrt(NI $a);
     
     /**
      * Convert float or int into relevant strong type
@@ -319,4 +315,38 @@ interface CalculatorEngineInterface
      * @return \chippyash\Type\Number\FloatType|\chippyash\Type\Number\IntType
      */
     public function convertNumeric($num);
+    
+    /**
+     * Increment the number by the increment
+     * By default the increment == 1
+     * This operation will effect the $a parameter
+     * 
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $inc
+     * 
+     * @return void
+     */
+    public function inc(NI &$a, NI $inc = null);
+
+    /**
+     * Decrement the number by the decrement
+     * By default the decrement == 1
+     * This operation will effect the $a parameter
+     * 
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $dec
+     * 
+     * @return void
+     */
+    public function dec(NI &$a, NI $dec = null);
+    
+    /**
+     * Return the natural (base e) logarithm for a number
+     * 
+     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * 
+     * @return \chippyash\Type\Numeric\Rational\AbstractRationalType
+     */
+    public function natLog(NI $a);
+
 }

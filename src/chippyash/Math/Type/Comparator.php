@@ -10,6 +10,7 @@ namespace chippyash\Math\Type;
 
 use chippyash\Type\Interfaces\NumericTypeInterface;
 use chippyash\Math\Type\Comparator\NativeEngine;
+use chippyash\Math\Type\Comparator\GmpEngine;
 use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
 use chippyash\Math\Type\Calculator;
 

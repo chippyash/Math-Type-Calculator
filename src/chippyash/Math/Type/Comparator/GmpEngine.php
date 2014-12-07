@@ -10,22 +10,22 @@ namespace chippyash\Math\Type\Comparator;
 
 use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use chippyash\Type\Number\Rational\RationalType;
+use chippyash\Type\Number\Rational\GMPRationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
-use chippyash\Type\Number\Complex\ComplexType;
+use chippyash\Type\Number\Complex\GMPComplexType;
 use chippyash\Math\Type\Calculator;
-use chippyash\Math\Type\Traits\CheckRationalTypes;
+use chippyash\Math\Type\Traits\CheckGmpRationalTypes;
 
 /**
- * PHP Native maths comparator
+ * GMP maths comparator
  *
  */
-class NativeEngine extends AbstractComparatorEngine
+class GmpEngine extends AbstractComparatorEngine
 {
-    use CheckRationalTypes;
+    use CheckGmpRationalTypes;
 
     /**
-     * @var chippyash\Math\Type\Calculator\NativeEngine
+     * @var chippyash\Math\Type\Calculator\GmpEngine
      */
     protected $calculator;
 
@@ -51,8 +51,7 @@ class NativeEngine extends AbstractComparatorEngine
             case 'int':
             case 'whole':
             case 'natural':
-            case 'float':
-                return $this->intFloatCompare($a, $b);
+                return $this->intCompare($a, $b);
             case 'rational':
                 list($a, $b) = $this->checkRationalTypes($a, $b);
                 return $this->rationalCompare($a, $b);
@@ -62,31 +61,33 @@ class NativeEngine extends AbstractComparatorEngine
                 return $this->complexCompare($a, $b->asComplex());
             case 'numeric:complex':
                 return $this->complexCompare($a->asComplex(), $b);
+            default:
+                throw new \Exception('Unsupported type: ' . $this->arbitrate($a, $b));
         }
     }
 
     /**
-     * Compare int and float types
+     * Compare int types
      *
      * @param chippyash\Type\Interfaces\NumericTypeInterface $a
      * @param chippyash\Type\Interfaces\NumericTypeInterface $b
      * @return int
      */
-    protected function intFloatCompare(NI $a, NI $b)
+    protected function intCompare(NI $a, NI $b)
     {
-        return $this->rationalCompare(
-                RationalTypeFactory::fromFloat($a()),
-                RationalTypeFactory::fromFloat($b()));
+        $test = gmp_cmp($a->gmp(), $b->gmp());
+        
+        return ($test == 0 ? $test : ($test < 0 ? -1 : 1));
     }
 
     /**
      * Compare two rationals
      *
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param \chippyash\Type\Number\Rational\RationalType $b
+     * @param \chippyash\Type\Number\Rational\GMPRationalType $a
+     * @param \chippyash\Type\Number\Rational\GMPRationalType $b
      * @return int
      */
-    protected function rationalCompare(RationalType $a, RationalType $b)
+    protected function rationalCompare(GMPRationalType $a, GMPRationalType $b)
     {
         $res = $this->calculator->rationalSub($a, $b);
 
@@ -104,12 +105,12 @@ class NativeEngine extends AbstractComparatorEngine
      * If both operands are real then compare the real parts
      * else compare the modulii of the two numbers
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param \chippyash\Type\Number\Complex\GMPComplexType $a
+     * @param \chippyash\Type\Number\Complex\GMPComplexType $b
      *
      * @return boolean
      */
-    protected function complexCompare(ComplexType $a, ComplexType $b)
+    protected function complexCompare(GMPComplexType $a, GMPComplexType $b)
     {
         if ($a->isReal()  && $b->isReal()) {
             return $this->rationalCompare($a->r(), $b->r());
@@ -118,15 +119,19 @@ class NativeEngine extends AbstractComparatorEngine
         //hack to get around native php integer limitations
         //what we should be doing here is to return $this->rationalCompare($a->modulus(), $b->modulus())
         //but this blows up because of the big rationals it produces
-        $am = $a->modulus()->asFloatType()->get();
-        $bm = $b->modulus()->asFloatType()->get();
+//        $am = $a->modulus()->asFloatType()->get();
+//        $bm = $b->modulus()->asFloatType()->get();
 
-        if ($am == $bm) {
-            return 0;
-        }
-        if ($am < $bm) {
-            return -1;
-        }
-        return 1;
+        $modA = $a->modulus();
+        $modB = $b->modulus();
+        
+        return $this->rationalCompare($modA, $modB);
+//        if ($am == $bm) {
+//            return 0;
+//        }
+//        if ($am < $bm) {
+//            return -1;
+//        }
+//        return 1;
     }
 }

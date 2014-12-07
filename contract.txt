@@ -1,0 +1,348 @@
+chippyash\Math\Type\Calculator\AbstractGmpEngine
+ [x] Inc replaces original value and defaults inc to one
+ [x] Inc accepts an increment value
+ [x] Inc can increment an integer
+ [x] Inc can increment a wholeint
+ [x] Inc can increment a naturalint
+ [x] Inc can increment a float
+ [x] Inc can increment a rational
+ [x] Inc can increment a rational complex
+ [x] Inc can increment a non rational complex
+ [x] Inc can increment with integer incrementor
+ [x] Inc can increment with float incrementor
+ [x] Inc can increment with rational incrementor
+ [x] Inc can increment with real complex incrementor
+ [x] Inc can increment with non real complex incrementor
+ [x] Dec replaces original value and defaults inc to one
+ [x] Dec accepts a decrement value
+ [x] Dec can decrement an integer
+ [x] Dec can decrement a wholeint
+ [x] Dec can decrement a naturalint
+ [x] Dec can decrement a float
+ [x] Dec can decrement a rational
+ [x] Dec can decrement a rational complex
+ [x] Dec can decrement a non rational complex
+ [x] Dec can decrement with integer decrementor
+ [x] Dec can decrement with float decrementor
+ [x] Dec can decrement with rational decrementor
+ [x] Dec can decrement with real complex decrementor
+ [x] Dec can decrement with non real complex decrementor
+
+chippyash\Math\Type\Calculator\AbstractNativeEngine
+ [x] Inc replaces original value and defaults inc to one
+ [x] Inc accepts an increment value
+ [x] Inc can increment an integer
+ [x] Inc can increment a wholeint
+ [x] Inc can increment a naturalint
+ [x] Inc can increment a float
+ [x] Inc can increment a rational
+ [ ] Inc can increment a rational complex
+ [ ] Inc can increment a non rational complex
+ [x] Inc can increment with integer incrementor
+ [x] Inc can increment with float incrementor
+ [x] Inc can increment with rational incrementor
+ [ ] Inc can increment with real complex incrementor
+ [ ] Inc can increment with non real complex incrementor
+ [x] Dec replaces original value and defaults inc to one
+ [x] Dec accepts a decrement value
+ [x] Dec can decrement an integer
+ [x] Dec can decrement a wholeint
+ [x] Dec can decrement a naturalint
+ [x] Dec can decrement a float
+ [x] Dec can decrement a rational
+ [ ] Dec can decrement a rational complex
+ [ ] Dec can decrement a non rational complex
+ [x] Dec can decrement with integer decrementor
+ [x] Dec can decrement with float decrementor
+ [x] Dec can decrement with rational decrementor
+ [ ] Dec can decrement with real complex decrementor
+ [ ] Dec can decrement with non real complex decrementor
+
+chippyash\Test\Math\Type\Calculator\NativeEngine
+ [ ] Adding two int types returns int type
+ [ ] Subtracting two int types returns int type
+ [ ] Dividing two int types returns rational type
+ [ ] Multiplying two int types returns int type
+ [ ] Int add with non int types computes result
+ [ ] Square root of int type returns int type for perfect square
+ [ ] Square root of int type returns rational type for non perfect square
+ [ ] Int pow returns rational or int or complex types
+ [ ] Adding floats returns a float
+ [ ] Subtracting floats returns a float
+ [ ] Dividing floats returns a float
+ [ ] Multiplying floats returns a float
+ [ ] Reciprocal of a floats returns a float
+ [ ] Pow of floats returns a float
+ [ ] Pow of float with rational exponent returns a float
+ [ ] Pow of float with zero complex exponent returns a float equals one
+ [ ] Pow of float with complex having zero real part exponent returns a complex
+ [ ] Sqrt of a float type returns a float type
+ [ ] Whole int addition returns a whole int
+ [ ] Whole int subtract returns a whole int
+ [ ] Whole int subtract throws exception if result is out of bounds
+ [ ] Whole int multiplication returns a whole int
+ [ ] Natural int addition returns a natural int
+ [ ] Natural int subtract returns a natural int
+ [ ] Natural int subtract throws exception if result is out of bounds
+ [ ] Natural int multiplication returns a natural int
+ [ ] Rational addition returns a rational
+ [ ] Rational addition can add non rationals and return a rational
+ [ ] Rational subtraction returns a rational
+ [ ] Rational subtraction can add non rationals and return a rational
+ [ ] Rational reciprocal returns a rational
+ [ ] Rational pow returns a rational when exponent is real complex
+ [ ] Rational pow returns a complex when exponent is unreal complex
+ [ ] Rational pow returns a complex when exponent is zero complex
+ [ ] Complex add returns complex
+ [ ] Complex sub returns complex
+ [ ] Complex mul returns complex
+ [ ] Complex div with zero divisor throws exception
+ [ ] Complex div returns complex
+ [ ] Complex reciprocal with zero complex throws exception
+ [ ] Complex reciprocal with non zero complex returns complex
+ [ ] Nat log returns rational type
+ [ ] Nat log returns correct result for int type
+ [ ] Nat log returns correct result for wholint type
+ [ ] Nat log returns correct result for naturalint type
+ [ ] Nat log returns correct result for float type
+ [ ] Nat log returns correct result for rational type
+ [ ] Nat log returns correct result for rational complex type
+ [ ] Nat log returns correct result for non rational complex type by using modulus
+
+chippyash\Test\Math\Type\CalculatorDiv
+ [ ] Div two ints returns rational type
+ [ ] Div two int types returns rational type
+ [ ] Div int and float returns float type
+ [ ] Div int type and float returns float type
+ [ ] Div two floats returns float type
+ [ ] Div two float types returns float type
+ [ ] Div float type and float returns float type
+ [ ] Div float type and float type returns float type
+ [ ] Div float type and int returns float type
+ [ ] Div float type and int type returns float type
+ [ ] Div two whole float types returns rational type
+ [ ] Div whole int type and float type returns float type
+ [ ] Div whole int type and float returns float type
+ [ ] Div two natural int types returns rational type
+ [ ] Div natural int type and float returns rational type
+ [ ] Div natural int type and float type returns float type
+ [ ] Div natural int type and whole int returns rational type
+ [ ] Div whole int type and natural int type returns rational type
+ [ ] Div rational type and int returns rational type
+ [ ] Div rational type and float type returns rational type
+ [ ] Div rational type and whole int type returns rational type
+ [ ] Div rational type and natural int type returns rational type
+ [ ] Div rational type and float returns rational type
+ [ ] Div two complex numbers returns complex number
+ [ ] Div complex numbers with non complex number returns complex number
+ [ ] Div non complex numbers with complex number throws exception
+ [ ] Div complex by zero complex throws exception
+ [x] Division is not commutative
+ [x] Division is not associative
+
+chippyash\Test\Math\Type\CalculatorMul
+ [x] Mul two ints returns int type
+ [ ] Mul int and float returns float type
+ [ ] Mul two floats returns float type
+ [x] Mul two int types returns int type
+ [ ] Mul int type and float returns float type
+ [ ] Mul int type and float type returns float type
+ [ ] Mul two float types returns float type
+ [ ] Mul float type and int returns float type
+ [ ] Mul two whole int types returns whole int type
+ [ ] Mul whole int type and int returns whole int type
+ [ ] Mul whole int type and int type returns whole int type
+ [ ] Mul whole int type and float type returns float type
+ [ ] Mul whole int type and float returns float type
+ [ ] Mul two natural int types returns natural int type
+ [ ] Mul natural int type and int returns natural int type
+ [ ] Mul natural int type and int type returns natural int type
+ [ ] Mul natural int type and float type returns float type
+ [ ] Mul natural int type and float returns float type
+ [ ] Mul whole int type and natural int returns whole int type
+ [ ] Mul rational type and int returns rational type
+ [ ] Mul rational type and int type returns rational type
+ [ ] Mul rational type and whole int type returns rational type
+ [ ] Mul rational type and natural int type returns rational type
+ [ ] Mul rational type and float returns rational type
+ [ ] Mul rational type and float type returns rational type
+ [ ] Mul two complex numbers returns complex number
+ [ ] Mul complex numbers with non complex number returns complex number
+ [ ] Mul non complex numbers with complex number throws exception
+ [ ] Multiplication is commutative
+ [ ] Multiplication is associative
+ [ ] Multiplication is distributive over addition
+ [ ] Multiplication is distributive over subtraction
+
+chippyash\Test\Math\Type\CalculatorPow
+ [x] Pow with integer base and integer exponent returns int type
+ [ ] Pow with integer base and float exponent returns rational type
+ [ ] Pow with int type base and zero complex exponent returns int type one
+ [ ] Pow with float base and integer exponent returns float type
+ [ ] Pow with float base and float exponent returns float type
+ [ ] Pow with float base and rational exponent returns float type
+ [ ] Pow with float type base and zero complex exponent returns int type one
+ [ ] Pow with float base and complex exponent returns complex type
+ [ ] Pow with rational base returns rational type
+ [ ] Pow with rational base and complex exponent returns complex type
+ [ ] Pow with rational base and real complex exponent returns rational type
+ [ ] Pow with rational base and zero complex exponent returns rational type with value one
+ [ ] Pow with complex base returns complex type
+ [ ] Pow with zero complex base and complex exponent returns zero complex
+ [ ] Can compute roots using pow
+
+chippyash\Test\Math\Type\CalculatorReciprocal
+ [ ] Reciprocal of number types returns float type
+ [ ] Reciprocal of rational type returns rational type
+ [ ] Reciprocal of complex type returns complex type
+ [ ] Reciprocal of zero complex throws exception
+ [x] Reciprocal of unknow type throws exception
+
+chippyash\Test\Math\Type\CalculatorSqrt
+ [x] Sqrt int type returns int type for perfect squares
+ [ ] Sqrt int type returns rational type for imperfect squares
+ [ ] Sqrt rational type returns rational type
+ [ ] Sqrt float type returns float type
+ [ ] Sqrt complex type returns complex type
+
+chippyash\Test\Math\Type\CalculatorSub
+ [x] Sub two ints returns int type
+ [ ] Sub int and float returns float type
+ [ ] Sub two floats returns float type
+ [x] Sub two int types returns int type
+ [ ] Sub int type and float returns float type
+ [ ] Sub int type and float type returns float type
+ [ ] Sub two float types returns float type
+ [ ] Sub float type and int returns float type
+ [ ] Sub two whole int types returns whole int type
+ [ ] Sub whole int type and int returns whole int type
+ [ ] Sub whole int type and int type returns whole int type
+ [ ] Sub whole int type and float type returns float type
+ [ ] Sub whole int type and float returns float type
+ [ ] Sub two natural int types returns natural int type
+ [ ] Sub natural int type and int returns natural int type
+ [ ] Sub natural int type and int type returns natural int type
+ [ ] Sub natural int type and float type returns float type
+ [ ] Sub natural int type and float returns float type
+ [ ] Sub whole int type and natural int returns whole int type
+ [ ] Sub rational type and int returns rational type
+ [ ] Sub rational type and int type returns rational type
+ [ ] Sub rational type and whole int type returns rational type
+ [ ] Sub rational type and natural int type returns rational type
+ [ ] Sub rational type and float returns rational type
+ [ ] Sub rational type and float type returns rational type
+ [ ] Sub two complex numbers returns complex number
+ [ ] Sub complex numbers with non complex number returns complex number
+ [ ] Sub non complex numbers with complex number throws exception
+ [x] Subtraction is not commutative
+ [x] Subtraction is not associative
+
+chippyash\Test\Math\Type\Calculator
+ [x] Construct with no parameter returns calculator
+ [ ] Construct with calculator engine interface type returns calculator
+ [x] Construct with invalid calculator engine throws exception
+ [x] Set number type with invalid type throws exception
+ [ ] Set number type will throw exception if gmp requested and gmp not loaded
+ [x] Calculator automatically returns correct numbers depending on gmp being loaded
+
+chippyash\Test\Math\Type\Comparator\AbstractComparatorEngine
+ [x] Eq returns boolean
+ [x] Neq returns boolean
+ [x] Lt returns boolean
+ [x] Lte returns boolean
+ [x] Gt returns boolean
+ [x] Gte returns boolean
+
+chippyash\Test\Math\Type\Comparator\GmpEngine
+ [x] Compare ints returns correct result
+ [x] Compare float as first param throws an exception
+ [x] Compare float as second param throws an exception
+ [x] Compare rationals returns correct result
+ [x] Compare real complex returns correct result based on real part
+ [ ] Compare unreal complex returns correct result based on real part
+ [x] Can mix complex and non complex types for comparison
+ [ ] Can mix types for comparison
+
+chippyash\Test\Math\Type\Comparator\NativeEngine
+ [ ] Compare ints returns correct result
+ [ ] Compare floats returns correct result
+ [x] Compare rationals returns correct result
+ [x] Compare real complex returns correct result based on real part
+ [x] Compare unreal complex returns correct result based on real part
+ [x] Can mix complex and non complex types for comparison
+ [ ] Can mix types for comparison
+
+chippyash\Test\Math\Type\GmpCalculatorAdd
+ [x] Add two ints returns gmp int type
+ [x] Add int and float returns gmp rational type
+ [x] Add two floats returns gmp rational type
+ [x] Add two int types returns gmp int type
+ [x] Add int type and float returns gmp rational type
+ [x] Add int type and float type returns gmp rational type
+ [x] Add two float types returns gmp rational type
+ [x] Add float type and int returns gmp rational type
+ [x] Add two whole int types returns gmp int type
+ [x] Add whole int type and int returns gmp int type
+ [x] Add whole int type and int type returns gmp int type
+ [x] Add whole int type and float type returns gmp rational type
+ [x] Add whole int type and float returns gmp rational type
+ [x] Add two natural int types returns gmp int type
+ [x] Add natural int type and int returns gmp int type
+ [x] Add natural int type and int type returns gmp int type
+ [x] Add natural int type and float type returns gmp rational type
+ [x] Add natural int type and float returns gmp rational type
+ [x] Add whole int type and natural int returns gmp int type
+ [x] Add rational type and int returns gmp rational type
+ [x] Add rational type and int type returns gmp rational type
+ [x] Add rational type and whole int type returns gmp rational type
+ [x] Add rational type and natural int type returns gmp rational type
+ [x] Add rational type and float returns gmp rational type
+ [x] Add rational type and float type returns gmp rational type
+ [ ] Add two complex numbers returns gmp complex number
+ [ ] Add complex numbers with non complex number returns gmp complex number
+ [ ] Add non complex numbers with complex number returns gmp complex number
+ [x] Addition is commutative
+ [x] Addition is associative
+ [ ] Addition gives correct results
+
+chippyash\Test\Math\Type\NativeCalculatorAdd
+ [x] Add two ints returns int type
+ [ ] Add int and float returns float type
+ [ ] Add two floats returns float type
+ [x] Add two int types returns int type
+ [ ] Add int type and float returns float type
+ [ ] Add int type and float type returns float type
+ [ ] Add two float types returns float type
+ [ ] Add float type and int returns float type
+ [ ] Add two whole int types returns whole int type
+ [ ] Add whole int type and int returns whole int type
+ [ ] Add whole int type and int type returns whole int type
+ [ ] Add whole int type and float type returns float type
+ [ ] Add whole int type and float returns float type
+ [ ] Add two natural int types returns natural int type
+ [ ] Add natural int type and int returns natural int type
+ [ ] Add natural int type and int type returns natural int type
+ [ ] Add natural int type and float type returns float type
+ [ ] Add natural int type and float returns float type
+ [ ] Add whole int type and natural int returns whole int type
+ [ ] Add rational type and int returns rational type
+ [ ] Add rational type and int type returns rational type
+ [ ] Add rational type and whole int type returns rational type
+ [ ] Add rational type and natural int type returns rational type
+ [ ] Add rational type and float returns rational type
+ [ ] Add rational type and float type returns rational type
+ [ ] Add two complex numbers returns complex number
+ [ ] Add complex numbers with non complex number returns complex number
+ [ ] Add non complex numbers with complex number returns complex number
+ [ ] Addition is commutative
+ [ ] Addition is associative
+ [ ] Addition gives correct results
+
+chippyash\Test\Math\Type\NativeComparator
+ [x] Construct with no parameter returns comparator
+ [x] Construct with comparator engine interface type returns comparator
+ [x] Construct with invalid comparator engine throws exception
+ [x] Compare returns result
+ [x] Magic call returns result for known method
+ [x] Magic call throws exception for unknown method
+
