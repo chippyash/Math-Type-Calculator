@@ -3,6 +3,7 @@
     "description": "Calculators for the chippyash/strong-type numeric types",
     "keywords": ["type","calculator","maths", "complex", "polar"],
     "license": "GPL-3.0+",
+    "homepage" : "http://the-matrix.github.io/",
     "authors": [
         {
             "name": "Ashley Kitson",
