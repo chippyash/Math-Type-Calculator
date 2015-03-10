@@ -12,7 +12,7 @@ use chippyash\Type\Number\Complex\ComplexTypeFactory;
 /**
  *
  */
-class CalculatorMulTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorMulTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
@@ -288,8 +288,10 @@ class CalculatorMulTest extends \PHPUnit_Framework_TestCase
                 'chippyash\Type\Number\Complex\ComplexType',
                 $this->object->mul($nonComplex, ComplexTypeFactory::create(1,5)));
     }
+    
     public function nonComplexNumbers()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         return [
             [2],
             [-2.4],

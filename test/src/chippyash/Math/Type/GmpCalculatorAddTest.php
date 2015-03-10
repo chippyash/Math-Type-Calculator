@@ -8,9 +8,10 @@ use chippyash\Type\Number\NaturalIntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Type\TypeFactory;
 
 /**
- *
+ * @runTestsInSeparateProcesses
  */
 class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
@@ -314,7 +315,6 @@ class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
             [2],
             [-2.4],
             [new IntType(2)],
-            [new FloatType(2.6)],
             [RationalTypeFactory::create(1,5)],
             [new WholeIntType(3)],
             [new NaturalIntType(6)],
@@ -342,33 +342,82 @@ class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider correctResults
+     * @dataProvider correctIntResults
      * @param mixed $a
      * @param mixed $b
      * @param mixed $r
      */
-    public function testAdditionGivesCorrectResults($a, $b, $r)
+    public function testAdditionOfIntegersGivesCorrectResults($a, $b, $r)
     {
-        $this->assertEquals($r, $this->object->add($a, $b));
+        $this->assertEquals(0, gmp_cmp($r->gmp(), $this->object->add($a, $b)->gmp()));
     }
 
-    public function correctResults()
+    public function correctIntResults()
     {
+        Calculator::setNumberType(Calculator::TYPE_GMP);
         return [
-            [1,2,new IntType(3)],
-            [new IntType(1),2,new IntType(3)],
-            [1,new IntType(2),new IntType(3)],
-            [new IntType(1),new IntType(2),new IntType(3)],
-            [2.0,3.0,new FloatType(5.0)],
-            [new FloatType(2.0),3.0,new FloatType(5.0)],
-            [2.0,new FloatType(3.0),new FloatType(5.0)],
-            [new FloatType(2.0),new FloatType(3.0),new FloatType(5.0)],
-            [new IntType(2),3.0,new FloatType(5.0)],
-            [new WholeIntType(2), 3, new WholeIntType(5)],
-            [2, new WholeIntType(3), new WholeIntType(5)],
-            [new NaturalIntType(2), 3, new NaturalIntType(5)],
-            [2, new NaturalIntType(3), new NaturalIntType(5)],
-            [RationalTypeFactory::create(4),RationalTypeFactory::create(4),RationalTypeFactory::create(8)]
+            [1, 2, TypeFactory::createInt(3)],
+            [TypeFactory::createInt(1), 2, TypeFactory::createInt(3)],
+            [1, TypeFactory::createInt(2), TypeFactory::createInt(3)],
+            [TypeFactory::createInt(1), TypeFactory::createInt(2), TypeFactory::createInt(3)],
+            [TypeFactory::createWhole(2), 3, TypeFactory::createWhole(5)],
+            [2, TypeFactory::createWhole(3), TypeFactory::createWhole(5)],
+            [TypeFactory::createNatural(2), 3, TypeFactory::createNatural(5)],
+            [2, TypeFactory::createNatural(3), TypeFactory::createNatural(5)],
         ];
     }
+    
+    /**
+     * @dataProvider correctFloatResults
+     * @param mixed $a
+     * @param mixed $b
+     * @param mixed $r
+     */
+    public function testAdditionOfFloatsGivesCorrectResults($a, $b, $r)
+    {
+        $expected = $r->gmp();
+        $test = $this->object->add($a, $b)->gmp();
+        //numerator
+        $this->assertEquals(0, gmp_cmp($expected[0], $test[0]));
+        //denominator
+        $this->assertEquals(0, gmp_cmp($expected[1], $test[1]));
+    }
+
+    public function correctFloatResults()
+    {
+        Calculator::setNumberType(Calculator::TYPE_GMP);
+        return [
+            [2.0, 3.0, TypeFactory::createFloat(5.0)],
+            [TypeFactory::createFloat(2.0), 3.0, TypeFactory::createFloat(5.0)],
+            [2.0, TypeFactory::createFloat(3.0), TypeFactory::createFloat(5.0)],
+            [TypeFactory::createFloat(2.0), TypeFactory::createFloat(3.0), TypeFactory::createFloat(5.0)],
+            [TypeFactory::createInt(2), 3.0, TypeFactory::createFloat(5.0)],
+        ];
+    }
+    
+    /**
+     * @dataProvider correctRationalResults
+     * @param mixed $a
+     * @param mixed $b
+     * @param mixed $r
+     */
+    public function testAdditionOfRationalsGivesCorrectResults($a, $b, $r)
+    {
+        $expected = $r->gmp();
+        $test = $this->object->add($a, $b)->gmp();
+         //numerator
+        $this->assertEquals(0, gmp_cmp($expected[0], $test[0]));
+        //denominator
+        $this->assertEquals(0, gmp_cmp($expected[1], $test[1]));
+    }
+
+    public function correctRationalResults()
+    {
+        Calculator::setNumberType(Calculator::TYPE_GMP);
+        return [
+            [RationalTypeFactory::create(4),RationalTypeFactory::create(4),RationalTypeFactory::create(8)],
+            [RationalTypeFactory::create(8,2),RationalTypeFactory::create(8,2),RationalTypeFactory::create(16,2)],
+        ];
+    }
+    
 }

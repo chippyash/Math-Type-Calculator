@@ -12,7 +12,7 @@ use chippyash\Type\Number\Complex\ComplexTypeFactory;
 /**
  *
  */
-class CalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
@@ -35,6 +35,7 @@ class CalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
 
     public function numericTypes()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         return [
             [new IntType(2)],
             [new WholeIntType(2)],

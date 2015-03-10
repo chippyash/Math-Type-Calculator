@@ -15,10 +15,19 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 'chippyash\Math\Type\Calculator', new Calculator());
     }
 
+    /**
+     * @runInSeparateProcess
+     * 
+     * This is a slightly bizarre test, as you have to create a calculator to
+     * send to the engine, in order to be able to construct a calculator with
+     * an engine!  In normal circumstance you won't do this, but simply create
+     * a new Calculator, optionally preceded by setting the required number type
+     */
     public function testConstructWithCalculatorEngineInterfaceTypeReturnsCalculator()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         $this->assertInstanceOf(
-                'chippyash\Math\Type\Calculator', new Calculator(new NativeEngine()));
+                'chippyash\Math\Type\Calculator', new Calculator(new NativeEngine(new Calculator())));
     }
 
     /**

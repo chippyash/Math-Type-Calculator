@@ -2,4 +2,4 @@ nbproject*
 vendor*
 composer.lock
 .directory
-
+.idea

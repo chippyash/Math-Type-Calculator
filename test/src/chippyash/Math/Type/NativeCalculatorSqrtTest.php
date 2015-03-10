@@ -12,7 +12,7 @@ use chippyash\Type\Number\Complex\ComplexTypeFactory;
 /**
  *
  */
-class CalculatorSqrtTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorSqrtTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 

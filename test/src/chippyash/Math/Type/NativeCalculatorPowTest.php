@@ -12,7 +12,7 @@ use chippyash\Type\Number\Complex\ComplexTypeFactory;
 /**
  *
  */
-class CalculatorPowTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorPowTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
@@ -46,6 +46,7 @@ class CalculatorPowTest extends \PHPUnit_Framework_TestCase
 
     public function integerTypes()
     {
+        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         return [
             [new IntType(2)],
             [new WholeIntType(2)],
