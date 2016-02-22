@@ -8,7 +8,6 @@
  */
 namespace chippyash\Math\Type\Comparator;
 
-use chippyash\Math\Type\Comparator\AbstractComparatorEngine;
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\Rational\RationalType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
@@ -26,6 +25,10 @@ class Native extends AbstractComparatorEngine
 
     protected $calculator;
 
+    /**
+     * Native constructor.
+     * side effect: Ensure that Type Factories use PHP Native types
+     */
     public function __construct()
     {
         $this->calculator = new Calc();
@@ -36,8 +39,8 @@ class Native extends AbstractComparatorEngine
      * a < b = -1
      * a > b = 1
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return int
      */
@@ -64,22 +67,23 @@ class Native extends AbstractComparatorEngine
     /**
      * Compare int and float types
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return int
      */
     protected function intFloatCompare(NI $a, NI $b)
     {
         return $this->rationalCompare(
-                RationalTypeFactory::fromFloat($a()),
-                RationalTypeFactory::fromFloat($b()));
+                RationalTypeFactory::fromFloat($a->asFloatType()),
+                RationalTypeFactory::fromFloat($b->asFloatType())
+        );
     }
 
     /**
      * Compare two rationals
      *
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param \chippyash\Type\Number\Rational\RationalType $b
+     * @param RationalType $a
+     * @param RationalType $b
      * @return int
      */
     protected function rationalCompare(RationalType $a, RationalType $b)
@@ -100,8 +104,8 @@ class Native extends AbstractComparatorEngine
      * If both operands are real then compare the real parts
      * else compare the modulii of the two numbers
      *
-     * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param \chippyash\Type\Number\Complex\ComplexType $b
+     * @param ComplexType $a
+     * @param ComplexType $b
      *
      * @return boolean
      */

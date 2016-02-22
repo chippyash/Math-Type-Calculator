@@ -8,10 +8,8 @@ use chippyash\Type\Number\NaturalIntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Type\RequiredType;
 
-/**
- *
- */
 class CalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
@@ -334,6 +332,8 @@ class CalculatorAddTest extends \PHPUnit_Framework_TestCase
 
     public function correctResults()
     {
+        //set required type as data created before tests are run
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         return [
             [1,2,new IntType(3)],
             [new IntType(1),2,new IntType(3)],

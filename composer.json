@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "chippyash/strong-type": "~1.1.3"
+        "chippyash/strong-type": "~2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.37",

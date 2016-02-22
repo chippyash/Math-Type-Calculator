@@ -5,13 +5,16 @@
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
 
+See the [test contract](https://github.com/chippyash/Math-Type-Calculator/blob/master/docs/Test-Contract.md).
+
 Build coverage only <100% due to inability of coverage engine to understand that
 closing brackets on a method are part of the method, even if they are never
 reached !
 
 ## What?
 
-Provides arithmetic calculation support for chippyash/strong-type numeric types.
+Provides arithmetic calculation support for chippyash/strong-type numeric types, (PHP
+native types only at this point.)
 
 ### Types supported
 
@@ -59,6 +62,9 @@ Check out [chippyash/Math-Matrix](https://github.com/chippyash/Math-Matrix) for 
 ## How
 
 ### Coding Basics
+
+Using the supplied calculator or comparator will set the underlying Strong Type
+numeric base to PHP Native.  This library does not yet support GMP number types.
 
 #### Calculations
 
@@ -189,7 +195,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.1.9"
+    "chippyash/math-type-calculator": "~1.1"
 </pre>
 
 to your composer.json "requires" section
@@ -239,5 +245,7 @@ V1.1.8 Update dependent version number
 
 V1.1.9 Update dependent version number
 V1.1.9a Bump to fix failing build
+
+V1.1.10 Fix calculator to use Native PHP numeric types until GMP calculator support is available
 
 

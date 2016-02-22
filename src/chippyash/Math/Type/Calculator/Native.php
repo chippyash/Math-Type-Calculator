@@ -8,7 +8,6 @@
  */
 namespace chippyash\Math\Type\Calculator;
 
-use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use chippyash\Type\Number\IntType;
 use chippyash\Type\Number\FloatType;
@@ -23,6 +22,7 @@ use chippyash\Math\Type\Traits\CheckRationalTypes;
 use chippyash\Math\Type\Traits\CheckIntTypes;
 use chippyash\Math\Type\Traits\CheckFloatTypes;
 use chippyash\Math\Type\Comparator;
+use chippyash\Type\RequiredType;
 
 /**
  * PHP Native calculation
@@ -35,11 +35,20 @@ class Native implements CalculatorEngineInterface
     use CheckFloatTypes;
 
     /**
+     * Native constructor.
+     * Ensure that Type Factories use PHP Native types
+     */
+    public function __construct()
+    {
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
+    }
+
+    /**
      * Integer type addition
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\IntType
+     * @param NI $a
+     * @param NI $b
+     * @return IntType
      */
     public function intAdd(NI $a, NI $b)
     {
@@ -51,9 +60,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer type subtraction
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\IntType
+     * @param NI $a
+     * @param NI $b
+     * @return IntType
      */
     public function intSub(NI $a, NI $b)
     {
@@ -65,9 +74,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer type multiplication
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\IntType
+     * @param NI $a
+     * @param NI $b
+     * @return IntType
      */
     public function intMul(NI $a, NI $b)
     {
@@ -79,9 +88,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer division
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param NI $a
+     * @param NI $b
+     * @return RationalType
      */
     public function intDiv(NI $a, NI $b)
     {
@@ -94,9 +103,9 @@ class Native implements CalculatorEngineInterface
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
      * 
-     * @param \chippyash\Type\Number\IntType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param IntType $a
+     * @param NI $exp Exponent
+     * @return NI
      */
     public function intPow(IntType $a, NI $exp)
     {
@@ -122,8 +131,8 @@ class Native implements CalculatorEngineInterface
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
      * 
-     * @param \chippyash\Type\Number\IntType $a
-     * @return \chippyash\Type\Number\IntType|\chippyash\Type\Number\Rational\RationalType result
+     * @param IntType $a
+     * @return IntType|RationalType result
      */
     public function intSqrt(IntType $a)
     {
@@ -138,8 +147,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Float addition
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatAdd(NI $a, NI $b)
@@ -151,8 +160,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Float subtraction
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatSub(NI $a, NI $b)
@@ -164,8 +173,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Float multiplication
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatMul(NI $a, NI $b)
@@ -177,8 +186,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Float division
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatDiv(NI $a, NI $b)
@@ -189,7 +198,7 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Float reciprocal i.e. 1/a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param NI $a
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatReciprocal(NI $a)
@@ -202,7 +211,7 @@ class Native implements CalculatorEngineInterface
      * Will return a float type
      * 
      * @param \chippyash\Type\Number\FloatType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @param NI $exp Exponent
      * @return \chippyash\Type\Number\FloatType
      */
     public function floatPow(FloatType $a, NI $exp)
@@ -236,8 +245,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number addition
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\WholeIntType
      */
     public function wholeAdd(NI $a, NI $b)
@@ -249,8 +258,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number subtraction
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\WholeIntType
      */
     public function wholeSub(NI $a, NI $b)
@@ -262,8 +271,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number multiplication
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\WholeIntType
      */
     public function wholeMul(NI $a, NI $b)
@@ -275,8 +284,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number addition
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\NaturalIntType
      */
     public function naturalAdd(NI $a, NI $b)
@@ -288,8 +297,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number subtraction
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\NaturalIntType
      */
     public function naturalSub(NI $a, NI $b)
@@ -301,8 +310,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number multiplication
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      * @return \chippyash\Type\Number\NaturalIntType
      */
     public function naturalMul(NI $a, NI $b)
@@ -314,9 +323,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number addition
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param NI $a
+     * @param NI $b
+     * @return RationalType
      */
     public function rationalAdd(NI $a, NI $b)
     {
@@ -338,9 +347,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number subtraction
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param NI $a
+     * @param NI $b
+     * @return RationalType
      */
     public function rationalSub(NI $a, NI $b)
     {
@@ -356,9 +365,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number multiplication
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param NI $a
+     * @param NI $b
+     * @return RationalType
      */
     public function rationalMul(NI $a, NI $b)
     {
@@ -372,9 +381,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number division
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param NI $a
+     * @param NI $b
+     * @return RationalType
      */
     public function rationalDiv(NI $a, NI $b)
     {
@@ -388,8 +397,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param \\chippyash\Type\Number\Rational\RationalType $a
-     * @return \chippyash\Type\Number\Rational\RationalType
+     * @param \RationalType $a
+     * @return RationalType
      */
     public function rationalReciprocal(RationalType $a)
     {
@@ -400,9 +409,9 @@ class Native implements CalculatorEngineInterface
      * Rational Pow - raise number to the exponent
      * Will return a RationalType
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param RationalType $a
+     * @param NI $exp Exponent
+     * @return NI
      */
     public function rationalPow(RationalType $a, NI $exp)
     {
@@ -428,8 +437,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational sqrt
      * 
-     * @param \chippyash\Type\Number\Rational\RationalType $a
-     * @return \chippyash\Type\Number\Rational\RationalType result
+     * @param RationalType $a
+     * @return RationalType result
      */
     public function rationalSqrt(RationalType $a)
     {
@@ -534,7 +543,7 @@ class Native implements CalculatorEngineInterface
      * Exponent must be non complex
      * 
      * @param \chippyash\Type\Number\Complex\ComplexType $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $exp Exponent
+     * @param NI $exp Exponent
      * 
      * @return \chippyash\Type\Number\Complex\ComplexType
      * 
