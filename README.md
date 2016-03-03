@@ -2,10 +2,10 @@
 
 ## Quality Assurance
 
-Certified for PHP 5.3 - 5.6
+Certified for PHP 5.4 - 5.6
 
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
-[![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
+[![Test Coverage](https://codeclimate.com/github/chippyash/Math-Type-Calculator/badges/coverage.svg)](https://codeclimate.com/github/chippyash/Math-Type-Calculator/coverage)
 
 See the [test contract](https://github.com/chippyash/Math-Type-Calculator/blob/master/docs/Test-Contract.md).
 
