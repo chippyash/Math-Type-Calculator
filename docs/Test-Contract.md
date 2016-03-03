@@ -1,14 +1,14 @@
 # Chippyash Strong Type Calculator
 
 ## 
-      chippyash\Test\Math\Type\Calculator\Native
+      Chippyash\Test\Math\Type\Calculator\Native
     
 
 *  Int add with non int types computes result
 *  Int pow returns rational or int or complex types
 
 ## 
-      chippyash\Test\Math\Type\CalculatorAdd
+      Chippyash\Test\Math\Type\CalculatorAdd
     
 
 *  Add two ints returns int type
@@ -44,7 +44,7 @@
 *  Addition gives correct results
 
 ## 
-      chippyash\Test\Math\Type\CalculatorDiv
+      Chippyash\Test\Math\Type\CalculatorDiv
     
 
 *  Div two ints returns rational type
@@ -78,7 +78,7 @@
 *  Division is not associative
 
 ## 
-      chippyash\Test\Math\Type\CalculatorMul
+      Chippyash\Test\Math\Type\CalculatorMul
     
 
 *  Mul two ints returns int type
@@ -115,7 +115,7 @@
 *  Multiplication is distributive over subtraction
 
 ## 
-      chippyash\Test\Math\Type\CalculatorPow
+      Chippyash\Test\Math\Type\CalculatorPow
     
 
 *  Pow with integer base and integer exponent returns int type
@@ -132,7 +132,7 @@
 *  Can compute roots using pow
 
 ## 
-      chippyash\Test\Math\Type\CalculatorReciprocal
+      Chippyash\Test\Math\Type\CalculatorReciprocal
     
 
 *  Reciprocal of number types returns float type
@@ -142,7 +142,7 @@
 *  Reciprocal of unknow type throws exception
 
 ## 
-      chippyash\Test\Math\Type\CalculatorSqrt
+      Chippyash\Test\Math\Type\CalculatorSqrt
     
 
 *  Sqrt int type returns int type for perfect squares
@@ -152,7 +152,7 @@
 *  Sqrt complex type returns complex type
 
 ## 
-      chippyash\Test\Math\Type\CalculatorSub
+      Chippyash\Test\Math\Type\CalculatorSub
     
 
 *  Sub two ints returns int type
@@ -187,7 +187,7 @@
 *  Subtraction is not associative
 
 ## 
-      chippyash\Test\Math\Type\Calculator
+      Chippyash\Test\Math\Type\Calculator
     
 
 *  Construct with no parameter returns calculator
@@ -196,7 +196,7 @@
 *  Construct with invalid calculator engine throws exception
 
 ## 
-      chippyash\Test\Math\Type\Comparator\AbstractComparatorEngine
+      Chippyash\Test\Math\Type\Comparator\AbstractComparatorEngine
     
 
 *  Eq returns boolean
@@ -207,7 +207,7 @@
 *  Gte returns boolean
 
 ## 
-      chippyash\Test\Math\Type\Comparator\Native
+      Chippyash\Test\Math\Type\Comparator\Native
     
 
 *  Compare ints returns correct result
@@ -219,7 +219,7 @@
 *  Can mix types for comparison
 
 ## 
-      chippyash\Test\Math\Type\Comparator
+      Chippyash\Test\Math\Type\Comparator
     
 
 *  Construct with no parameter returns comparator

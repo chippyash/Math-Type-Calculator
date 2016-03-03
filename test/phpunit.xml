@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-PHPUnit configuration file to run chippyash\Matrix tests
+PHPUnit configuration file to run Chippyash\Matrix tests
 -->
 
 <!--
@@ -41,8 +41,8 @@ testSuiteLoaderFile="/path/to/StandardTestSuiteLoader.php"
         <blacklist>
             <directory>../vendor</directory>
             <!-- don't cover interfaces -->
-            <file>../src/chippyash/Math/Type/Calculator/CalculatorEngineInterface.php</file>
-            <file>../src/chippyash/Math/Type/Comparator/ComparatorEngineInterface.php</file>
+            <file>../src/Chippyash/Math/Type/Calculator/CalculatorEngineInterface.php</file>
+            <file>../src/Chippyash/Math/Type/Comparator/ComparatorEngineInterface.php</file>
         </blacklist>
     </filter>
 

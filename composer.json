@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "chippyash/strong-type": "~2.1"
+        "chippyash/strong-type": "~3"
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.37",
@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-0": {
-            "chippyash\\Math\\Type\\": "src/"
+            "Chippyash\\Math\\Type\\": "src/"
         }
     }
 }

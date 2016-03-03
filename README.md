@@ -2,6 +2,8 @@
 
 ## Quality Assurance
 
+Certified for PHP 5.3 - 5.6
+
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
 
@@ -71,7 +73,7 @@ numeric base to PHP Native.  This library does not yet support GMP number types.
 Using the calculator is simplicity itself:
 
 <pre>
-    use chippyash\Math\Type\Calculator;
+    use Chippyash\Math\Type\Calculator;
 
     $calc = new Calculator()
 </pre>
@@ -79,7 +81,7 @@ Using the calculator is simplicity itself:
 Then you simply fire calculation requests at it:
 
 <pre>
-    use chippyash\Type\TypeFactory;
+    use Chippyash\Type\TypeFactory;
 
     $r = TypeFactory::create('rational', 2, 3);
     $i = TypeFactory::create('int', 23);
@@ -129,8 +131,8 @@ resultant types run the examples/example-calc.php file
 To compare two numeric types:
 
 <pre>
-    use chippyash\Math\Type\Comparator;
-    use chippyash\Type\TypeFactory;
+    use Chippyash\Math\Type\Comparator;
+    use Chippyash\Type\TypeFactory;
 
     $r = TypeFactory::create('rational', 2, 3);
     $i = TypeFactory::create('int', 23);
@@ -248,4 +250,4 @@ V1.1.9a Bump to fix failing build
 
 V1.1.10 Fix calculator to use Native PHP numeric types until GMP calculator support is available
 
-
+V2.0.0 BC Break: change namespace from chippyash\Math to Chippyash\Math\Type  
