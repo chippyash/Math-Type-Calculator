@@ -197,7 +197,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.1"
+    "chippyash/math-type-calculator": "~2"
 </pre>
 
 to your composer.json "requires" section
