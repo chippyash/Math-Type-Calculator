@@ -60,6 +60,7 @@ Check out [chippyash/Logical-Matrix](https://github.com/chippyash/Logical-matrix
 
 Check out [chippyash/Math-Matrix](https://github.com/chippyash/Math-Matrix) for mathematical matrix operations
 
+Check out [ZF4 Packages](http://zf4.biz/packages?utm_source=github&utm_medium=web&utm_campaign=blinks&utm_content=typecalculator) for more packages
 
 ## How
 
@@ -260,4 +261,6 @@ V1.1.9a Bump to fix failing build
 
 V1.1.10 Fix calculator to use Native PHP numeric types until GMP calculator support is available
 
-V2.0.0 BC Break: change namespace from chippyash\Math to Chippyash\Math\Type  
+V2.0.0 BC Break: change namespace from chippyash\Math to Chippyash\Math\Type
+  
+V2.0.1 Add link to packages

@@ -1,0 +1,20 @@
+# Save as .codeclimate.yml (note leading .) in project root directory
+languages:
+  Ruby: false
+  JavaScript: false
+  PHP: true
+  Python: false
+exclude_paths:
+- "test/*"
+- "docs/*"
+- "examples/*"
+engines:
+  phpmd:
+    enabled: true
+    checks:
+      Naming/LongVariable:
+        enabled: false
+      Naming/ShortMethodName:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
