@@ -1,14 +1,8 @@
 <?php
-namespace Chippyash\Test\Math\Type;
+namespace chippyash\Test\Math\Type;
 
-use Chippyash\Math\Type\Calculator;
-use Chippyash\Math\Type\Calculator\Native;
-use Chippyash\Type\Number\IntType;
-use Chippyash\Type\Number\WholeIntType;
-use Chippyash\Type\Number\NaturalIntType;
-use Chippyash\Type\Number\FloatType;
-use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+use chippyash\Math\Type\Calculator;
+use chippyash\Math\Type\Calculator\NativeEngine;
 
 /**
  *
@@ -18,22 +12,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithNoParameterReturnsCalculator()
     {
         $this->assertInstanceOf(
-                'Chippyash\Math\Type\Calculator', new Calculator());
+                'chippyash\Math\Type\Calculator', new Calculator());
     }
 
-    /**
-     * @runInSeparateProcess
-     * 
-     * This is a slightly bizarre test, as you have to create a calculator to
-     * send to the engine, in order to be able to construct a calculator with
-     * an engine!  In normal circumstance you won't do this, but simply create
-     * a new Calculator, optionally preceded by setting the required number type
-     */
     public function testConstructWithCalculatorEngineInterfaceTypeReturnsCalculator()
     {
-        Calculator::setNumberType(Calculator::TYPE_NATIVE);
         $this->assertInstanceOf(
-                'Chippyash\Math\Type\Calculator', new Calculator(new Native()));
+                'chippyash\Math\Type\Calculator', new Calculator(new NativeEngine()));
     }
 
     /**

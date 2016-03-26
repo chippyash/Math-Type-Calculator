@@ -8,10 +8,16 @@ use chippyash\Type\Number\NaturalIntType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Type\Number\Rational\RationalTypeFactory;
 use chippyash\Type\Number\Complex\ComplexTypeFactory;
+<<<<<<< HEAD
 use chippyash\Type\TypeFactory;
 
 /**
  * @runTestsInSeparateProcesses
+=======
+
+/**
+ *
+>>>>>>> 1871b7cff507a5c6b124f07bec75cd684a881865
  */
 class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
@@ -315,6 +321,10 @@ class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
             [2],
             [-2.4],
             [new IntType(2)],
+<<<<<<< HEAD
+=======
+            [new FloatType(2.6)],
+>>>>>>> 1871b7cff507a5c6b124f07bec75cd684a881865
             [RationalTypeFactory::create(1,5)],
             [new WholeIntType(3)],
             [new NaturalIntType(6)],
@@ -342,11 +352,16 @@ class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @dataProvider correctIntResults
+=======
+     * @dataProvider correctResults
+>>>>>>> 1871b7cff507a5c6b124f07bec75cd684a881865
      * @param mixed $a
      * @param mixed $b
      * @param mixed $r
      */
+<<<<<<< HEAD
     public function testAdditionOfIntegersGivesCorrectResults($a, $b, $r)
     {
         $this->assertEquals(0, gmp_cmp($r->gmp(), $this->object->add($a, $b)->gmp()));
@@ -420,4 +435,30 @@ class GmpCalculatorAddTest extends \PHPUnit_Framework_TestCase
         ];
     }
     
+=======
+    public function testAdditionGivesCorrectResults($a, $b, $r)
+    {
+        $this->assertEquals($r, $this->object->add($a, $b));
+    }
+
+    public function correctResults()
+    {
+        return [
+            [1,2,new IntType(3)],
+            [new IntType(1),2,new IntType(3)],
+            [1,new IntType(2),new IntType(3)],
+            [new IntType(1),new IntType(2),new IntType(3)],
+            [2.0,3.0,new FloatType(5.0)],
+            [new FloatType(2.0),3.0,new FloatType(5.0)],
+            [2.0,new FloatType(3.0),new FloatType(5.0)],
+            [new FloatType(2.0),new FloatType(3.0),new FloatType(5.0)],
+            [new IntType(2),3.0,new FloatType(5.0)],
+            [new WholeIntType(2), 3, new WholeIntType(5)],
+            [2, new WholeIntType(3), new WholeIntType(5)],
+            [new NaturalIntType(2), 3, new NaturalIntType(5)],
+            [2, new NaturalIntType(3), new NaturalIntType(5)],
+            [RationalTypeFactory::create(4),RationalTypeFactory::create(4),RationalTypeFactory::create(8)]
+        ];
+    }
+>>>>>>> 1871b7cff507a5c6b124f07bec75cd684a881865
 }
