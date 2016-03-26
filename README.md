@@ -2,8 +2,12 @@
 
 ## Quality Assurance
 
+Certified for PHP 5.4 - 5.6
+
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
-[![Coverage Status](https://coveralls.io/repos/chippyash/Math-Type-Calculator/badge.png)](https://coveralls.io/r/chippyash/Math-Type-Calculator)
+[![Test Coverage](https://codeclimate.com/github/chippyash/Math-Type-Calculator/badges/coverage.svg)](https://codeclimate.com/github/chippyash/Math-Type-Calculator/coverage)
+
+See the [test contract](https://github.com/chippyash/Math-Type-Calculator/blob/master/docs/Test-Contract.md).
 
 Build coverage only <100% due to inability of coverage engine to understand that
 closing brackets on a method are part of the method, even if they are never
@@ -11,7 +15,8 @@ reached !
 
 ## What?
 
-Provides arithmetic calculation support for chippyash/strong-type numeric types.
+Provides arithmetic calculation support for chippyash/strong-type numeric types, (PHP
+native types only at this point.)
 
 ### Types supported
 
@@ -72,17 +77,21 @@ Check out [chippyash/Logical-Matrix](https://github.com/chippyash/Logical-matrix
 
 Check out [chippyash/Math-Matrix](https://github.com/chippyash/Math-Matrix) for mathematical matrix operations
 
+Check out [ZF4 Packages](http://zf4.biz/packages?utm_source=github&utm_medium=web&utm_campaign=blinks&utm_content=typecalculator) for more packages
 
 ## How
 
 ### Coding Basics
+
+Using the supplied calculator or comparator will set the underlying Strong Type
+numeric base to PHP Native.  This library does not yet support GMP number types.
 
 #### Calculations
 
 Using the calculator is simplicity itself:
 
 <pre>
-    use chippyash\Math\Type\Calculator;
+    use Chippyash\Math\Type\Calculator;
 
     $calc = new Calculator()
 </pre>
@@ -90,7 +99,7 @@ Using the calculator is simplicity itself:
 Then you simply fire calculation requests at it:
 
 <pre>
-    use chippyash\Type\TypeFactory;
+    use Chippyash\Type\TypeFactory;
 
     $r = TypeFactory::create('rational', 2, 3);
     $i = TypeFactory::create('int', 23);
@@ -151,8 +160,8 @@ resultant types run the examples/example-calc.php file
 To compare two numeric types:
 
 <pre>
-    use chippyash\Math\Type\Comparator;
-    use chippyash\Type\TypeFactory;
+    use Chippyash\Math\Type\Comparator;
+    use Chippyash\Type\TypeFactory;
 
     $r = TypeFactory::create('rational', 2, 3);
     $i = TypeFactory::create('int', 23);
@@ -240,7 +249,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~1.1.9"
+    "chippyash/math-type-calculator": "~2"
 </pre>
 
 to your composer.json "requires" section
@@ -261,6 +270,16 @@ To run the tests:
     cd TypeCalc
     vendor/bin/phpunit -c test/phpunit.xml test/
 </pre>
+
+## License
+
+This software library is released under the [GNU GPL V3 or later license](http://www.gnu.org/copyleft/gpl.html)
+
+This software library is Copyright (c) 2015-2016, Ashley Kitson, UK
+
+A commercial license is available for this software library, please contact the author. 
+It is normally free to deserving causes, but gets you around the limitation of the GPL
+license, which does not allow unrestricted inclusion of this code in commercial works.
 
 ## History
 
@@ -291,4 +310,8 @@ V1.1.8 Update dependent version number
 V1.1.9 Update dependent version number
 V1.1.9a Bump to fix failing build
 
+V1.1.10 Fix calculator to use Native PHP numeric types until GMP calculator support is available
 
+V2.0.0 BC Break: change namespace from chippyash\Math to Chippyash\Math\Type
+  
+V2.0.1 Add link to packages

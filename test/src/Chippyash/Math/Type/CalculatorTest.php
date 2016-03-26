@@ -1,8 +1,19 @@
 <?php
-namespace chippyash\Test\Math\Type;
+namespace Chippyash\Test\Math\Type;
 
+<<<<<<< HEAD:test/src/chippyash/Math/Type/CalculatorTest.php
 use chippyash\Math\Type\Calculator;
 use chippyash\Math\Type\Calculator\NativeEngine;
+=======
+use Chippyash\Math\Type\Calculator;
+use Chippyash\Math\Type\Calculator\Native;
+use Chippyash\Type\Number\IntType;
+use Chippyash\Type\Number\WholeIntType;
+use Chippyash\Type\Number\NaturalIntType;
+use Chippyash\Type\Number\FloatType;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
+use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+>>>>>>> 4f1de48055fdc9f29c54dbfd364827575f79d2d4:test/src/Chippyash/Math/Type/CalculatorTest.php
 
 /**
  *
@@ -12,9 +23,10 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithNoParameterReturnsCalculator()
     {
         $this->assertInstanceOf(
-                'chippyash\Math\Type\Calculator', new Calculator());
+                'Chippyash\Math\Type\Calculator', new Calculator());
     }
 
+<<<<<<< HEAD:test/src/chippyash/Math/Type/CalculatorTest.php
     /**
      * @runInSeparateProcess
      * 
@@ -23,11 +35,23 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      * an engine!  In normal circumstance you won't do this, but simply create
      * a new Calculator, optionally preceded by setting the required number type
      */
+=======
+    public function testConstructWithValidEngineTypeReturnsCalculator()
+    {
+        $this->assertInstanceOf(
+                'Chippyash\Math\Type\Calculator', new Calculator(Calculator::ENGINE_NATIVE));
+    }
+
+>>>>>>> 4f1de48055fdc9f29c54dbfd364827575f79d2d4:test/src/Chippyash/Math/Type/CalculatorTest.php
     public function testConstructWithCalculatorEngineInterfaceTypeReturnsCalculator()
     {
         Calculator::setNumberType(Calculator::TYPE_NATIVE);
         $this->assertInstanceOf(
+<<<<<<< HEAD:test/src/chippyash/Math/Type/CalculatorTest.php
                 'chippyash\Math\Type\Calculator', new Calculator(new NativeEngine(new Calculator())));
+=======
+                'Chippyash\Math\Type\Calculator', new Calculator(new Native()));
+>>>>>>> 4f1de48055fdc9f29c54dbfd364827575f79d2d4:test/src/Chippyash/Math/Type/CalculatorTest.php
     }
 
     /**

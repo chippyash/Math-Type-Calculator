@@ -1,18 +1,17 @@
 <?php
-/**
- * Arithmetic calculation support for chippyash Strong Types
+/*
+ * Arithmetic calculation support for Chippyash Strong Types
  *
  * @author Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type;
+namespace Chippyash\Math\Type;
 
-use chippyash\Type\Interfaces\NumericTypeInterface;
-use chippyash\Math\Type\Comparator\NativeEngine;
-use chippyash\Math\Type\Comparator\GmpEngine;
-use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
-use chippyash\Math\Type\Calculator;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
+use Chippyash\Math\Type\Comparator\Native;
+use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
+use Chippyash\Math\Type\Comparator\AbstractComparatorEngine;
 
 /**
  * Generic comparator for strong type support
@@ -20,11 +19,18 @@ use chippyash\Math\Type\Calculator;
  * NB - this uses the Calculator to determine correct base types
  */
 class Comparator implements ComparatorEngineInterface
-{    
-  
+{
+    const ENGINE_NATIVE = 0;
+
+    const NS = 'Chippyash\Math\Type\Comparator\\';
+
+    protected $supportedEngines = [
+        self::ENGINE_NATIVE => 'Native'
+    ];
+
     /**
      * Comparator engine
-     * @var chippyash\Math\Type\Comparator\ComparatorEngineInterface
+     * @var Chippyash\Math\Type\Comparator\ComparatorEngineInterface
      */
     protected $compEngine;
 
@@ -32,7 +38,8 @@ class Comparator implements ComparatorEngineInterface
      * Constructor
      * Set up the comparator engine. In due course this will support gmp, bcmath etc
      *
-     * @param chippyash\Math\Type\Comparator\ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
+     * @param int|Chippyash\Math\Type\Comparator\ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
+     * @throws \InvalidArgumentException
      */
     public function __construct(ComparatorEngineInterface $compEngine = null)
     {
@@ -54,8 +61,8 @@ class Comparator implements ComparatorEngineInterface
      * a < b = -1
      * a > b = 1
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return int
      */

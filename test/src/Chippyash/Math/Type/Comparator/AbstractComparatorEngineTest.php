@@ -1,7 +1,7 @@
 <?php
-namespace chippyash\Test\Math\Type\Comparator;
+namespace Chippyash\Test\Math\Type\Comparator;
 
-use chippyash\Type\Number\IntType;
+use Chippyash\Type\Number\IntType;
 
 /**
  *
@@ -15,7 +15,7 @@ class AbstractComparatorEngineTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->object = $this->getMockForAbstractClass(
-                'chippyash\Math\Type\Comparator\AbstractComparatorEngine');
+                'Chippyash\Math\Type\Comparator\AbstractComparatorEngine');
 
 
         $this->number = new IntType(2);

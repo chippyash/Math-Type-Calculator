@@ -1,25 +1,32 @@
 {
-    "name": "chippyash/math-type-calculator",
-    "description": "Calculators for the chippyash/strong-type numeric types",
-    "keywords": ["type","calculator","maths", "complex", "polar"],
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Ashley Kitson",
-            "email": "ashley@zf4.biz"
-        }
-    ],
-    "require": {
-        "chippyash/strong-type": "~2.1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~4.3.0",
-        "phpunit/phpunit-skeleton-generator": "~2.0.1",
-        "satooshi/php-coveralls": "dev-master"
-    },
-    "autoload": {
-        "psr-0": {
-            "chippyash\\Math\\Type\\": "src/"
-        }
+  "name": "chippyash/math-type-calculator",
+  "description": "Calculators for the chippyash/strong-type numeric types",
+  "keywords": [
+    "type",
+    "calculator",
+    "maths",
+    "complex",
+    "polar"
+  ],
+  "license": "GPL-3.0+",
+  "homepage": "http://zf4.biz/packages?utm_source=packagist&utm_medium=web&utm_campaign=blinks&utm_content=typecalculator",
+  "authors": [
+    {
+      "name": "Ashley Kitson",
+      "email": "ashley@zf4.biz"
     }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "chippyash/strong-type": "~3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~3.7.37",
+    "codeclimate/php-test-reporter": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "Chippyash\\Math\\Type\\": "src/"
+    }
+  }
 }

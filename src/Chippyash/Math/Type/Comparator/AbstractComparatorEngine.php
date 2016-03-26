@@ -1,16 +1,16 @@
 <?php
 /*
- * Arithmetic calculation support for chippyash Strong Types
+ * Arithmetic calculation support for Chippyash Strong Types
  *
  * @author Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type\Comparator;
+namespace Chippyash\Math\Type\Comparator;
 
-use chippyash\Math\Type\Comparator\ComparatorEngineInterface;
-use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
-use chippyash\Type\Interfaces\NumericTypeInterface as NI;
+use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
+use Chippyash\Math\Type\Traits\ArbitrateTwoTypes;
+use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
 
 /**
  * Basic implementation of a comparator engine
@@ -30,8 +30,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a == b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -43,8 +43,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a != b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -57,8 +57,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a < b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -70,8 +70,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a <= b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -83,8 +83,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a > b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -96,8 +96,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a >= b
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return boolean
      */
@@ -111,8 +111,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
      * a < b = -1
      * a > b = 1
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      * @return int
      */

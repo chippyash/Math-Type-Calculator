@@ -1,19 +1,17 @@
 <?php
 /*
- * Arithmetic calculation support for chippyash Strong Types
+ * Arithmetic calculation support for Chippyash Strong Types
  *
  * @author Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type;
+namespace Chippyash\Math\Type;
 
-use chippyash\Type\Interfaces\NumericTypeInterface;
-use chippyash\Math\Type\Calculator\NativeEngine;
-use chippyash\Math\Type\Calculator\GmpEngine;
-use chippyash\Math\Type\Calculator\CalculatorEngineInterface;
-use chippyash\Math\Type\Traits\ArbitrateTwoTypes;
-use chippyash\Type\TypeFactory;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
+use Chippyash\Math\Type\Calculator\Native;
+use Chippyash\Math\Type\Calculator\CalculatorEngineInterface;
+use Chippyash\Math\Type\Traits\ArbitrateTwoTypes;
 
 /**
  * Generic calculator for strong type support
@@ -33,35 +31,18 @@ use chippyash\Type\TypeFactory;
 class Calculator
 {
     use ArbitrateTwoTypes;
-    
-    /**
-     * numeric base types
-     * same as TypeFactory
-     */
-    const TYPE_DEFAULT = 'auto';
-    const TYPE_NATIVE = 'native';
-    const TYPE_GMP = 'gmp';
-    
-    /**
-     * Client requested numeric base type support
-     * @var string
-     */
-    protected static $supportType = self::TYPE_DEFAULT;
-    /**
-     * Numeric base types we can support
-     * @var array
-     */
-    protected static $validTypes = [self::TYPE_DEFAULT, self::TYPE_GMP, self::TYPE_NATIVE];
-    
-    /**
-     * The actual base type we are going to return
-     * @var string
-     */
-    protected static $requiredType = null;
-    
+
+    const ENGINE_NATIVE = 0;
+
+    const NS = 'Chippyash\Math\Type\Calculator\\';
+
+    protected $supportedEngines = [
+        self::ENGINE_NATIVE => 'Native'
+    ];
+
     /**
      * Calculation engine
-     * @var chippyash\Math\Type\Calculator\CalculatorEngineInterface
+     * @var Chippyash\Math\Type\Calculator\CalculatorEngineInterface
      */
     protected $calcEngine;
 
@@ -70,7 +51,8 @@ class Calculator
      * Constructor
      * Set up the calculation engine. In due course this will support gmp, bcmath etc
      *
-     * @param chippyash\Math\Type\Calculator\CalculatorEngineInterface $calcEngine Calculation engine to use - default == Native
+     * @param int|Chippyash\Math\Type\Calculator\CalculatorEngineInterface $calcEngine Calculation engine to use - default == Native
+     * @throws \InvalidArgumentException
      */
     public function __construct(CalculatorEngineInterface $calcEngine = null)
     {
@@ -91,12 +73,12 @@ class Calculator
     /**
      * Return addition of two types: a + b
      *
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
      *
      *
      *
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function add($a, $b)
     {
@@ -126,9 +108,9 @@ class Calculator
     /**
      * Return subtraction of two types: a - b
      *
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function sub($a, $b)
     {
@@ -157,9 +139,9 @@ class Calculator
     /**
      * Return multiplication of two types: a * b
      *
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function mul($a, $b)
     {
@@ -188,9 +170,9 @@ class Calculator
     /**
      * Return division of two types: a / b
      *
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function div($a, $b)
     {
@@ -217,8 +199,8 @@ class Calculator
     /**
      * Return reciprocal of the type: 1/a
      *
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function reciprocal($a)
     {
@@ -235,9 +217,9 @@ class Calculator
 
     /**
      * 
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param \chippyash\Math\Type\NumericTypeInterface $exp
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \Chippyash\Math\Type\NumericTypeInterface $exp
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function pow($a, $exp)
     {
@@ -258,8 +240,8 @@ class Calculator
     
     /**
      * 
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function sqrt($a)
     {
@@ -281,9 +263,9 @@ class Calculator
     /**
      * Return the natural logarithm (base e) of the number
      * 
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
      * 
-     * @return chippyash\Type\Number\Complex\AbstractComplexType
+     * @return Chippyash\Type\Number\Complex\AbstractComplexType
      */
     public function natLog($a)
     {
@@ -293,10 +275,10 @@ class Calculator
     /**
      * In place incrementor
      * 
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
      * 
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function inc(NumericTypeInterface &$a, $inc = null)
     {
@@ -310,10 +292,10 @@ class Calculator
     /**
      * In place decrementor
      * 
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
      * 
-     * @return chippyash\Type\Interfaces\NumericTypeInterface
+     * @return Chippyash\Type\Interfaces\NumericTypeInterface
      */
     public function dec(NumericTypeInterface &$a, $inc = null)
     {
@@ -327,7 +309,7 @@ class Calculator
     /**
      * Return the actual calc engine is use
      * 
-     * @return chippyash\Math\Type\Calculator\CalculatorEngineInterface
+     * @return Chippyash\Math\Type\Calculator\CalculatorEngineInterface
      */
     public function getEngine()
     {

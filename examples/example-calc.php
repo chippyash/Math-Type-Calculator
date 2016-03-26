@@ -9,9 +9,9 @@
 
 include "../vendor/autoload.php";
 
-use chippyash\Math\Type\Calculator;
-use chippyash\Type\TypeFactory as F;
-use chippyash\Type\Exceptions\InvalidTypeException;
+use Chippyash\Math\Type\Calculator;
+use Chippyash\Type\TypeFactory as F;
+use Chippyash\Type\Exceptions\InvalidTypeException;
 
 $calc = new Calculator();
 
@@ -19,7 +19,7 @@ function display($op, $p1, $p2 = null)
 {
     global $calc;
 
-    $search = ['chippyash\Type\Number\Rational\\','chippyash\Type\Number\Complex\\','chippyash\Type\Number\\'];
+    $search = ['Chippyash\Type\Number\Rational\\','Chippyash\Type\Number\Complex\\','Chippyash\Type\Number\\'];
     $replace = ['','',''];
     if (is_int($p1)) {
         $tA = 'PHP-Int';
