@@ -5,12 +5,13 @@ use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\FloatType;
 use Chippyash\Type\Number\Rational\RationalType;
 use Chippyash\Type\Number\Complex\ComplexType;
-use Chippyash\Math\Type\Comparator\Native;
+use Chippyash\Math\Type\Comparator\NativeEngine;
+use Chippyash\Type\RequiredType;
 
 /**
  *
  */
-class NativeTest extends \PHPUnit_Framework_TestCase
+class NativeEngineTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
@@ -29,7 +30,8 @@ class NativeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->object = new Native();
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
+        $this->object = new NativeEngine();
 
         $this->smallInt = new IntType(2);
         $this->bigInt = new IntType(12);

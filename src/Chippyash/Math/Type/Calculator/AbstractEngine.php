@@ -6,13 +6,13 @@
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type\Calculator;
+namespace Chippyash\Math\Type\Calculator;
 
-use chippyash\Math\Type\Calculator;
-use chippyash\Math\Type\Comparator;
-use chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use chippyash\Type\TypeFactory;
-use chippyash\Type\Number\Rational\RationalTypeFactory;
+use Chippyash\Math\Type\Calculator;
+use Chippyash\Math\Type\Comparator;
+use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
+use Chippyash\Type\TypeFactory;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
 
 /**
  *Abstract calculator base clase
@@ -46,8 +46,8 @@ Abstract class AbstractEngine
      * as a result. e.g. incrementing an IntType by a ComplexType will change
      * $a to a ComplexType
      * 
-     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param \chippyash\Type\Interfaces\NumericTypeInterface $inc
+     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $inc
      * 
      * @return void
      */
@@ -65,8 +65,8 @@ Abstract class AbstractEngine
      * By default the decrement == 1
      * This operation will effect the $a parameter
      * 
-     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param \chippyash\Type\Interfaces\NumericTypeInterface $dec
+     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $dec
      * 
      * @return void
      */
@@ -86,15 +86,15 @@ Abstract class AbstractEngine
      * This function will use a Taylor Series algorithm to compute the log
      * for GMP calculator else use PHP inbuilt log() method
      * 
-     * @param \chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $a
      * 
-     * @return \chippyash\Type\Numeric\Rational\AbstractRationalType
+     * @return \Chippyash\Type\Numeric\Rational\AbstractRationalType
      */
     public function natLog(NI $a)
     {
         //handle native types
         if (Calculator::getRequiredType() !== Calculator::TYPE_GMP) {
-            if ($a instanceof \chippyash\Type\Number\Complex\AbstractComplexType
+            if ($a instanceof \Chippyash\Type\Number\Complex\AbstractComplexType
                 && !$a->isReal()) {
                 return RationalTypeFactory::fromFloat(\log($a->modulus()->get()));
             }
@@ -106,7 +106,7 @@ Abstract class AbstractEngine
         $epsilon = RationalTypeFactory::fromFloat(self::NATLOG_EPSILON);
         $calc = $this->calculator;
         $comp = new Comparator();
-        if ($a instanceof \chippyash\Type\Number\Complex\AbstractComplexType) {
+        if ($a instanceof \Chippyash\Type\Number\Complex\AbstractComplexType) {
             if($a->isReal()) {
                 $y = $a->r();
             } else {

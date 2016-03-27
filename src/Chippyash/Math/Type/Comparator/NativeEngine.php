@@ -12,14 +12,14 @@ use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use Chippyash\Type\Number\Rational\RationalType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexType;
-use Chippyash\Math\Type\Calculator\Native as Calc;
+use Chippyash\Math\Type\Calculator\NativeEngine as Calc;
 use Chippyash\Math\Type\Traits\CheckRationalTypes;
 
 /**
  * PHP Native maths comparator
  *
  */
-class Native extends AbstractComparatorEngine
+class NativeEngine extends AbstractComparatorEngine
 {
     use CheckRationalTypes;
 
@@ -56,11 +56,7 @@ class Native extends AbstractComparatorEngine
                 list($a, $b) = $this->checkRationalTypes($a, $b);
                 return $this->rationalCompare($a, $b);
             case 'complex':
-                return $this->complexCompare($a, $b);
-            case 'complex:numeric':
-                return $this->complexCompare($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->complexCompare($a->asComplex(), $b);
+                return $this->complexCompare($a->asComplex(), $b->asComplex());
         }
     }
 

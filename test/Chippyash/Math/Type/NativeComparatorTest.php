@@ -2,19 +2,20 @@
 namespace Chippyash\Test\Math\Type;
 
 use Chippyash\Math\Type\Comparator;
-use Chippyash\Math\Type\Comparator\Native;
+use Chippyash\Math\Type\Comparator\NativeEngine;
 use Chippyash\Type\Number\IntType;
-use Chippyash\Type\Number\WholeIntType;
-use Chippyash\Type\Number\NaturalIntType;
-use Chippyash\Type\Number\FloatType;
-use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+use Chippyash\Type\RequiredType;
 
 /**
  *
  */
-class ComparatorTest extends \PHPUnit_Framework_TestCase
+class NativeComparatorTest extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
+    }
+
     public function testConstructWithNoParameterReturnsComparator()
     {
         $this->assertInstanceOf(
@@ -24,13 +25,13 @@ class ComparatorTest extends \PHPUnit_Framework_TestCase
     public function testConstructWithValidEngineTypeReturnsComparator()
     {
         $this->assertInstanceOf(
-                'Chippyash\Math\Type\Comparator', new Comparator(Comparator::ENGINE_NATIVE));
+                'Chippyash\Math\Type\Comparator', new Comparator(Comparator::TYPE_NATIVE));
     }
 
     public function testConstructWithComparatorEngineInterfaceTypeReturnsComparator()
     {
         $this->assertInstanceOf(
-                'Chippyash\Math\Type\Comparator', new Comparator(new Native()));
+                'Chippyash\Math\Type\Comparator', new Comparator(new NativeEngine()));
     }
 
     /**

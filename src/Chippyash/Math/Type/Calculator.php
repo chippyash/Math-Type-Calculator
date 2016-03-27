@@ -9,9 +9,9 @@
 namespace Chippyash\Math\Type;
 
 use Chippyash\Type\Interfaces\NumericTypeInterface;
-use Chippyash\Math\Type\Calculator\Native;
 use Chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use Chippyash\Math\Type\Traits\ArbitrateTwoTypes;
+use Chippyash\Type\RequiredType;
 
 /**
  * Generic calculator for strong type support
@@ -32,17 +32,24 @@ class Calculator
 {
     use ArbitrateTwoTypes;
 
-    const ENGINE_NATIVE = 0;
+    /**@+
+     * Numeric engine types
+     */
+    const TYPE_DEFAULT = 0;
+    const TYPE_NATIVE = 1;
+    const TYPE_GMP = 2;
+    /**@-*/
 
-    const NS = 'Chippyash\Math\Type\Calculator\\';
+    const NS = 'Chippyash\\Math\\Type\\Calculator\\';
 
     protected $supportedEngines = [
-        self::ENGINE_NATIVE => 'Native'
+        self::TYPE_NATIVE => 'NativeEngine',
+        self::TYPE_GMP => 'GmpEngine'
     ];
 
     /**
      * Calculation engine
-     * @var Chippyash\Math\Type\Calculator\CalculatorEngineInterface
+     * @var CalculatorEngineInterface
      */
     protected $calcEngine;
 
@@ -51,34 +58,35 @@ class Calculator
      * Constructor
      * Set up the calculation engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|Chippyash\Math\Type\Calculator\CalculatorEngineInterface $calcEngine Calculation engine to use - default == Native
+     * @param int|CalculatorEngineInterface $calcEngine Calculation engine to use - default == Auto
      * @throws \InvalidArgumentException
      */
-    public function __construct(CalculatorEngineInterface $calcEngine = null)
+    public function __construct($calcEngine = null)
     {
-        if ($calcEngine instanceof CalculatorEngineInterface) {
+        if (is_null($calcEngine) || (is_int($calcEngine) && $calcEngine == self::TYPE_DEFAULT)) {
+            $this->calcEngine = $this->getDefaultEngine();
+            return;
+        } elseif (is_int($calcEngine) && array_key_exists($calcEngine, $this->supportedEngines)) {
+            $className = self::NS . $this->supportedEngines[$calcEngine];
+            $this->calcEngine = new $className();
+            return;
+        } elseif ($calcEngine instanceof CalculatorEngineInterface) {
             $this->calcEngine = $calcEngine;
             return;
         }
-        
-        if (self::getRequiredType() == self::TYPE_GMP) {
-            $this->calcEngine = new GmpEngine($this);
-            return;
-        }
-        
-        $this->calcEngine = new NativeEngine($this);
-        
+
+        throw new \InvalidArgumentException('No known calculator engine');
     }
 
     /**
      * Return addition of two types: a + b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $b
      *
      *
      *
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @return NumericTypeInterface
      */
     public function add($a, $b)
     {
@@ -95,22 +103,18 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalAdd($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalAdd($a, $b);
+                return $this->calcEngine->rationalAdd($a->asRational(), $b->asRational());
             case 'complex':
-                return $this->calcEngine->complexAdd($a, $b);
-            case 'complex:numeric':
-                return $this->calcEngine->complexAdd($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->calcEngine->complexAdd($a->asComplex(), $b);
+                return $this->calcEngine->complexAdd($a->asComplex(), $b->asComplex());
         }
     }
 
     /**
      * Return subtraction of two types: a - b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $b
+     * @return NumericTypeInterface
      */
     public function sub($a, $b)
     {
@@ -126,22 +130,18 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalSub($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalSub($a, $b);
+                return $this->calcEngine->rationalSub($a->asRational(), $b->asRational());
             case 'complex':
-                return $this->calcEngine->complexSub($a, $b);
-            case 'complex:numeric':
-                return $this->calcEngine->complexSub($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->calcEngine->complexSub($a->asComplex(), $b);
+                return $this->calcEngine->complexSub($a->asComplex(), $b->asComplex());
         }
     }
 
     /**
      * Return multiplication of two types: a * b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $b
+     * @return NumericTypeInterface
      */
     public function mul($a, $b)
     {
@@ -157,22 +157,18 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalMul($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalMul($a, $b);
+                return $this->calcEngine->rationalMul($a->asRational(), $b->asRational());
             case 'complex':
-                return $this->calcEngine->complexMul($a, $b);
-            case 'complex:numeric':
-                return $this->calcEngine->complexMul($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->calcEngine->complexMul($a->asComplex(), $b);
+                return $this->calcEngine->complexMul($a->asComplex(), $b->asComplex());
         }
     }
 
     /**
      * Return division of two types: a / b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $b
+     * @return NumericTypeInterface
      */
     public function div($a, $b)
     {
@@ -184,13 +180,9 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->intDiv($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalDiv($a, $b);
+                return $this->calcEngine->rationalDiv($a->asRational(), $b->asRational());
             case 'complex':
-                return $this->calcEngine->complexDiv($a, $b);
-            case 'complex:numeric':
-                return $this->calcEngine->complexDiv($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->calcEngine->complexDiv($a->asComplex(), $b);
+                return $this->calcEngine->complexDiv($a->asComplex(), $b->asComplex());
             default:
                 return $this->calcEngine->floatDiv($a, $b);
         }
@@ -199,8 +191,8 @@ class Calculator
     /**
      * Return reciprocal of the type: 1/a
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @return NumericTypeInterface
      */
     public function reciprocal($a)
     {
@@ -217,9 +209,9 @@ class Calculator
 
     /**
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param \Chippyash\Math\Type\NumericTypeInterface $exp
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $exp
+     * @return NumericTypeInterface
      */
     public function pow($a, $exp)
     {
@@ -240,8 +232,8 @@ class Calculator
     
     /**
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @return NumericTypeInterface
      */
     public function sqrt($a)
     {
@@ -263,7 +255,7 @@ class Calculator
     /**
      * Return the natural logarithm (base e) of the number
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $a
      * 
      * @return Chippyash\Type\Number\Complex\AbstractComplexType
      */
@@ -275,10 +267,10 @@ class Calculator
     /**
      * In place incrementor
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $inc Default == 1
      * 
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @return NumericTypeInterface
      */
     public function inc(NumericTypeInterface &$a, $inc = null)
     {
@@ -292,10 +284,10 @@ class Calculator
     /**
      * In place decrementor
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $inc Default == 1
+     * @param numeric|NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $inc Default == 1
      * 
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @return NumericTypeInterface
      */
     public function dec(NumericTypeInterface &$a, $inc = null)
     {
@@ -307,59 +299,13 @@ class Calculator
     }
     
     /**
-     * Return the actual calc engine is use
+     * Return the actual calc engine in use
      * 
-     * @return Chippyash\Math\Type\Calculator\CalculatorEngineInterface
+     * @return CalculatorEngineInterface
      */
     public function getEngine()
     {
         return $this->calcEngine;
-    }
-    
-    /**
-     * Set the required number type to return
-     * By default this is self::TYPE_DEFAULT  which is 'auto', meaning that
-     * the factory will determine if GMP is installed and use that else use 
-     * PHP native types
-     * 
-     * @param string $requiredType
-     * @throws \InvalidArgumentException
-     */
-    public static function setNumberType($requiredType)
-    {
-        if (!in_array($requiredType, self::$validTypes)) {
-            throw new \InvalidArgumentException("{$requiredType} is not a supported number type");
-        }
-        if ($requiredType == self::TYPE_GMP && !extension_loaded('gmp')) {
-            throw new \InvalidArgumentException('GMP not supported');
-        }
-        self::$supportType = $requiredType;
-        TypeFactory::setNumberType($requiredType);
-    }
-    
-    /**
-     * Get the required type base to return
-     * This is also used by the comparator to determine type
-     * 
-     * @return string
-     */
-    public static function getRequiredType()
-    {
-        if (self::$requiredType != null) {
-            return self::$requiredType;
-        }
-        
-        if (self::$supportType == self::TYPE_DEFAULT) {
-            if (extension_loaded('gmp')) {
-                self::$requiredType = self::TYPE_GMP;
-            } else {
-                self::$requiredType = self::TYPE_NATIVE;
-            }
-        } else {
-            self::$requiredType = self::$supportType;
-        }
-        
-        return self::$requiredType;
     }
     
     protected function convert($num)
@@ -373,5 +319,28 @@ class Calculator
 
         $type = (is_object($num) ? get_class($num) : gettype($num));
         throw new \BadMethodCallException('No solution for unknown type: ' . $type);
+    }
+
+    /**
+     * Get the required type base to return
+     *
+     * @return string
+     */
+    protected function getRequiredType()
+    {
+        return RequiredType::getInstance()->get();
+    }
+
+    protected function getDefaultEngine()
+    {
+        if ($this->getRequiredType() == RequiredType::TYPE_NATIVE) {
+            $class = $this->supportedEngines[self::TYPE_NATIVE];
+        } else {
+            $class = $this->supportedEngines[self::TYPE_GMP];
+        }
+
+        $className = self::NS . $class;
+
+        return new $className();
     }
 }

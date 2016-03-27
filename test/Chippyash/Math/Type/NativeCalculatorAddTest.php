@@ -10,12 +10,13 @@ use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexTypeFactory;
 use Chippyash\Type\RequiredType;
 
-class CalculatorAddTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
     public function setUp()
     {
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         $this->object = new Calculator();
     }
 

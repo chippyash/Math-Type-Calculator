@@ -1,23 +1,25 @@
 <?php
 namespace Chippyash\Test\Math\Type\Calculator;
 
-use Chippyash\Math\Type\Calculator\Native;
+use Chippyash\Math\Type\Calculator\NativeEngine;
 use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\WholeIntType;
 use Chippyash\Type\Number\FloatType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+use Chippyash\Type\RequiredType;
 
 /**
  * Covers some areas not covered in the main calculator tests
  */
-class NativeTest extends \PHPUnit_Framework_TestCase
+class NativeEngineTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
     public function setUp()
     {
-        $this->object = new Native();
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
+        $this->object = new NativeEngine();
     }
 
 

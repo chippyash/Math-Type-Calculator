@@ -26,14 +26,8 @@ trait ArbitrateTwoTypes
     protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)
     {
         $pairing = $this->getTypePairing($a, $b);
-        if ($pairing == 'complex:complex') {
+        if (strstr($pairing, 'complex') !== false) {
             return 'complex';
-        }
-        if (strpos($pairing, 'complex') === 0) {
-            return 'complex:numeric';
-        }
-        if (strpos($pairing, 'complex') !== false) {
-            return 'numeric:complex';
         }
         if (strstr($pairing, 'rational') !== false) {
             return 'rational';

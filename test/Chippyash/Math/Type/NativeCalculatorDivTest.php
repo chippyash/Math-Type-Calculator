@@ -8,16 +8,18 @@ use Chippyash\Type\Number\NaturalIntType;
 use Chippyash\Type\Number\FloatType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+use Chippyash\Type\RequiredType;
 
 /**
  *
  */
-class CalculatorDivTest extends \PHPUnit_Framework_TestCase
+class NativeCalculatorDivTest extends \PHPUnit_Framework_TestCase
 {
     protected $object;
 
     public function setUp()
     {
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         $this->object = new Calculator();
     }
 
