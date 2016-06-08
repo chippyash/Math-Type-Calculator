@@ -2,12 +2,22 @@
 
 ## Quality Assurance
 
-Certified for PHP 5.4 - 5.6
-
+![PHP 5.4](https://img.shields.io/badge/PHP-5.4-blue.svg)
+![PHP 5.5](https://img.shields.io/badge/PHP-5.5-blue.svg)
+![PHP 5.6](https://img.shields.io/badge/PHP-5.6-blue.svg)
+![PHP 7](https://img.shields.io/badge/PHP-7-blue.svg)
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Test Coverage](https://codeclimate.com/github/chippyash/Math-Type-Calculator/badges/coverage.svg)](https://codeclimate.com/github/chippyash/Math-Type-Calculator/coverage)
 
 See the [test contract](https://github.com/chippyash/Math-Type-Calculator/blob/master/docs/Test-Contract.md).
+
+The above badges represent the current master branch.  As a rule, I don't push
+ to GitHub unless tests, coverage and usability are acceptable.  This may not be
+ true for short periods of time; on holiday, need code for some other downstream
+ project etc.  If you need stable code, use a tagged version. Read 'Further Documentation'
+ and 'Installation'.
+ 
+Current development branch is feature/gmp_support. Want to help? - that's where it is.
 
 Build coverage only <100% due to inability of coverage engine to understand that
 closing brackets on a method are part of the method, even if they are never
@@ -264,3 +274,6 @@ V1.1.10 Fix calculator to use Native PHP numeric types until GMP calculator supp
 V2.0.0 BC Break: change namespace from chippyash\Math to Chippyash\Math\Type
   
 V2.0.1 Add link to packages
+
+V2.0.2 Ensure compatibility with PHP7
+
