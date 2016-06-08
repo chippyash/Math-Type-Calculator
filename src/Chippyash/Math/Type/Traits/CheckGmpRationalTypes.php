@@ -22,8 +22,8 @@ trait CheckGmpRationalTypes
     /**
      * Check for rational type, converting if necessary
      *
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NumericTypeInterface $a
+     * @param NumericTypeInterface $b
      * @return array [RationalType, RationalType]
      */
     protected function checkRationalTypes(NumericTypeInterface $a, NumericTypeInterface $b)

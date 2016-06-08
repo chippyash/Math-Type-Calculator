@@ -1,5 +1,5 @@
 <?php
-namespace Chippyash\Test\Math\Type;
+namespace Chippyash\Test\Math\Type\Calculator\Native;
 
 use Chippyash\Math\Type\Calculator;
 use Chippyash\Math\Type\Calculator\NativeEngine;
@@ -8,9 +8,12 @@ use Chippyash\Type\RequiredType;
 /**
  *
  */
-class NativeCalculatorTest extends \PHPUnit_Framework_TestCase
+class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * System under test
+     * @var Calculator
+     */
     protected function setUp()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);

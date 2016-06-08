@@ -17,14 +17,18 @@ use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
 interface ComparatorEngineInterface
 {
     /**
-     * a == b = 0
+     * a == b = 0 (or a ≈ b)
      * a < b = -1
      * a > b = 1
      *
-     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param \Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * if tolerance is supplied, then equality is determined within a tolerance limit
+     * 0 <= abs(a-b) <= tolerance
+     *
+     * @param NI $a
+     * @param NI $b
+     * @param NI $tolerance default = exact
      *
      * @return int
      */
-    public function compare(NI $a, NI $b);
+    public function compare(NI $a, NI $b, NI $tolerance = null);
 }

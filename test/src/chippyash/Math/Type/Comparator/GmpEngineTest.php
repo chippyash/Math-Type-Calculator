@@ -7,6 +7,7 @@ use chippyash\Type\Number\Rational\GMPRationalType;
 use chippyash\Type\Number\Complex\GMPComplexType;
 use chippyash\Type\Number\FloatType;
 use chippyash\Math\Type\Comparator\GmpEngine;
+use Chippyash\Type\RequiredType;
 
 /**
  *
@@ -29,7 +30,7 @@ class GmpEngineTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        TypeFactory::setNumberType(TypeFactory::TYPE_GMP);
+        RequiredType::getInstance()->set(RequiredType::TYPE_GMP);
         $this->object = new GmpEngine();
 
         $this->smallInt = new GMPIntType(2);

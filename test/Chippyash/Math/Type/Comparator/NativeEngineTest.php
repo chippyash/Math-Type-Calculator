@@ -7,13 +7,17 @@ use Chippyash\Type\Number\Rational\RationalType;
 use Chippyash\Type\Number\Complex\ComplexType;
 use Chippyash\Math\Type\Comparator\NativeEngine;
 use Chippyash\Type\RequiredType;
+use Chippyash\Type\TypeFactory;
 
 /**
  *
  */
 class NativeEngineTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
+    /**
+     * @var NativeEngine
+     */
+    protected $sut;
 
     protected $smallInt;
     protected $bigInt;
@@ -31,7 +35,7 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
-        $this->object = new NativeEngine();
+        $this->sut = new NativeEngine();
 
         $this->smallInt = new IntType(2);
         $this->bigInt = new IntType(12);
@@ -50,43 +54,43 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testCompareIntsReturnsCorrectResult()
     {
-        $this->assertEquals(0, $this->object->compare($this->smallInt, $this->smallInt));
-        $this->assertEquals(-1, $this->object->compare($this->smallInt, $this->bigInt));
-        $this->assertEquals(1, $this->object->compare($this->bigInt, $this->smallInt));
+        $this->assertEquals(0, $this->sut->compare($this->smallInt, $this->smallInt));
+        $this->assertEquals(-1, $this->sut->compare($this->smallInt, $this->bigInt));
+        $this->assertEquals(1, $this->sut->compare($this->bigInt, $this->smallInt));
     }
 
     public function testCompareFloatsReturnsCorrectResult()
     {
-        $this->assertEquals(0, $this->object->compare($this->smallFloat, $this->smallFloat));
-        $this->assertEquals(-1, $this->object->compare($this->smallFloat, $this->bigFloat));
-        $this->assertEquals(1, $this->object->compare($this->bigFloat, $this->smallFloat));
+        $this->assertEquals(0, $this->sut->compare($this->smallFloat, $this->smallFloat));
+        $this->assertEquals(-1, $this->sut->compare($this->smallFloat, $this->bigFloat));
+        $this->assertEquals(1, $this->sut->compare($this->bigFloat, $this->smallFloat));
     }
 
     public function testCompareRationalsReturnsCorrectResult()
     {
-        $this->assertEquals(0, $this->object->compare($this->smallRational, $this->smallRational));
-        $this->assertEquals(-1, $this->object->compare($this->smallRational, $this->bigRational));
-        $this->assertEquals(1, $this->object->compare($this->bigRational, $this->smallRational));
+        $this->assertEquals(0, $this->sut->compare($this->smallRational, $this->smallRational));
+        $this->assertEquals(-1, $this->sut->compare($this->smallRational, $this->bigRational));
+        $this->assertEquals(1, $this->sut->compare($this->bigRational, $this->smallRational));
     }
 
     public function testCompareRealComplexReturnsCorrectResultBasedOnRealPart()
     {
-        $this->assertEquals(0, $this->object->compare($this->smallRealComplex, $this->smallRealComplex));
-        $this->assertEquals(-1, $this->object->compare($this->smallRealComplex, $this->bigRealComplex));
-        $this->assertEquals(1, $this->object->compare($this->bigRealComplex, $this->smallRealComplex));
+        $this->assertEquals(0, $this->sut->compare($this->smallRealComplex, $this->smallRealComplex));
+        $this->assertEquals(-1, $this->sut->compare($this->smallRealComplex, $this->bigRealComplex));
+        $this->assertEquals(1, $this->sut->compare($this->bigRealComplex, $this->smallRealComplex));
     }
 
     public function testCompareUnrealComplexReturnsCorrectResultBasedOnRealPart()
     {
-        $this->assertEquals(0, $this->object->compare($this->smallUnrealComplex, $this->smallUnrealComplex));
-        $this->assertEquals(-1, $this->object->compare($this->smallUnrealComplex, $this->bigUnrealComplex));
-        $this->assertEquals(1, $this->object->compare($this->bigUnrealComplex, $this->smallUnrealComplex));
+        $this->assertEquals(0, $this->sut->compare($this->smallUnrealComplex, $this->smallUnrealComplex));
+        $this->assertEquals(-1, $this->sut->compare($this->smallUnrealComplex, $this->bigUnrealComplex));
+        $this->assertEquals(1, $this->sut->compare($this->bigUnrealComplex, $this->smallUnrealComplex));
     }
 
     public function testCanMixComplexAndNonComplexTypesForComparison()
     {
-        $this->assertEquals(1, $this->object->compare($this->smallUnrealComplex, $this->smallInt));
-        $this->assertEquals(-1, $this->object->compare($this->smallInt, $this->smallUnrealComplex));
+        $this->assertEquals(1, $this->sut->compare($this->smallUnrealComplex, $this->smallInt));
+        $this->assertEquals(-1, $this->sut->compare($this->smallInt, $this->smallUnrealComplex));
     }
 
     /**
@@ -94,7 +98,7 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanMixTypesForComparison($a, $b, $res)
     {
-        $this->assertEquals($res, $this->object->compare($a, $b));
+        $this->assertEquals($res, $this->sut->compare($a, $b));
     }
 
     public function mixedTypes()
@@ -114,5 +118,45 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
             [$this->smallRealComplex, $this->smallFloat, 0],
             [$this->smallRealComplex, $this->smallRational, 0],
         ];
+    }
+
+    public function testYouCanSetAToleranceForAComparison()
+    {
+        $tolerance = TypeFactory::createFloat(0.0001);
+        $a = TypeFactory::createInt(1);
+        $b = TypeFactory::createFloat(1.1);
+        $c = TypeFactory::createFloat(1.0001);
+        $this->assertEquals(-1, $this->sut->compare($a, $b, $tolerance));
+        $this->assertEquals(0, $this->sut->compare($a, $c, $tolerance));
+
+        $a1 = TypeFactory::createRational(1);
+        $b1 = TypeFactory::createRational(1.1);
+        $c1 = TypeFactory::createRational(1.0001);
+        $this->assertEquals(-1, $this->sut->compare($a1, $b1, $tolerance));
+        $this->assertEquals(0, $this->sut->compare($a1, $c1, $tolerance));
+
+        //real complex
+        $a2 = TypeFactory::createComplex(1, 0);
+        $b2 = TypeFactory::createComplex(1.1, 0);
+        $c2 = TypeFactory::createComplex(1.0001, 0);
+        $this->assertEquals(-1, $this->sut->compare($a2, $b2, $tolerance));
+        $this->assertEquals(0, $this->sut->compare($a2, $c2, $tolerance));
+
+        //unreal complex
+        $a3 = TypeFactory::createComplex(1, 2);
+        $b3 = TypeFactory::createComplex(1.1, 2);
+        $c3 = TypeFactory::createComplex(1.0001, 2);
+        $this->assertEquals(-1, $this->sut->compare($a3, $b3, $tolerance));
+        $this->assertEquals(0, $this->sut->compare($a3, $c3, $tolerance));
+    }
+
+    public function testYouCanGetApproximatelyEqualsWithTheAeqMethod()
+    {
+        $tolerance = TypeFactory::createFloat(0.0001);
+        $a = TypeFactory::createInt(1);
+        $b = TypeFactory::createFloat(1.1);
+        $c = TypeFactory::createFloat(1.0001);
+        $this->assertFalse($this->sut->aeq($a, $b, $tolerance));
+        $this->assertTrue($this->sut->aeq($a, $c, $tolerance));
     }
 }

@@ -135,7 +135,21 @@ class NativeEngine implements CalculatorEngineInterface
 
         return $res;
     }
-    
+
+    /**
+     * Return the natural (base e) logarithm for an integer
+     *
+     * By definition this is a float
+     *
+     * @param NTI $a
+     *
+     * @return FloatType
+     */
+    public function intNatLog(NTI $a)
+    {
+        return $this->floatNatLog($a);
+    }
+
     /**
      * Float addition
      *
@@ -235,6 +249,20 @@ class NativeEngine implements CalculatorEngineInterface
     }
 
     /**
+     * Return the natural (base e) logarithm for a number
+     *
+     * By definition this is a float (or rational)
+     *
+     * @param NTI $a
+     *
+     * @return FloatType
+     */
+    public function floatNatLog(NTI $a)
+    {
+        return new FloatType(\log($a()));
+    }
+
+    /**
      * Whole number addition
      *
      * @param NTI $a
@@ -321,13 +349,6 @@ class NativeEngine implements CalculatorEngineInterface
      */
     public function rationalAdd(RTI $a, RTI $b)
     {
-        if (!$a instanceof RationalType) {
-            $a = $a->asRational();
-        }
-        if (!$b instanceof RationalType) {
-            $b = $b->asRational();
-        }
-
         $lcm = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
         $nn = $this->rationalDiv(
             $this->rationalMul(
@@ -388,10 +409,7 @@ class NativeEngine implements CalculatorEngineInterface
     public function rationalMul(RTI $a, RTI $b)
     {
         list($a, $b) = $this->checkRationalTypes($a, $b);
-        $n = $this->intMul($a->numerator(), $b->numerator());
-        $d = $this->intMul($a->denominator(), $b->denominator());
-
-        return RationalTypeFactory::create($n, $d);
+        return RationalTypeFactory::fromFloat($a() * $b());
     }
 
     /**
@@ -464,7 +482,20 @@ class NativeEngine implements CalculatorEngineInterface
                 RationalTypeFactory::fromFloat($num), 
                 RationalTypeFactory::fromFloat($den));
     }
-    
+
+    /**
+     * Return the natural (base e) logarithm for a rational
+     *
+     * By definition this is a rational given a rational
+     *
+     * @param RTI $a
+     *
+     * @return RationalType
+     */
+    public function rationalNatLog(RTI $a)
+    {
+        return RationalTypeFactory::fromFloat($this->floatNatLog($a));
+    }
 
     /**
      * Complex number addition
@@ -611,7 +642,120 @@ class NativeEngine implements CalculatorEngineInterface
     {
         return $this->complexPow($a, RationalTypeFactory::create(1, 2));
     }
-    
+
+    /**
+     * Return the natural (base e) logarithm for a complex number
+     *
+     * By definition this is a rational
+     * 
+     * If the C isReal then log(C.realPart) else log(modulus(C))
+     *
+     * @param CTI $a
+     *
+     * @return RationalType
+     */
+    public function complexNatLog(CTI $a)
+    {
+        if ($a->isReal()) {
+            return RationalTypeFactory::fromFloat(\log($a()));
+        }
+
+        return RationalTypeFactory::fromFloat(\log($a->modulus()->get()));
+    }
+
+
+    /**
+     * In place increment an IntType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incInt(NTI $a, $inc = 1)
+    {
+        $increment = ($inc instanceof NTI ? intval($inc()) : intval($inc));
+        $a->set($a() + $increment);
+    }
+
+    /**
+     * In place increment a FloatType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incFloat(NTI $a, $inc = 1)
+    {
+        $increment = ($inc instanceof NTI ? floatval($inc()) : floatval($inc));
+        $a->set($a() + $increment);
+    }
+
+    /**
+     * In place increment a RationalType
+     *
+     * @param RTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incRational(RTI $a, $inc = 1)
+    {
+        $this->incInt($a->numerator(), $inc);
+    }
+
+    /**
+     * In place increment a ComplexType
+     *
+     * @param CTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incComplex(CTI $a, $inc = 1)
+    {
+        $this->incRational($a->r(), $inc);
+    }
+
+    /**
+     * In place decrement an IntType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decInt(NTI $a, $dec = 1)
+    {
+        $decrement = ($dec instanceof NTI ? intval($dec()) : intval($dec));
+        $a->set($a() - $decrement);
+    }
+
+    /**
+     * In place decrement a FloatType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decFloat(NTI $a, $dec = 1)
+    {
+        $decrement = ($dec instanceof NTI ? floatval($dec()) : floatval($dec));
+        $a->set($a() - $decrement);
+    }
+
+    /**
+     * In place decrement a RationalType
+     *
+     * @param RTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decRational(RTI $a, $dec = 1)
+    {
+        $this->decInt($a->numerator(), $dec);
+    }
+
+    /**
+     * In place decrement a ComplexType
+     *
+     * @param CTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decComplex(CTI $a, $dec = 1)
+    {
+        $this->decRational($a->r(), $dec);
+    }
+
     private function intComplexPow($a, ComplexType $exp)
     {
         if ($exp->isZero()) {

@@ -8,14 +8,13 @@
  */
 namespace Chippyash\Math\Type\Calculator;
 
-use Chippyash\Type\Number\IntType;
-use Chippyash\Type\Number\Rational\RationalType;
 use Chippyash\Type\TypeFactory;
 use Chippyash\Type\Interfaces\NumericTypeInterface as NTI;
 use Chippyash\Type\Interfaces\RationalTypeInterface as RTI;
 use Chippyash\Type\Interfaces\ComplexTypeInterface as CTI;
-use Chippyash\Type\Number\GMPIntType;
+use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\FloatType;
+use Chippyash\Type\Number\GMPIntType;
 use Chippyash\Type\Number\Rational\GMPRationalType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\AbstractComplexType;
@@ -31,7 +30,7 @@ use Chippyash\Math\Type\Comparator;
 /**
  * GMP calculation
  */
-class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
+class GmpEngine implements CalculatorEngineInterface
 {
     use GmpConvertNumeric;
     use CheckGmpRationalTypes;
@@ -39,6 +38,12 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
     use CheckGmpFloatTypes;
     use CheckGmpComplexTypes;
 
+    /**
+     * Convergence epsilon for natural logarithm method
+     * @see natLog()
+     */
+    const NATLOG_EPSILON = 1e-20;
+    
     /**
      * Integer type addition
      *
@@ -326,9 +331,29 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
     {
         list($a, $b) = $this->checkRationalTypes($a, $b);
 
-        $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
-        $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
-        $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
+        $d = RationalTypeFactory::create(
+            $this->lcm(
+                $a->denominator()->get(), 
+                $b->denominator()->get()
+            )
+        )->asGMPRational();
+        
+        $nn = $this->rationalDiv(
+            $this->rationalMul(
+                $a->numerator()->asGMPRational(), 
+                $d
+            ), 
+            $a->denominator()->asGMPRational()
+        )->get();
+        
+        $nd = $this->rationalDiv(
+            $this->rationalMul(
+                $b->numerator()->asGMPRational(), 
+                $d
+            ), 
+            $b->denominator()->asGMPRational()
+        )->get();
+        
         $n = $this->intAdd(TypeFactory::createInt($nn), TypeFactory::createInt($nd));
 
         return RationalTypeFactory::create($n, $d->numerator());
@@ -342,14 +367,38 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
      * @return GMPRationalType
      */
     public function rationalSub(RTI $a, RTI $b)
-    {
+    { 
         list($a, $b) = $this->checkRationalTypes($a, $b);
-        $d = RationalTypeFactory::create($this->lcm($a->denominator()->get(), $b->denominator()->get()));
-        $nn = $this->rationalDiv($this->rationalMul($a->numerator(), $d), $a->denominator())->get();
-        $nd = $this->rationalDiv($this->rationalMul($b->numerator(), $d), $b->denominator())->get();
-        $n = $this->intSub(new GMPIntType($nn), new GMPIntType($nd));
+        $d = RationalTypeFactory::create(
+            $this->lcm(
+                $a->denominator()->get(),
+                $b->denominator()->get()
+            )
+        )->asGMPRational();
 
-        return RationalTypeFactory::create($n, $d->numerator());
+        $nn = $this->rationalDiv(
+            $this->rationalMul(
+                $a->numerator()->asGMPRational(),
+                $d
+            ),
+            $a->denominator()->asGMPRational()
+        )->get();
+
+
+        $nd = $this->rationalDiv(
+            $this->rationalMul(
+                $b->numerator()->asGMPRational(),
+                $d
+            ),
+            $b->denominator()->asGMPRational()
+        )->get();
+
+        $n = $this->intSub(TypeFactory::createInt($nn), TypeFactory::createInt($nd));
+        $aa = (string) $a; $bb = (string) $b; $dd = (string) $d;
+        $nnn = (string) $nn; $nnd = (string) $nd;
+        $ret = RationalTypeFactory::create($n, $d->numerator());
+        
+        return $ret;
     }
 
     /**
@@ -590,21 +639,124 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
     
     
     /**
-     * Return the natural (base e) logarithm for a number
-     * 
-     * This function will use a Taylor Series algorithm to compute the log
-     * for GMP calculator else use PHP inbuilt log() method
-     * 
      * @param NTI $a
-     * 
-     * @return \Chippyash\Type\Numeric\Rational\GMPRationalType
+     * @param numeric|NTI|int $inc
+     * @return mixed
      */
-    public function natLog(NTI $a)
+    public function incInt(NTI $a, $inc = 1)
     {
-        $epsilon = RationalTypeFactory::fromFloat(self::NATLOG_EPSILON);
-        $calc = $this->calculator;
-        $comp = new Comparator();
-        if ($a instanceof \Chippyash\Type\Number\Complex\GMPComplexType) {
+        $increment = ($inc instanceof NTI ? $inc : $this->convertNumeric($inc));
+        $a->set($this->intAdd($a, $increment)->gmp());
+    }
+
+    /**
+     * @param NTI $a
+     * @param numeric|NTI|int $inc
+     * @return mixed
+     * @throws \BadMethodCallException
+     */
+    public function incFloat(NTI $a, $inc = 1)
+    {
+        throw new \BadMethodCallException('decFloat not implemented for GMP calculator');
+    }
+
+    /**
+     * @param RTI $a
+     * @param numeric|NTI|int $inc
+     * @return mixed
+     */
+    public function incRational(RTI $a, $inc = 1)
+    {
+        $this->incInt($a->numerator(), $inc);
+    }
+
+    /**
+     * @param CTI $a
+     * @param numeric|NTI|int $inc
+     * @return mixed
+     */
+    public function incComplex(CTI $a, $inc = 1)
+    {
+        $this->incRational($a->r(), $inc);
+    }
+
+    /**
+     * @param NTI $a
+     * @param numeric|NTI|int $dec
+     * @return mixed
+     */
+    public function decInt(NTI $a, $dec = 1)
+    {
+        $decrement = ($dec instanceof NTI ? $dec : $this->convertNumeric($dec));
+        $a->set($this->intSub($a, $decrement)->gmp());
+    }
+
+    /**
+     * @param NTI $a
+     * @param numeric|NTI|int $dec
+     * @return mixed
+     * @throws \BadMethodCallException
+     */
+    public function decFloat(NTI $a, $dec = 1)
+    {
+        throw new \BadMethodCallException('decFloat not implemented for GMP calculator');
+    }
+
+    /**
+     * @param RTI $a
+     * @param numeric|NTI|int $dec
+     * @return mixed
+     */
+    public function decRational(RTI $a, $dec = 1)
+    {
+        $this->decInt($a->numerator(), $dec);
+    }
+
+    /**
+     * @param CTI $a
+     * @param numeric|NTI|int $dec
+     * @return mixed
+     */
+    public function decComplex(CTI $a, $dec = 1)
+    {
+        $this->decRational($a->r(), $dec);
+    }
+
+    /**
+     * @param NTI $a
+     * @return RTI
+     */
+    public function intNatLog(NTI $a)
+    {
+        return $this->natLog2(new GMPRationalType($a, new GMPIntType(1)));
+    }
+
+    /**
+     * @param NTI $a
+     * @return mixed
+     * @throws \BadMethodCallException
+     */
+    public function floatNatLog(NTI $a)
+    {
+        throw new \BadMethodCallException('floatNatLog method not implemented for GMP engine');
+    }
+
+    /**
+     * @param RTI $a
+     * @return RTI
+     */
+    public function rationalNatLog(RTI $a)
+    {
+        return $this->natLog2($a);
+    }
+
+    /**
+     * @param CTI $a
+     * @return RTI
+     */
+    public function complexNatLog(CTI $a)
+    {
+        if ($a instanceof GMPComplexType) {
             if($a->isReal()) {
                 $y = $a->r();
             } else {
@@ -614,24 +766,126 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
             $y = $a;
         }
         
+        return $this->natLog2($y);
+    }
+
+    /**
+     * Return the natural (base e) logarithm for a number
+     *
+     * This function will use a Taylor Series algorithm to compute the log
+     *
+     * @param GMPRationalType $y
+     *
+     * @return GMPRationalType
+     */
+    private function natLog(GMPRationalType $y)
+    {
+        $epsilon = RationalTypeFactory::fromFloat(self::NATLOG_EPSILON);
+        $comp = new Comparator();
+        $one = RationalTypeFactory::create(1);
+        $two = RationalTypeFactory::create(2);
+        
         //x = (y-1)/(y+1)
-        $x = $calc->div($calc->sub($y, 1), $calc->add($y, 1));
-        //x = x^2
-        $z = $calc->mul($x, $x);
+        $x = $this->rationalDiv($this->rationalSub($y, $one), $this->rationalAdd($y, $one));
+        //z = x^2
+        $z = $this->rationalMul($x, $x);
         //initial log value
         $L = RationalTypeFactory::create(0);
-        $two = RationalTypeFactory::create(2);
+        
 
         //run the Taylor Series until we meet the epsilon limiter
-        for ($k=RationalTypeFactory::create(1); $comp->gt($x, $epsilon); $calc->inc($k, $two)) {
+        for ($k=$one; $comp->gt($x, $epsilon); $this->incRational($k, $two)) {
+            $tx = $x->get();
+
             //$L += 2 * $x / $k;
-            $calc->inc($L, $calc->div($calc->mul($two, $x), $k));
+            $this->incRational($L, $this->rationalDiv($this->rationalMul($two, $x), $k));
             //$x *= $z;
-            $x = $calc->mul($x, $z);
+            $x = $this->rationalMul($x, $z);
+
+            $tk = $k->get();
+            $tx = $x->get();
+            $tL = $L->get();
         }
 
         return $L;
+    }
 
+    /**
+     * ln(x) = pi/(2M(1,4/s)) - m.ln(2)
+     *
+     * where :
+     *  M = arithemetic geometric mean of (1, 4/s)
+     *  s = x2^m, with m precision bits (8 regarded as sufficient)
+     *
+     * @link https://en.wikipedia.org/wiki/Natural_logarithm
+     *
+     * @param GMPRationalType $x
+     *
+     * @return GMPRationalType
+     */
+    private function natLog2($x)
+    {
+        //s
+        $m = RationalTypeFactory::create(8);
+        $two = RationalTypeFactory::create(2);
+        $m2 = $this->rationalPow($two, $m);
+        $s = $this->rationalMul($x, $m2);
+
+        //M
+        $s4 = $this->rationalDiv(RationalTypeFactory::create(4), $s);
+        $precision = RationalTypeFactory::create(1,1000000000000000000);
+        $M = $this->agm(RationalTypeFactory::create(1), $s4, $precision);
+
+        //pi
+        $pi = RationalTypeFactory::fromFloat(M_PI);
+        //ln(2)
+        $ln2 = RationalTypeFactory::fromFloat(log(2));
+
+        $ret = $this->rationalSub(
+            $this->rationalDiv($pi, $this->rationalMul($two, $M)),
+            $this->rationalMul($m, $ln2)
+        );
+        echo  sprintf("ln(%s) = %s\n\n", (string) $x, (string) $ret);
+        return $ret;
+    }
+
+    /**
+     * Arithmetic geometric mean
+     *
+     * @link https://en.wikipedia.org/wiki/Arithmetic%E2%80%93geometric_mean
+     *
+     * a1 = (a+g)/2
+     * g1 = sqrt(ag)
+     * until precision
+     * 
+     * @param GMPRationalType $a
+     * @param GMPRationalType $g
+     * @param GMPRationalType $precision
+     * 
+     * @return GMPRationalType
+     */
+    private function agm(GMPRationalType $a, GMPRationalType $g, GMPRationalType $precision)
+    {
+        echo sprintf("initial a: %s, g; %s", (string) $a, (string) $g) . PHP_EOL;
+        $comp = new Comparator();
+        $two = RationalTypeFactory::create(2);
+        //have we reached precision?
+        //diff(a,b) <= precision
+        do {
+            echo sprintf("diff: %s", (string) $this->rationalSub($a, $g)->abs()) . PHP_EOL;
+            $ai = $this->rationalDiv($this->rationalAdd($a, $g), $two);
+            $gi = $this->rationalSqrt($this->rationalMul($a, $g));
+            echo sprintf("a: %s, g: %s, p: %s", (string) $ai, (string) $gi, (string) $precision) . PHP_EOL;
+            unset($a, $g);
+            $a = clone $ai; $g = clone $gi;
+            unset ($ai, $gi);
+            echo sprintf("aeq = %s", $comp->aeq($a, $g, $precision) ? 'true' : 'false') . PHP_EOL;
+        } while (false === $comp->aeq($a, $g, $precision));
+        echo PHP_EOL;
+
+        //return mean of two numbers
+        $ret = $this->rationalDiv($this->rationalAdd($a, $g), $two);
+        return $ret;
     }
     
     private function intComplexPow($a, ComplexType $exp)
@@ -639,37 +893,29 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
         if ($exp->isZero()) {
             return new IntType(1);
         }
-        return $this->complexExponent($a, $exp);        
-    }
-    
-    private function floatComplexPow($a, ComplexType $exp)
-    {
-        if ($exp->isZero()) {
-            return new FloatType(1);
-        }
         return $this->complexExponent($a, $exp);
     }
-    
+
     private function complexExponent($base, ComplexType $exp)
     {
         if ($exp->isReal()) {
             return $this->rationalPow(
-                    RationalTypeFactory::fromFloat($base), 
-                    $exp->r());
+                RationalTypeFactory::fromFloat($base),
+                $exp->r());
         }
-        
+
         //do the imaginary part
         //n^bi = cos(b.lg(n)) + i.sin(b.lg(n))
         $b = $exp->i()->get();
         $n = log($base);
         $r = cos($b * $n);
-        $i = sin($b * $n);     
-        
+        $i = sin($b * $n);
+
         //no real part
         if ($exp->r()->get() == 0) {
             return new ComplexType(
-                    RationalTypeFactory::fromFloat($r),
-                    RationalTypeFactory::fromFloat($i));
+                RationalTypeFactory::fromFloat($r),
+                RationalTypeFactory::fromFloat($i));
         }
         //real and imaginary part
         //n^a+bi = n^a(cos(b.lg(n)) + i.sin(b.lg(n)))
@@ -677,11 +923,11 @@ class GmpEngine extends AbstractEngine implements CalculatorEngineInterface
         $rr = $na * $r;
         $ii = $na * $i;
         return new ComplexType(
-                RationalTypeFactory::fromFloat($rr),
-                RationalTypeFactory::fromFloat($ii)
-                ); 
+            RationalTypeFactory::fromFloat($rr),
+            RationalTypeFactory::fromFloat($ii)
+        );
     }
-    
+
     /**
      * Return Greatest Common Denominator of two numbers
      *

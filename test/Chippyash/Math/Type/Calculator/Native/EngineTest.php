@@ -8,18 +8,22 @@ use Chippyash\Type\Number\FloatType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexTypeFactory;
 use Chippyash\Type\RequiredType;
+use Chippyash\Type\TypeFactory;
 
 /**
  * Covers some areas not covered in the main calculator tests
  */
-class NativeEngineTest extends \PHPUnit_Framework_TestCase
+class EngineTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
+    /**
+     * @var NativeEngine
+     */
+    protected $sut;
 
     public function setUp()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
-        $this->object = new NativeEngine();
+        $this->sut = new NativeEngine();
     }
 
 
@@ -29,10 +33,10 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
         $b = new FloatType(12.0);
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\IntType',
-                $this->object->intAdd($a, $b));
+                $this->sut->intAdd($a, $b));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\IntType',
-                $this->object->intAdd($b, $a));
+                $this->sut->intAdd($b, $a));
     }
     
     public function testIntPowReturnsRationalOrIntOrComplexTypes()
@@ -41,24 +45,24 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
         $exp = new IntType(3);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\IntType',
-                $this->object->intPow($base, $exp));
-        $this->assertEquals(125, $this->object->intPow($base, $exp)->get());
+                $this->sut->intPow($base, $exp));
+        $this->assertEquals(125, $this->sut->intPow($base, $exp)->get());
         
         $exp2 = new FloatType(3.5);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\Rational\RationalType',
-                $this->object->intPow($base, $exp2));
-        $this->assertEquals('332922571/1191100', (string) $this->object->intPow($base, $exp2));
+                $this->sut->intPow($base, $exp2));
+        $this->assertEquals('332922571/1191100', (string) $this->sut->intPow($base, $exp2));
         
         $exp3 = RationalTypeFactory::fromFloat(3.5);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\Rational\RationalType',
-                $this->object->intPow($base, $exp3));
-        $this->assertEquals('332922571/1191100', (string) $this->object->intPow($base, $exp3));
+                $this->sut->intPow($base, $exp3));
+        $this->assertEquals('332922571/1191100', (string) $this->sut->intPow($base, $exp3));
         
         $base2 = new IntType(4);
         $exp4 = ComplexTypeFactory::fromString('5+3i');
-        $pow = $this->object->intPow($base2, $exp4);
+        $pow = $this->sut->intPow($base2, $exp4);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\Complex\ComplexType',
                 $pow);
@@ -66,7 +70,7 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('-861158767/988584', (string) $pow->i());
         
         $exp5 = ComplexTypeFactory::fromString('0+3i');
-        $pow = $this->object->intPow($base2, $exp5);
+        $pow = $this->sut->intPow($base2, $exp5);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\Complex\ComplexType',
                 $pow);
@@ -74,10 +78,11 @@ class NativeEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('-20905959/24575389', (string) $pow->i());
         
         $exp6 = ComplexTypeFactory::fromString('5+0i');
-        $pow = $this->object->intPow($base2, $exp6);
+        $pow = $this->sut->intPow($base2, $exp6);
         $this->assertInstanceOf(
                 '\Chippyash\Type\Number\Rational\RationalType',
                 $pow);
         $this->assertEquals(1024, $pow->get());
     }
+
 }

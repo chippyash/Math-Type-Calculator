@@ -67,18 +67,19 @@ class Comparator implements ComparatorEngineInterface
     }
 
     /**
-     * a == b = 0
+     * a == b = 0 (or a ≈ b = 0)
      * a < b = -1
      * a > b = 1
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NumericTypeInterface $a
+     * @param NumericTypeInterface $b
+     * @param NumericTypeInterface $tolerance
      *
      * @return int
      */
-    public function compare(NumericTypeInterface $a, NumericTypeInterface $b)
+    public function compare(NumericTypeInterface $a, NumericTypeInterface $b, NumericTypeInterface $tolerance = null)
     {
-        return $this->compEngine->compare($a, $b);
+        return $this->compEngine->compare($a, $b, $tolerance);
     }
 
     /**

@@ -48,6 +48,7 @@ native types only at this point.)
 
 *  eq  a == b
 *  neq a != b
+*  aeq a ≈ b within toleeance t
 *  lt  a < b
 *  lte a <= b
 *  gt  a > b
@@ -134,11 +135,11 @@ or PHP int or PHP float, except where explicitly stated):
 *  reciprocal($a) : NumericTypeInterface
 *  pow($base, $exp) : NumericTypeInterface
 *  sqrt($a) : NumericTypeInterface
-*  natLog($a) : AbstractRationalType
-*  inc(NumericTypeInterface &$a) : NumericTypeInterface
-*  inc(NumericTypeInterface &$a, $inc) : NumericTypeInterface
-*  dec(NumericTypeInterface &$a) : NumericTypeInterface
-*  dec(NumericTypeInterface &$a, $dec) : NumericTypeInterface
+*  natLog($a) : RationalType|IntType
+*  inc(NumericTypeInterface &$a) : NumericTypeInterface acts on $a
+*  inc(NumericTypeInterface &$a, NumericTypeInterface|numeric $inc) : NumericTypeInterface acts on $a
+*  dec(NumericTypeInterface &$a) : NumericTypeInterface acts on $a
+*  dec(NumericTypeInterface &$a, NumericTypeInterface $dec) : acts on $a
 
 The Calculator will arbitrate between types and return the lowest possible type based on the operand types.
 The order of precedence is
@@ -183,11 +184,15 @@ The Comparator::compare($a, $b) method takes two NumericTypeInterface types and 
     a == b: 0
     a < b : -1
     a > b : 1
+    
+compare() takes an optional third parameter : NumericInterface $tolerance which acts on the
+equality phase of the comparison to specify a toleance for equality. See aeq() below
 
 It has convenience methods (all operands are NumericTypeInterface):
 
 *  eq($a, $b) : boolean: $a == $b
 *  neq($a, $b) : boolean: $a != $b
+*  aeq($a, $b, $tolerance) : boolean : $a ≈ $b within $tolerance
 *  lt($a, $b) : boolean: $a < $b
 *  lte($a, $b) : boolean: $a <= $b
 *  gt($a, $b) : boolean: $a > $b
@@ -195,6 +200,8 @@ It has convenience methods (all operands are NumericTypeInterface):
 
 <pre>
     if ($comp->gt($w, $f) { ... }
+    
+    if ($comp->aeq($c1, $c2, TypeFactory::create('rational', 1, 10000) { ... }
 </pre>
 
 ### Support for GMP extension - V2 onwards only

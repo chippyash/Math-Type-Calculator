@@ -24,13 +24,12 @@ class Issue1Test extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        RequiredType::getInstance()->set(RequiredType::TYPE_GMP);
+        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         $this->sut = new Calculator();
     }
 
     public function tCase()
     {
-        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         $a = RationalTypeFactory::fromFloat(M_PI);
         $b = RationalTypeFactory::fromFloat(M_E);
         $aa = $a->get();
@@ -47,7 +46,6 @@ class Issue1Test extends \PHPUnit_Framework_TestCase
 
     public function testBigDivision()
     {
-        RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
         $a = RationalTypeFactory::fromFloat(M_PI);
         $b = RationalTypeFactory::fromFloat(M_E);
         $expected = M_PI / M_E;
@@ -64,12 +62,6 @@ class Issue1Test extends \PHPUnit_Framework_TestCase
     public function testBigMultiplication()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
-        $a = RationalTypeFactory::fromFloat(M_PI);
-        $b = RationalTypeFactory::fromFloat(M_E);
-        $expected = M_PI * M_E;
-        $test = $this->sut->mul($a, $b)->get();
-        $this->assertEquals($expected, $test);
-        RequiredType::getInstance()->set(RequiredType::TYPE_GMP);
         $a = RationalTypeFactory::fromFloat(M_PI);
         $b = RationalTypeFactory::fromFloat(M_E);
         $expected = M_PI * M_E;

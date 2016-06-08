@@ -1,5 +1,5 @@
 <?php
-namespace Chippyash\Test\Math\Type;
+namespace Chippyash\Test\Math\Type\Calculator\Native;
 
 use Chippyash\Math\Type\Calculator;
 use Chippyash\Type\Number\IntType;
@@ -13,14 +13,18 @@ use Chippyash\Type\RequiredType;
 /**
  *
  */
-class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
+class CalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
+    /**
+     * System under test
+     * @var Calculator
+     */
+    protected $sut;
 
     public function setUp()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
-        $this->object = new Calculator();
+        $this->sut = new Calculator();
     }
 
     /**
@@ -31,7 +35,7 @@ class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->reciprocal($n));
+                $this->sut->reciprocal($n));
     }
 
     public function numericTypes()
@@ -48,14 +52,14 @@ class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->reciprocal(RationalTypeFactory::create(2,1)));
+                $this->sut->reciprocal(RationalTypeFactory::create(2,1)));
     }
 
     public function testReciprocalOfComplexTypeReturnsComplexType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Complex\ComplexType',
-                $this->object->reciprocal(ComplexTypeFactory::create(2,1)));
+                $this->sut->reciprocal(ComplexTypeFactory::create(2,1)));
     }
 
     /**
@@ -64,7 +68,7 @@ class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
      */
     public function testReciprocalOfZeroComplexThrowsException()
     {
-        $this->object->reciprocal(ComplexTypeFactory::create(0,0));
+        $this->sut->reciprocal(ComplexTypeFactory::create(0,0));
 
     }
 
@@ -72,9 +76,9 @@ class NativeCalculatorReciprocalTest extends \PHPUnit_Framework_TestCase
      * @expectedException BadMethodCallException
      * @expectedExceptionMessage No solution for unknown type: stdClass
      */
-    public function testReciprocalOfUnknowTypeThrowsException()
+    public function testReciprocalOfUnknownTypeThrowsException()
     {
-        $this->object->reciprocal(new \stdClass());
+        $this->sut->reciprocal(new \stdClass());
 
     }
 }

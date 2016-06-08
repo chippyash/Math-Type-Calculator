@@ -9,19 +9,20 @@
 namespace Chippyash\Math\Type\Comparator;
 
 use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use Chippyash\Type\Number\Rational\RationalType;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
+use Chippyash\Type\Number\Rational\GMPRationalType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\ComplexType;
-use Chippyash\Math\Type\Calculator\NativeEngine as Calc;
-use Chippyash\Math\Type\Traits\CheckRationalTypes;
+use Chippyash\Type\Number\Complex\GMPComplexType;
+use Chippyash\Math\Type\Calculator\GmpEngine as Calc;
+use Chippyash\Math\Type\Traits\CheckGmpRationalTypes;
 
 /**
  * PHP Native maths comparator
  *
  */
-class NativeEngine extends AbstractComparatorEngine
+class GmpEngine extends AbstractComparatorEngine
 {
-    use CheckRationalTypes;
+    use CheckGmpRationalTypes;
 
     protected $calculator;
 
@@ -55,53 +56,47 @@ class NativeEngine extends AbstractComparatorEngine
             case 'whole':
             case 'natural':
             case 'float':
-                return $this->intFloatCompare($a, $b, $tolerance);
             case 'rational':
                 list($a, $b) = $this->checkRationalTypes($a, $b);
                 return $this->rationalCompare($a, $b, $tolerance);
             case 'complex':
-                return $this->complexCompare($a->asComplex(), $b->asComplex(), $tolerance);
+                return $this->complexCompare($a->asGMPComplex(), $b->asGMPComplex(), $tolerance);
         }
-    }
-
-    /**
-     * Compare int and float types
-     *
-     * @param NI $a
-     * @param NI $b
-     * @param NI $tolerance
-     * @return int
-     */
-    protected function intFloatCompare(NI $a, NI $b, NI $tolerance = null)
-    {
-        return $this->rationalCompare(
-            RationalTypeFactory::fromFloat($a->asFloatType()),
-            RationalTypeFactory::fromFloat($b->asFloatType()),
-            $tolerance
-        );
     }
 
     /**
      * Compare two rationals
      *
-     * @param RationalType $a
-     * @param RationalType $b
+     * @param GMPRationalType $a
+     * @param GMPRationalType $b
      * @param NI $tolerance
+     * 
      * @return int
      */
-    protected function rationalCompare(RationalType $a, RationalType $b, NI $tolerance = null)
+    protected function rationalCompare(GMPRationalType $a, GMPRationalType $b, NI $tolerance = null)
     {
+        $aa = $a->asFloatType()->get();
+        $bb = $b->asFloatType()->get();
+        $cc = $aa - $bb;
         $res = $this->calculator->rationalSub($a, $b);
-
+        $rr = $res->asFloatType()->get();
+        $sr = (string) $res;
         if (is_null($tolerance)) {
             //no tolerance so return sign()
+            $s = $res->sign();
+            $v = $res->asFloatType()->get();
             return $res->sign();
         }
         //working to an equality tolerance
-        $aRes = abs($res->get());
-        if ($aRes >= 0 && $aRes <= $tolerance->get()) {
+        $aRes = $res->abs();
+        $va = $aRes->asFloatType()->get();
+        $tt = $tolerance->asFloatType()->get();
+        if ($this->rationalCompare($aRes, RationalTypeFactory::create(0)) >= 0
+            && $this->rationalCompare($aRes, $this->checkRationalType($tolerance)) <= 0)
+        {
             return 0;
         }
+        
         return $res->sign();
     }
 
@@ -110,38 +105,18 @@ class NativeEngine extends AbstractComparatorEngine
      * If both operands are real then compare the real parts
      * else compare the modulii of the two numbers
      *
-     * @param ComplexType $a
-     * @param ComplexType $b
+     * @param GMPComplexType $a
+     * @param GMPComplexType $b
      * @param NI $tolerance
      *
      * @return boolean
      */
-    protected function complexCompare(ComplexType $a, ComplexType $b, NI $tolerance = null)
+    protected function complexCompare(GMPComplexType $a, GMPComplexType $b, NI $tolerance = null)
     {
-        if ($a->isReal() && $b->isReal()) {
+        if ($a->isReal()  && $b->isReal()) {
             return $this->rationalCompare($a->r(), $b->r(), $tolerance);
         }
 
-        //hack to get around native php integer limitations
-        //what we should be doing here is to return $this->rationalCompare($a->modulus(), $b->modulus())
-        //but this blows up because of the big rationals it produces
-        $am = $a->modulus()->asFloatType()->get();
-        $bm = $b->modulus()->asFloatType()->get();
-        $isWithinTolerance = (is_null($tolerance) ? false : true);
-
-
-        if (!$isWithinTolerance && $am == $bm) {
-            return 0;
-        }
-        if ($isWithinTolerance) {
-            $aRes = abs($am - $bm);
-            if ($aRes >= 0 && $aRes <= $tolerance->get()) {
-                return 0;
-            }
-        }
-        if ($am < $bm) {
-            return -1;
-        }
-        return 1;
+        return $this->rationalCompare($a->modulus(), $b->modulus(), $tolerance);
     }
 }

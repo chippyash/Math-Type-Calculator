@@ -6,12 +6,11 @@
  * @copyright Ashley Kitson, UK, 2014
  * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
-namespace chippyash\Math\Type\Traits;
+namespace Chippyash\Math\Type\Traits;
 
-use chippyash\Type\Number\FloatType;
-use chippyash\Type\Number\IntType;
-use chippyash\Type\Number\GmpIntType;
-use chippyash\Type\Number\Rational\RationalTypeFactory;
+use Chippyash\Type\Number\GMPIntType;
+use Chippyash\Type\Number\Rational\GMPRationalType;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
 
 /**
  * Native calculator/comparator int/float conversion
@@ -22,7 +21,7 @@ trait GmpConvertNumeric
      * Convert float or int into relevant strong type
      *
      * @param numeric $num
-     * @return \chippyash\Type\Number\RationalGMPRationalType|\chippyash\Type\Number\GMPIntType
+     * @return GMPRationalType|GMPIntType
      */
     public function convertNumeric($num)
     {

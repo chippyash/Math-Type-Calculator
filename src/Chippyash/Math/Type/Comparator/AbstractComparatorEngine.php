@@ -30,8 +30,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a == b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -43,8 +43,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a != b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -55,10 +55,26 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     }
 
     /**
+     * Approximately equal
+     * a ≈ b
+     * 0 <= abs(a-b) <= tolerance
+     * 
+     * @param NI $a
+     * @param NI $b
+     * @param NI $tolerance
+     * 
+     * @return boolean
+     */
+    public function aeq(NI $a, NI $b, NI $tolerance)
+    {
+        return $this->compare($a, $b, $tolerance) == 0;
+    }
+
+    /**
      * a < b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -70,8 +86,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a <= b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -83,8 +99,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a > b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -96,8 +112,8 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     /**
      * a >= b
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NI $a
+     * @param NI $b
      *
      * @return boolean
      */
@@ -107,15 +123,19 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     }
 
     /**
-     * a == b = 0
+     * a == b = 0 (or a ≈ b)
      * a < b = -1
      * a > b = 1
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * if tolerance is supplied, then equality is determined within a tolerance limit
+     * 0 <= abs(diff(a-b)) <= tolerance
+     *
+     * @param NI $a
+     * @param NI $b
+     * @param NI $tolerance default = exact
      *
      * @return int
      */
-    abstract public function compare(NI $a, NI $b);
+    abstract public function compare(NI $a, NI $b, NI $tolerance = null);
 
 }

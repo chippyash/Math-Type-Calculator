@@ -313,6 +313,116 @@ interface CalculatorEngineInterface
      * @return CTI result
      */
     public function complexSqrt(CTI $a);
+
+    /**
+     * In place increment an IntType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incInt(NTI $a, $inc = 1);
+
+    /**
+     * In place increment a FloatType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incFloat(NTI $a, $inc = 1);
+
+    /**
+     * In place increment a RationalType
+     *
+     * @param RTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incRational(RTI $a, $inc = 1);
+
+    /**
+     * In place increment a ComplexType
+     *
+     * @param CTI $a
+     * @param numeric|NTI $inc
+     */
+    public function incComplex(CTI $a, $inc = 1);
+
+    /**
+     * In place decrement an IntType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decInt(NTI $a, $dec = 1);
+
+    /**
+     * In place decrement a FloatType
+     *
+     * @param NTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decFloat(NTI $a, $dec = 1);
+
+    /**
+     * In place decrement a RationalType
+     *
+     * @param RTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decRational(RTI $a, $dec = 1);
+
+    /**
+     * In place decrement a ComplexType
+     *
+     * @param CTI $a
+     * @param numeric|NTI $dec
+     */
+    public function decComplex(CTI $a, $dec = 1);
+
+    /**
+     * Return the natural (base e) logarithm for an integer
+     *
+     * By definition this is a float
+     *
+     * @param NTI $a
+     *
+     * @return FloatType
+     */
+    public function intNatLog(NTI $a);
+
+    /**
+     * Return the natural (base e) logarithm for a float
+     *
+     * By definition this is a float (or rational)
+     *
+     * @param NTI $a
+     *
+     * @return FloatType
+     */
+    public function floatNatLog(NTI $a);
+
+    /**
+     * Return the natural (base e) logarithm for a rational
+     *
+     * By definition this is a rational given a rational
+     *
+     * @param RTI $a
+     *
+     * @return RationalType
+     */
+    public function rationalNatLog(RTI $a);
+
+    /**
+     * Return the natural (base e) logarithm for a complex number
+     *
+     * By definition this is a rational
+     *
+     * If the C isReal then log(C.realPart) else log(modulus(C))
+     *
+     * @param CTI $a
+     *
+     * @return RationalType
+     */
+    public function complexNatLog(CTI $a);
     
     /**
      * Convert float or int into relevant strong type

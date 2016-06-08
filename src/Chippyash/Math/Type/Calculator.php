@@ -103,9 +103,15 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalAdd($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalAdd($a->asRational(), $b->asRational());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalAdd($a->asRational(), $b->asRational());
+                }
+                return $this->calcEngine->rationalAdd($a->asGMPRational(), $b->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexAdd($a->asComplex(), $b->asComplex());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexAdd($a->asComplex(), $b->asComplex());
+                }
+                return $this->calcEngine->complexAdd($a->asGMPComplex(), $b->asGMPComplex());
         }
     }
 
@@ -130,9 +136,15 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalSub($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalSub($a->asRational(), $b->asRational());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalSub($a->asRational(), $b->asRational());
+                }
+                return $this->calcEngine->rationalSub($a->asGMPRational(), $b->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexSub($a->asComplex(), $b->asComplex());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexSub($a->asComplex(), $b->asComplex());
+                }
+                return $this->calcEngine->complexSub($a->asGMPComplex(), $b->asGMPComplex());
         }
     }
 
@@ -157,9 +169,15 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->naturalMul($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalMul($a->asRational(), $b->asRational());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalMul($a->asRational(), $b->asRational());
+                }
+                return $this->calcEngine->rationalMul($a->asGMPRational(), $b->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexMul($a->asComplex(), $b->asComplex());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexMul($a->asComplex(), $b->asComplex());
+                }
+                return $this->calcEngine->complexMul($a->asGMPComplex(), $b->asGMPComplex());
         }
     }
 
@@ -180,9 +198,15 @@ class Calculator
             case 'natural':
                 return $this->calcEngine->intDiv($a, $b);
             case 'rational':
-                return $this->calcEngine->rationalDiv($a->asRational(), $b->asRational());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalDiv($a->asRational(), $b->asRational());
+                }
+                return $this->calcEngine->rationalDiv($a->asGMPRational(), $b->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexDiv($a->asComplex(), $b->asComplex());
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexDiv($a->asComplex(), $b->asComplex());
+                }
+                return $this->calcEngine->complexDiv($a->asGMPComplex(), $b->asGMPComplex());
             default:
                 return $this->calcEngine->floatDiv($a, $b);
         }
@@ -199,9 +223,15 @@ class Calculator
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
             case 'rational':
-                return $this->calcEngine->rationalReciprocal($a);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalReciprocal($a);
+                }
+                return $this->calcEngine->rationalReciprocal($a->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexReciprocal($a);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexReciprocal($a);
+                }
+                return $this->calcEngine->complexReciprocal($a->asGMPComplex());
             default :
                 return $this->calcEngine->floatReciprocal($a);
         }
@@ -218,9 +248,15 @@ class Calculator
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
             case 'rational':
-                return $this->calcEngine->rationalPow($a, $exp);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalPow($a, $exp);
+                }
+                return $this->calcEngine->rationalPow($a->asGMPRational(), $exp);
             case 'complex':
-                return $this->calcEngine->complexPow($a, $exp);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexPow($a, $exp);
+                }
+                return $this->calcEngine->complexPow($a->asGMPComplex(), $exp);
             case 'int':
             case 'whole':
             case 'natural':
@@ -240,9 +276,15 @@ class Calculator
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
             case 'rational':
-                return $this->calcEngine->rationalSqrt($a);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalSqrt($a);
+                }
+                return $this->calcEngine->rationalSqrt($a->asGMPRational());
             case 'complex':
-                return $this->calcEngine->complexSqrt($a);
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexSqrt($a);
+                }
+                return $this->calcEngine->complexSqrt($a->asGMPComplex());
             case 'int':
             case 'whole':
             case 'natural':
@@ -257,11 +299,29 @@ class Calculator
      * 
      * @param numeric|NumericTypeInterface $a
      * 
-     * @return Chippyash\Type\Number\Complex\AbstractComplexType
+     * @return NTI
      */
     public function natLog($a)
     {
-        return $this->calcEngine->natLog($this->convert($a));
+        $a = $this->convert($a);
+        switch ($this->arbitrate($a, $a)) {
+            case 'rational':
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->rationalNatLog($a);
+                }
+                return $this->calcEngine->rationalNatLog($a->asGMPRational());
+            case 'complex':
+                if (RequiredType::getInstance()->get() == RequiredType::TYPE_NATIVE) {
+                    return $this->calcEngine->complexNatLog($a);
+                }
+                return $this->calcEngine->complexNatLog($a->asGMPComplex());
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intNatLog($a);
+            default :
+                return $this->calcEngine->intNatLog($a);
+        }
     }
     
     /**
@@ -269,43 +329,49 @@ class Calculator
      * 
      * @param numeric|NumericTypeInterface $a
      * @param numeric|NumericTypeInterface $inc Default == 1
-     * 
-     * @return NumericTypeInterface
      */
-    public function inc(NumericTypeInterface &$a, $inc = null)
+    public function inc($a, $inc = 1)
     {
-        if (!is_null($inc)) {
-            $inc = $this->convert($inc);
+        switch ($this->arbitrate($a, $a)) {
+            case 'rational':
+                $this->calcEngine->incRational($a, $inc);
+                break;
+            case 'complex':
+                $this->calcEngine->incComplex($a, $inc);
+                break;
+            case 'int':
+            case 'whole':
+            case 'natural':
+                $this->calcEngine->incInt($a, $inc);
+                break;
+            default :
+                $this->calcEngine->incFloat($a, $inc);
         }
-        
-        return $this->calcEngine->inc($a, $inc);
     }
-    
+
     /**
      * In place decrementor
-     * 
+     *
      * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $inc Default == 1
-     * 
-     * @return NumericTypeInterface
+     * @param numeric|NumericTypeInterface $dec Default == 1
      */
-    public function dec(NumericTypeInterface &$a, $inc = null)
+    public function dec($a, $dec = 1)
     {
-        if (!is_null($inc)) {
-            $inc = $this->convert($inc);
+        switch ($this->arbitrate($a, $a)) {
+            case 'rational':
+                $this->calcEngine->decRational($a, $dec);
+                break;
+            case 'complex':
+                $this->calcEngine->decComplex($a, $dec);
+                break;
+            case 'int':
+            case 'whole':
+            case 'natural':
+                $this->calcEngine->decInt($a, $dec);
+                break;
+            default :
+                $this->calcEngine->decFloat($a, $dec);
         }
-        
-        return $this->calcEngine->dec($a, $inc);
-    }
-    
-    /**
-     * Return the actual calc engine in use
-     * 
-     * @return CalculatorEngineInterface
-     */
-    public function getEngine()
-    {
-        return $this->calcEngine;
     }
     
     protected function convert($num)

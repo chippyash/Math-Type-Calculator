@@ -1,5 +1,5 @@
 <?php
-namespace Chippyash\Test\Math\Type;
+namespace Chippyash\Test\Math\Type\Calculator\Native;
 
 use Chippyash\Math\Type\Calculator;
 use Chippyash\Type\Number\IntType;
@@ -10,196 +10,200 @@ use Chippyash\Type\Number\Rational\RationalTypeFactory;
 use Chippyash\Type\Number\Complex\ComplexTypeFactory;
 use Chippyash\Type\RequiredType;
 
-class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
+class CalculatorAddTest extends \PHPUnit_Framework_TestCase
 {
-    protected $object;
+    /**
+     * System under test
+     * @var Calculator
+     */
+    protected $sut;
 
     public function setUp()
     {
         RequiredType::getInstance()->set(RequiredType::TYPE_NATIVE);
-        $this->object = new Calculator();
+        $this->sut = new Calculator();
     }
 
     public function testAddTwoIntsReturnsIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\IntType',
-                $this->object->add(2, 3));
+                $this->sut->add(2, 3));
     }
 
     public function testAddIntAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(2, 3.4));
+                $this->sut->add(2, 3.4));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(3.4, 2));
+                $this->sut->add(3.4, 2));
     }
 
     public function testAddTwoFloatsReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(2.6, -3.067));
+                $this->sut->add(2.6, -3.067));
     }
 
     public function testAddTwoIntTypesReturnsIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\IntType',
-                $this->object->add(new IntType(2), new IntType(3)));
+                $this->sut->add(new IntType(2), new IntType(3)));
     }
 
     public function testAddIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new IntType(2), 3.4));
+                $this->sut->add(new IntType(2), 3.4));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(3.4, new IntType(2)));
+                $this->sut->add(3.4, new IntType(2)));
     }
 
     public function testAddIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new IntType(2), new FloatType(3.4)));
+                $this->sut->add(new IntType(2), new FloatType(3.4)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new FloatType(3.4), new IntType(2)));
+                $this->sut->add(new FloatType(3.4), new IntType(2)));
     }
 
     public function testAddTwoFloatTypesReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new FloatType(2.6), new FloatType(-3.067)));
+                $this->sut->add(new FloatType(2.6), new FloatType(-3.067)));
     }
 
     public function testAddFloatTypeAndIntReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(2, new FloatType(3.4)));
+                $this->sut->add(2, new FloatType(3.4)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new FloatType(3.4), 2));
+                $this->sut->add(new FloatType(3.4), 2));
     }
 
     public function testAddTwoWholeIntTypesReturnsWholeIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new WholeIntType(2), new WholeIntType(5)));
+                $this->sut->add(new WholeIntType(2), new WholeIntType(5)));
     }
 
     public function testAddWholeIntTypeAndIntReturnsWholeIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new WholeIntType(2), 5));
+                $this->sut->add(new WholeIntType(2), 5));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(5, new WholeIntType(2)));
+                $this->sut->add(5, new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndIntTypeReturnsWholeIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new WholeIntType(2), new IntType(5)));
+                $this->sut->add(new WholeIntType(2), new IntType(5)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new IntType(5), new WholeIntType(2)));
+                $this->sut->add(new IntType(5), new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new WholeIntType(2), new FloatType(5.5)));
+                $this->sut->add(new WholeIntType(2), new FloatType(5.5)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new FloatType(5.5), new WholeIntType(2)));
+                $this->sut->add(new FloatType(5.5), new WholeIntType(2)));
     }
 
     public function testAddWholeIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new WholeIntType(2), 5.5));
+                $this->sut->add(new WholeIntType(2), 5.5));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(5.5, new WholeIntType(2)));
+                $this->sut->add(5.5, new WholeIntType(2)));
     }
 
     public function testAddTwoNaturalIntTypesReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\NaturalIntType',
-                $this->object->add(new NaturalIntType(2), new NaturalIntType(5)));
+                $this->sut->add(new NaturalIntType(2), new NaturalIntType(5)));
     }
 
     public function testAddNaturalIntTypeAndIntReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\NaturalIntType',
-                $this->object->add(new NaturalIntType(2), 5));
+                $this->sut->add(new NaturalIntType(2), 5));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\NaturalIntType',
-                $this->object->add(5, new NaturalIntType(2)));
+                $this->sut->add(5, new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndIntTypeReturnsNaturalIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\NaturalIntType',
-                $this->object->add(new NaturalIntType(2), new IntType(5)));
+                $this->sut->add(new NaturalIntType(2), new IntType(5)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\NaturalIntType',
-                $this->object->add(new IntType(5), new NaturalIntType(2)));
+                $this->sut->add(new IntType(5), new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndFloatTypeReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new NaturalIntType(2), new FloatType(5.5)));
+                $this->sut->add(new NaturalIntType(2), new FloatType(5.5)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new FloatType(5.5), new NaturalIntType(2)));
+                $this->sut->add(new FloatType(5.5), new NaturalIntType(2)));
     }
 
     public function testAddNaturalIntTypeAndFloatReturnsFloatType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(new NaturalIntType(2), 5.5));
+                $this->sut->add(new NaturalIntType(2), 5.5));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\FloatType',
-                $this->object->add(5.5, new NaturalIntType(2)));
+                $this->sut->add(5.5, new NaturalIntType(2)));
     }
 
     public function testAddWholeIntTypeAndNaturalIntReturnsWholeIntType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new WholeIntType(5), new NaturalIntType(2)));
+                $this->sut->add(new WholeIntType(5), new NaturalIntType(2)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\WholeIntType',
-                $this->object->add(new NaturalIntType(2), new WholeIntType(5)));
+                $this->sut->add(new NaturalIntType(2), new WholeIntType(5)));
     }
 
     public function testAddRationalTypeAndIntReturnsRationalType()
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), 2));
+                $this->sut->add(RationalTypeFactory::create(1,5), 2));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(2, RationalTypeFactory::create(1,5)));
+                $this->sut->add(2, RationalTypeFactory::create(1,5)));
 
     }
 
@@ -207,10 +211,10 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), new IntType(2)));
+                $this->sut->add(RationalTypeFactory::create(1,5), new IntType(2)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(new IntType(2), RationalTypeFactory::create(1,5)));
+                $this->sut->add(new IntType(2), RationalTypeFactory::create(1,5)));
 
     }
 
@@ -218,10 +222,10 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), new WholeIntType(2)));
+                $this->sut->add(RationalTypeFactory::create(1,5), new WholeIntType(2)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(new WholeIntType(2), RationalTypeFactory::create(1,5)));
+                $this->sut->add(new WholeIntType(2), RationalTypeFactory::create(1,5)));
 
     }
 
@@ -229,10 +233,10 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), new NaturalIntType(2)));
+                $this->sut->add(RationalTypeFactory::create(1,5), new NaturalIntType(2)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(new NaturalIntType(2), RationalTypeFactory::create(1,5)));
+                $this->sut->add(new NaturalIntType(2), RationalTypeFactory::create(1,5)));
 
     }
 
@@ -240,10 +244,10 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), 2.6));
+                $this->sut->add(RationalTypeFactory::create(1,5), 2.6));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(2.6, RationalTypeFactory::create(1,5)));
+                $this->sut->add(2.6, RationalTypeFactory::create(1,5)));
 
     }
 
@@ -251,10 +255,10 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(RationalTypeFactory::create(1,5), new FloatType(2.6)));
+                $this->sut->add(RationalTypeFactory::create(1,5), new FloatType(2.6)));
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Rational\RationalType',
-                $this->object->add(new FloatType(2.6), RationalTypeFactory::create(1,5)));
+                $this->sut->add(new FloatType(2.6), RationalTypeFactory::create(1,5)));
 
     }
 
@@ -262,7 +266,7 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Complex\ComplexType',
-                $this->object->add(ComplexTypeFactory::create(1,5), ComplexTypeFactory::create(5,1)));
+                $this->sut->add(ComplexTypeFactory::create(1,5), ComplexTypeFactory::create(5,1)));
     }
 
     /**
@@ -273,7 +277,7 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Complex\ComplexType',
-                $this->object->add(ComplexTypeFactory::create(1,5), $nonComplex));
+                $this->sut->add(ComplexTypeFactory::create(1,5), $nonComplex));
     }
 
     /**
@@ -284,7 +288,7 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
                 'Chippyash\Type\Number\Complex\ComplexType',
-                $this->object->add($nonComplex, ComplexTypeFactory::create(1,5)));
+                $this->sut->add($nonComplex, ComplexTypeFactory::create(1,5)));
     }
 
     public function nonComplexNumbers()
@@ -302,8 +306,8 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
 
     public function testAdditionIsCommutative()
     {
-        $a = $this->object->add(12, 3);
-        $b = $this->object->add(3, 12);
+        $a = $this->sut->add(12, 3);
+        $b = $this->sut->add(3, 12);
         //a+b = b+a
         $this->assertEquals($a, $b);
     }
@@ -314,8 +318,8 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
         $b = 3;
         $c = 5;
         //a+(b+c) = (a+b)_c
-        $r1 = $this->object->add($a, $this->object->add($b, $c));
-        $r2 = $this->object->add($this->object->add($a, $b), $c);
+        $r1 = $this->sut->add($a, $this->sut->add($b, $c));
+        $r2 = $this->sut->add($this->sut->add($a, $b), $c);
 
         $this->assertEquals($r1, $r2);
     }
@@ -328,7 +332,7 @@ class NativeCalculatorAddTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdditionGivesCorrectResults($a, $b, $r)
     {
-        $this->assertEquals($r, $this->object->add($a, $b));
+        $this->assertEquals($r, $this->sut->add($a, $b));
     }
 
     public function correctResults()
