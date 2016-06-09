@@ -243,21 +243,26 @@ Broadly speaking:
 
 In the following 'this', means this software library
 
-- You are using this for a private project - crack on!
-- You are using this in an internal system or website - crack on!
-- You are using this as part of a purely personal web
-- You are using this for your big web site, and it doesn't form part of the equity - crack on!
+- You are using this for a private project - crack on\!
+- You are using this in an internal system or website - crack on\!
+- You are using this as part of a purely personal web - crack on\!
+- You are using this for your web site, and it doesn't form part of the equity - crack on\!
  
 - You are using this in any form of closed system that you intend to sell - you need to
 	conform to GPL V3 or buy a commercial license
-- You are using this in your web site and you want to sell it or your business comprising 
+- You are using this in any form of public web site and you want to sell it or your business comprising 
 	the website - you need conform to GPL V3 or buy a commercial license
 
-- You are a charity using this for any purpose, notwithstanding the above, crack on!
+- You are a charity using this for any purpose, notwithstanding the above - crack on\!
 
 If in any doubt, please engage the services of your nearest high paid patent and rights 
 lawyer. They'll be happy to take your money.  Instead of which you could 
 be nice and give the money to your local agency in need.
+
+Latest figures:
+- me : about even
+- corporations : down
+- charities : up
 
 ## History
 
