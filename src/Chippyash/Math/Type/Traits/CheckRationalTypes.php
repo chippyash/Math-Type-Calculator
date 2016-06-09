@@ -28,16 +28,8 @@ trait CheckRationalTypes
      */
     protected function checkRationalTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        if (!$a instanceof RationalType) {
-            $a1 = $a->asRational();
-        } else {
-            $a1 = $a;
-        }
-        if (!$b instanceof RationalType) {
-            $b1 = $b->asRational();
-        } else {
-            $b1 = $b;
-        }
+        $a1 = ($a instanceof RationalType ? $a : $a->asRational());
+        $b1 = ($b instanceof RationalType ? $b : $b->asRational());
 
         return [$a1, $b1];
     }

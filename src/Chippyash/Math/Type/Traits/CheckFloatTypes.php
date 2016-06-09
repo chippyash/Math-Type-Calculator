@@ -27,16 +27,8 @@ trait CheckFloatTypes
      */
     protected function checkFloatTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        if (!$a instanceof FloatType) {
-            $a1 = $a->asFloatType();
-        } else {
-            $a1 = $a;
-        }
-        if (!$b instanceof FloatType) {
-            $b1 = $b->asFloatType();
-        } else {
-            $b1 = $b;
-        }
+        $a1 = ($a instanceof FloatType ? $a : $a->asFloatType());
+        $b1 = ($b instanceof FloatType ? $b : $b->asFloatType());
 
         return [$a1, $b1];
     }

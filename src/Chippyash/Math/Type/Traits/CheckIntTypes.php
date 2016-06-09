@@ -28,16 +28,8 @@ trait CheckIntTypes
      */
     protected function checkIntTypes(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        if (!$a instanceof IntType) {
-            $a1 = $a->asIntType();
-        } else {
-            $a1 = $a;
-        }
-        if (!$b instanceof IntType) {
-            $b1 = $b->asIntType();
-        } else {
-            $b1 = $b;
-        }
+        $a1 = ($a instanceof IntType ? $a : $a->asIntType());
+        $b1 = ($a instanceof IntType ? $b : $b->asIntType());
 
         return [$a1, $b1];
     }

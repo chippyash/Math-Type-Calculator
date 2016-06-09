@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
  * @author Ashley Kitson <akitson@zf4.biz>
@@ -19,9 +19,12 @@ trait ArbitrateTwoTypes
     /**
      * Arbitrate the return type from the operation
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NumericTypeInterface $a first type
+     * @param NumericTypeInterface $b second type
+     * 
      * @return string
+     * 
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)
     {

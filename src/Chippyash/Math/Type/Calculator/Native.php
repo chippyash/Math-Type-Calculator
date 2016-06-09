@@ -139,9 +139,9 @@ class Native implements CalculatorEngineInterface
         $res = $this->rationalSqrt(new RationalType($a, new IntType(1)));
         if ($res->isInteger()) {
             return $res->numerator();
-        } else {
-            return $res;
         }
+
+        return $res;
     }
     
     /**
@@ -419,19 +419,17 @@ class Native implements CalculatorEngineInterface
             $r = $this->floatComplexPow($a(), $exp);
             if ($r instanceof FloatType) {
                 return RationalTypeFactory::fromFloat($r());
-            } else {
-                return $r;
             }
-        } else {
-            $exp2 = $exp->get();
+            return $r;
         }
-        
+
+        $exp2 = $exp->get();
         $numF = pow($a->numerator()->get(), $exp2);
         $denF = pow($a->denominator()->get(), $exp2);
         $numR = RationalTypeFactory::fromFloat($numF);
         $denR = RationalTypeFactory::fromFloat($denF);
-        return $this->rationalDiv($numR, $denR);
         
+        return $this->rationalDiv($numR, $denR);
     }
     
     /**
@@ -554,37 +552,50 @@ class Native implements CalculatorEngineInterface
         if ($exp instanceof ComplexType) {
             $comp = new Comparator();
             $zero = new IntType(0);
-            if ($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero)) {
-                $real = 0;
-                $imaginary = 0;
-            } else {
-                $er = $exp->r()->get();
-                $ei = $exp->i()->get();
-                $logr = log($a->modulus()->get());
-                $theta = $a->theta()->get();
-                $rho = exp($logr * $er - $ei * $theta);
-                $beta = $theta * $er + $ei * $logr;
-                $real = $rho * cos($beta);
-                $imaginary = $rho * sin($beta);
+            $real = 0;
+            $imaginary = 0;
+            if (!($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero))) {
+                list($real, $imaginary) = $this->getPowExponentPartsFromPolar($a, $exp);
             }
-        } else {
-            //non complex
-            //de moivres theorum
-            //z^n = r^n(cos(n.theta) + sin(n.theta)i)
-            //where z is a complex number, r is the radius
-            $n = $exp();
-            $nTheta = $n * $a->theta()->get();
-            $pow = pow($a->modulus()->get(), $n);
-            $real = cos($nTheta) * $pow;
-            $imaginary = sin($nTheta) * $pow;
-        }
+
+            return new ComplexType(
+                RationalTypeFactory::fromFloat($real),
+                RationalTypeFactory::fromFloat($imaginary)
+            );
+        } 
+        //non complex
+        //de moivres theorum
+        //z^n = r^n(cos(n.theta) + sin(n.theta)i)
+        //where z is a complex number, r is the radius
+        $n = $exp();
+        $nTheta = $n * $a->theta()->get();
+        $pow = pow($a->modulus()->get(), $n);
+        $real = cos($nTheta) * $pow;
+        $imaginary = sin($nTheta) * $pow;
         
         return new ComplexType(
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
                 );        
     }
-    
+
+    /**
+     * @param ComplexType $a
+     * @param ComplexType $exp
+     * @return array [real, imaginary]
+     */
+    protected function getPowExponentPartsFromPolar(ComplexType $a, ComplexType $exp)
+    {
+        $eReal = $exp->r()->get();
+        $eImaginary = $exp->i()->get();
+        $logr = log($a->modulus()->get());
+        $theta = $a->theta()->get();
+        $rho = exp($logr * $eReal - $eImaginary * $theta);
+        $beta = $theta * $eReal + $eImaginary * $logr;
+
+        return [$rho * cos($beta), $rho * sin($beta)];
+    }
+
     /**
      * Complex sqrt
      * 

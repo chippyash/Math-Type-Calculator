@@ -58,28 +58,27 @@ class Calculator
     {
         if (is_null($calcEngine)) {
             $this->calcEngine = new Native();
-            return;
         } elseif (is_int($calcEngine) && array_key_exists($calcEngine, $this->supportedEngines)) {
             $className = self::NS . $this->supportedEngines[$calcEngine];
             $this->calcEngine = new $className();
-            return;
         } elseif ($calcEngine instanceof CalculatorEngineInterface) {
             $this->calcEngine = $calcEngine;
-            return;
         }
 
-        throw new \InvalidArgumentException('No known calculator engine');
+        if (is_null($this->calcEngine)) {
+            throw new \InvalidArgumentException('No known calculator engine');
+        }
     }
 
     /**
      * Return addition of two types: a + b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param numeric|NumericTypeInterface $a first operand
+     * @param numeric|NumericTypeInterface $b second operand
      *
-     *
-     *
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @return NumericTypeInterface
+     * 
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function add($a, $b)
     {
@@ -109,9 +108,12 @@ class Calculator
     /**
      * Return subtraction of two types: a - b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a first operaand
+     * @param numeric|NumericTypeInterface $b second operand
+     * 
+     * @return NumericTypeInterface
+     * 
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function sub($a, $b)
     {
@@ -140,9 +142,12 @@ class Calculator
     /**
      * Return multiplication of two types: a * b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a first operand
+     * @param numeric|NumericTypeInterface $b second operand
+     * 
+     * @return NumericTypeInterface
+     * 
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function mul($a, $b)
     {
@@ -171,9 +176,10 @@ class Calculator
     /**
      * Return division of two types: a / b
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $b
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a first operand
+     * @param numeric|NumericTypeInterface $b second operand
+     * 
+     * @return NumericTypeInterface
      */
     public function div($a, $b)
     {
@@ -200,8 +206,8 @@ class Calculator
     /**
      * Return reciprocal of the type: 1/a
      *
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @return NumericTypeInterface
      */
     public function reciprocal($a)
     {
@@ -218,9 +224,9 @@ class Calculator
 
     /**
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
+     * @param numeric|NumericTypeInterface $a
      * @param \Chippyash\Math\Type\NumericTypeInterface $exp
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @return NumericTypeInterface
      */
     public function pow($a, $exp)
     {
@@ -241,8 +247,8 @@ class Calculator
     
     /**
      * 
-     * @param numeric|Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @return Chippyash\Type\Interfaces\NumericTypeInterface
+     * @param numeric|NumericTypeInterface $a
+     * @return NumericTypeInterface
      */
     public function sqrt($a)
     {

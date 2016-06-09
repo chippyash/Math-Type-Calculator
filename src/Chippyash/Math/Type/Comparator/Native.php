@@ -39,10 +39,12 @@ class Native extends AbstractComparatorEngine
      * a < b = -1
      * a > b = 1
      *
-     * @param NI $a
-     * @param NI $b
+     * @param NI $a first term
+     * @param NI $b second term
      *
      * @return int
+     * 
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function compare(NI $a, NI $b)
     {
