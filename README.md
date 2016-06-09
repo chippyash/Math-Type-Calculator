@@ -20,10 +20,6 @@ The above badges represent the current master branch.  As a rule, I don't push
  
 Current development branch is feature/gmp_support. Want to help? - that's where it is.
 
-Build coverage only <100% due to inability of coverage engine to understand that
-closing brackets on a method are part of the method, even if they are never
-reached !
-
 ## What?
 
 Provides arithmetic calculation support for chippyash/strong-type numeric types, (PHP
