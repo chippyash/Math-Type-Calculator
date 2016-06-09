@@ -8,6 +8,7 @@
 ![PHP 7](https://img.shields.io/badge/PHP-7-blue.svg)
 [![Build Status](https://travis-ci.org/chippyash/Math-Type-Calculator.svg?branch=master)](https://travis-ci.org/chippyash/Math-Type-Calculator)
 [![Test Coverage](https://codeclimate.com/github/chippyash/Math-Type-Calculator/badges/coverage.svg)](https://codeclimate.com/github/chippyash/Math-Type-Calculator/coverage)
+[![Code Climate](https://codeclimate.com/github/chippyash/Math-Type-Calculator/badges/gpa.svg)](https://codeclimate.com/github/chippyash/Math-Type-Calculator)
 
 See the [test contract](https://github.com/chippyash/Math-Type-Calculator/blob/master/docs/Test-Contract.md).
 

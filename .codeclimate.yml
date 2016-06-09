@@ -14,7 +14,13 @@ engines:
     checks:
       Naming/LongVariable:
         enabled: false
+      Naming/ShortVariable:
+        enabled: false
       Naming/ShortMethodName:
         enabled: false
       CleanCode/StaticAccess:
+        enabled: false
+      Design/WeightedMethodCount:
+        enabled: false
+      Design/TooManyMethods:
         enabled: false
