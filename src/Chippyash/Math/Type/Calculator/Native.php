@@ -1,10 +1,10 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
- * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @author    Ashley Kitson <akitson@zf4.biz>
+ * @copyright Copyright (c) 2014, Ashley Kitson, UK
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Calculator;
 
@@ -46,8 +46,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer type addition
      *
-     * @param NI $a
-     * @param NI $b
+     * @param  NI $a first operand
+     * @param  NI $b second operand
+     * 
      * @return IntType
      */
     public function intAdd(NI $a, NI $b)
@@ -60,8 +61,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer type subtraction
      *
-     * @param NI $a
-     * @param NI $b
+     * @param  NI $a first operand
+     * @param  NI $b second operand
+     *
      * @return IntType
      */
     public function intSub(NI $a, NI $b)
@@ -74,8 +76,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer type multiplication
      *
-     * @param NI $a
-     * @param NI $b
+     * @param  NI $a first operand
+     * @param  NI $b second operand
+     *
      * @return IntType
      */
     public function intMul(NI $a, NI $b)
@@ -88,8 +91,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Integer division
      *
-     * @param NI $a
-     * @param NI $b
+     * @param  NI $a first operand
+     * @param  NI $b second operand
+     *
      * @return RationalType
      */
     public function intDiv(NI $a, NI $b)
@@ -103,8 +107,9 @@ class Native implements CalculatorEngineInterface
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
      * 
-     * @param IntType $a
-     * @param NI $exp Exponent
+     * @param IntType $a operand
+     * @param NI      $exp Exponent
+     * 
      * @return NI
      */
     public function intPow(IntType $a, NI $exp)
@@ -131,7 +136,8 @@ class Native implements CalculatorEngineInterface
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
      * 
-     * @param IntType $a
+     * @param IntType $a operand
+     * 
      * @return IntType|RationalType result
      */
     public function intSqrt(IntType $a)
@@ -147,9 +153,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Float addition
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\FloatType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return FloatType
      */
     public function floatAdd(NI $a, NI $b)
     {
@@ -160,9 +167,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Float subtraction
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\FloatType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return FloatType
      */
     public function floatSub(NI $a, NI $b)
     {
@@ -173,9 +181,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Float multiplication
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\FloatType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return FloatType
      */
     public function floatMul(NI $a, NI $b)
     {
@@ -186,9 +195,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Float division
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\FloatType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return FloatType
      */
     public function floatDiv(NI $a, NI $b)
     {
@@ -198,8 +208,10 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Float reciprocal i.e. 1/a
-     * @param NI $a
-     * @return \Chippyash\Type\Number\FloatType
+     * 
+     * @param NI $a operand
+     * 
+     * @return FloatType
      */
     public function floatReciprocal(NI $a)
     {
@@ -210,9 +222,10 @@ class Native implements CalculatorEngineInterface
      * Float Pow - raise number to the exponent
      * Will return a float type
      * 
-     * @param \Chippyash\Type\Number\FloatType $a
-     * @param NI $exp Exponent
-     * @return \Chippyash\Type\Number\FloatType
+     * @param FloatType $a operand
+     * @param NI        $exp Exponent
+     * 
+     * @return FloatType
      */
     public function floatPow(FloatType $a, NI $exp)
     {
@@ -234,8 +247,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Float sqrt
      * 
-     * @param \Chippyash\Type\Number\FloatType $a
-     * @return \Chippyash\Type\Number\FloatType result
+     * @param FloatType $a operand
+     * 
+     * @return FloatType result
      */
     public function floatSqrt(FloatType $a)
     {
@@ -245,9 +259,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number addition
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\WholeIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return WholeIntType
      */
     public function wholeAdd(NI $a, NI $b)
     {
@@ -258,9 +273,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number subtraction
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\WholeIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return WholeIntType
      */
     public function wholeSub(NI $a, NI $b)
     {
@@ -271,9 +287,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Whole number multiplication
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\WholeIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return WholeIntType
      */
     public function wholeMul(NI $a, NI $b)
     {
@@ -284,9 +301,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number addition
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\NaturalIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return NaturalIntType
      */
     public function naturalAdd(NI $a, NI $b)
     {
@@ -297,9 +315,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number subtraction
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\NaturalIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return NaturalIntType
      */
     public function naturalSub(NI $a, NI $b)
     {
@@ -310,9 +329,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Natural number multiplication
      *
-     * @param NI $a
-     * @param NI $b
-     * @return \Chippyash\Type\Number\NaturalIntType
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return NaturalIntType
      */
     public function naturalMul(NI $a, NI $b)
     {
@@ -323,8 +343,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number addition
      *
-     * @param NI $a
-     * @param NI $b
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
      * @return RationalType
      */
     public function rationalAdd(NI $a, NI $b)
@@ -347,8 +368,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number subtraction
      *
-     * @param NI $a
-     * @param NI $b
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
      * @return RationalType
      */
     public function rationalSub(NI $a, NI $b)
@@ -365,8 +387,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number multiplication
      *
-     * @param NI $a
-     * @param NI $b
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
      * @return RationalType
      */
     public function rationalMul(NI $a, NI $b)
@@ -381,8 +404,9 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number division
      *
-     * @param NI $a
-     * @param NI $b
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
      * @return RationalType
      */
     public function rationalDiv(NI $a, NI $b)
@@ -397,7 +421,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param \RationalType $a
+     * @param RationalType $a operand
+     * 
      * @return RationalType
      */
     public function rationalReciprocal(RationalType $a)
@@ -409,8 +434,9 @@ class Native implements CalculatorEngineInterface
      * Rational Pow - raise number to the exponent
      * Will return a RationalType
      * 
-     * @param RationalType $a
-     * @param NI $exp Exponent
+     * @param RationalType $a operand
+     * @param NI           $exp exponent
+     * 
      * @return NI
      */
     public function rationalPow(RationalType $a, NI $exp)
@@ -435,7 +461,8 @@ class Native implements CalculatorEngineInterface
     /**
      * Rational sqrt
      * 
-     * @param RationalType $a
+     * @param  RationalType $a operand
+     * 
      * @return RationalType result
      */
     public function rationalSqrt(RationalType $a)
@@ -443,17 +470,19 @@ class Native implements CalculatorEngineInterface
         $num = sqrt($a->numerator()->get());
         $den = sqrt($a->denominator()->get());
         return $this->rationalDiv(
-                RationalTypeFactory::fromFloat($num), 
-                RationalTypeFactory::fromFloat($den));
+            RationalTypeFactory::fromFloat($num), 
+            RationalTypeFactory::fromFloat($den)
+        );
     }
     
 
     /**
      * Complex number addition
      *
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @param \Chippyash\Type\Number\Complex\ComplexType $b
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @param ComplexType $a first operand
+     * @param ComplexType $b second operand
+     * 
+     * @return ComplexType
      */
     public function complexAdd(ComplexType $a, ComplexType $b)
     {
@@ -465,9 +494,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Complex number subtraction
      *
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @param \Chippyash\Type\Number\Complex\ComplexType $b
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @param ComplexType $a first operand
+     * @param ComplexType $b second operand
+     *
+     * @return ComplexType
      */
     public function complexSub(ComplexType $a, ComplexType $b)
     {
@@ -479,9 +509,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Complex number multiplication
      *
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @param \Chippyash\Type\Number\Complex\ComplexType $b
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @param ComplexType $a first operand
+     * @param ComplexType $b second operand
+     *
+     * @return ComplexType
      */
     public function complexMul(ComplexType $a, ComplexType $b)
     {
@@ -493,9 +524,11 @@ class Native implements CalculatorEngineInterface
     /**
      * Complex number division
      *
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @param \Chippyash\Type\Number\Complex\ComplexType $b
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @param ComplexType $a first operand
+     * @param ComplexType $b second operand
+     *
+     * @return ComplexType
+     * 
      * @throws \BadMethodCallException
      */
     public function complexDiv(ComplexType $a, ComplexType $b)
@@ -516,8 +549,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @param ComplexType $a operand
+     *
+     * @return ComplexType
+     * 
      * @throws \BadMethodCallException
      */
     public function complexReciprocal(ComplexType $a)
@@ -540,10 +575,10 @@ class Native implements CalculatorEngineInterface
      * Will return a ComplexType
      * Exponent must be non complex
      * 
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @param NI $exp Exponent
+     * @param ComplexType $a operand
+     * @param NI          $exp Exponent
      * 
-     * @return \Chippyash\Type\Number\Complex\ComplexType
+     * @return ComplexType
      * 
      * @throws \InvalidArgumentException If exponent is complex
      */
@@ -574,14 +609,15 @@ class Native implements CalculatorEngineInterface
         $imaginary = sin($nTheta) * $pow;
         
         return new ComplexType(
-                RationalTypeFactory::fromFloat($real),
-                RationalTypeFactory::fromFloat($imaginary)
-                );        
+            RationalTypeFactory::fromFloat($real),
+            RationalTypeFactory::fromFloat($imaginary)
+        );        
     }
 
     /**
-     * @param ComplexType $a
-     * @param ComplexType $exp
+     * @param ComplexType $a first operand
+     * @param ComplexType $exp second operand
+     * 
      * @return array [real, imaginary]
      */
     protected function getPowExponentPartsFromPolar(ComplexType $a, ComplexType $exp)
@@ -599,14 +635,23 @@ class Native implements CalculatorEngineInterface
     /**
      * Complex sqrt
      * 
-     * @param \Chippyash\Type\Number\Complex\ComplexType $a
-     * @return \Chippyash\Type\Number\Complex\ComplexType result
+     * @param ComplexType $a operand
+     * 
+     * @return ComplexType
      */
     public function complexSqrt(ComplexType $a)
     {
         return $this->complexPow($a, RationalTypeFactory::create(1, 2));
     }
-    
+
+    /**
+     * Create Complex power from  an integer
+     * 
+     * @param int $a operand
+     * @param ComplexType $exp exponent
+     * 
+     * @return NI|ComplexType|IntType
+     */
     private function intComplexPow($a, ComplexType $exp)
     {
         if ($exp->isZero()) {
@@ -614,7 +659,15 @@ class Native implements CalculatorEngineInterface
         }
         return $this->complexExponent($a, $exp);        
     }
-    
+
+    /**
+     * Create complex power from a float
+     * 
+     * @param float $a operand
+     * @param ComplexType $exp exponent
+     * 
+     * @return NI|ComplexType|FloatType
+     */
     private function floatComplexPow($a, ComplexType $exp)
     {
         if ($exp->isZero()) {
@@ -622,13 +675,22 @@ class Native implements CalculatorEngineInterface
         }
         return $this->complexExponent($a, $exp);
     }
-    
+
+    /**
+     * Create complex power from natural base and complex exponent
+     * 
+     * @param int|float $base base
+     * @param ComplexType $exp exponent
+     * 
+     * @return NI|ComplexType
+     */
     private function complexExponent($base, ComplexType $exp)
     {
         if ($exp->isReal()) {
             return $this->rationalPow(
-                    RationalTypeFactory::fromFloat($base), 
-                    $exp->r());
+                RationalTypeFactory::fromFloat($base), 
+                $exp->r()
+            );
         }
         
         //do the imaginary part
@@ -641,8 +703,9 @@ class Native implements CalculatorEngineInterface
         //no real part
         if ($exp->r()->get() == 0) {
             return new ComplexType(
-                    RationalTypeFactory::fromFloat($r),
-                    RationalTypeFactory::fromFloat($i));
+                RationalTypeFactory::fromFloat($r),
+                RationalTypeFactory::fromFloat($i)
+            );
         }
         //real and imaginary part
         //n^a+bi = n^a(cos(b.lg(n)) + i.sin(b.lg(n)))
@@ -650,16 +713,17 @@ class Native implements CalculatorEngineInterface
         $rr = $na * $r;
         $ii = $na * $i;
         return new ComplexType(
-                RationalTypeFactory::fromFloat($rr),
-                RationalTypeFactory::fromFloat($ii)
-                ); 
+            RationalTypeFactory::fromFloat($rr),
+            RationalTypeFactory::fromFloat($ii)
+        ); 
     }
     
     /**
      * Return Greatest Common Denominator of two numbers
      *
-     * @param int $a
-     * @param int $b
+     * @param  int $a
+     * @param  int $b
+     * 
      * @return int
      */
     private function gcd($a, $b)
@@ -669,8 +733,10 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Return Least Common Multiple of two numbers
+     * 
      * @param int $a
      * @param int $b
+     * 
      * @return int
      */
     private function lcm($a, $b)

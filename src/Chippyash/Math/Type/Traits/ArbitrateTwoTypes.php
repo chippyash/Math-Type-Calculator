@@ -2,9 +2,9 @@
 /**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
- * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @author    Ashley Kitson <akitson@zf4.biz>
+ * @copyright Copyright (c) 2014, Ashley Kitson, UK
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Traits;
 
@@ -55,6 +55,14 @@ trait ArbitrateTwoTypes
         }
     }
 
+    /**
+     * Work out the type of the number pairs
+     * 
+     * @param NumericTypeInterface $a first operand
+     * @param NumericTypeInterface $b second operand
+     * 
+     * @return string
+     */
     private function getTypePairing(NumericTypeInterface $a, NumericTypeInterface $b)
     {
         $search = ['Chippyash\Type\Number\Rational\\','Chippyash\Type\Number\Complex\\','Chippyash\Type\Number\\', 'Type'];

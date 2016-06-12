@@ -1,10 +1,10 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
- * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @author    Ashley Kitson <akitson@zf4.biz>
+ * @copyright Copyright (c) 2014, Ashley Kitson, UK
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Comparator;
 
@@ -17,7 +17,6 @@ use Chippyash\Math\Type\Traits\CheckRationalTypes;
 
 /**
  * PHP Native maths comparator
- *
  */
 class Native extends AbstractComparatorEngine
 {
@@ -49,43 +48,43 @@ class Native extends AbstractComparatorEngine
     public function compare(NI $a, NI $b)
     {
         switch ($this->arbitrate($a, $b)) {
-            case 'int':
-            case 'whole':
-            case 'natural':
-            case 'float':
-                return $this->intFloatCompare($a, $b);
-            case 'rational':
-                list($a, $b) = $this->checkRationalTypes($a, $b);
-                return $this->rationalCompare($a, $b);
-            case 'complex':
-                return $this->complexCompare($a, $b);
-            case 'complex:numeric':
-                return $this->complexCompare($a, $b->asComplex());
-            case 'numeric:complex':
-                return $this->complexCompare($a->asComplex(), $b);
+        case 'int':
+        case 'whole':
+        case 'natural':
+        case 'float':
+            return $this->intFloatCompare($a, $b);
+        case 'rational':
+            list($a, $b) = $this->checkRationalTypes($a, $b);
+            return $this->rationalCompare($a, $b);
+        case 'complex':
+            return $this->complexCompare($a, $b);
+        case 'complex:numeric':
+            return $this->complexCompare($a, $b->asComplex());
+        case 'numeric:complex':
+            return $this->complexCompare($a->asComplex(), $b);
         }
     }
 
     /**
      * Compare int and float types
      *
-     * @param NI $a
-     * @param NI $b
+     * @param  NI $a
+     * @param  NI $b
      * @return int
      */
     protected function intFloatCompare(NI $a, NI $b)
     {
         return $this->rationalCompare(
-                RationalTypeFactory::fromFloat($a->asFloatType()),
-                RationalTypeFactory::fromFloat($b->asFloatType())
+            RationalTypeFactory::fromFloat($a->asFloatType()),
+            RationalTypeFactory::fromFloat($b->asFloatType())
         );
     }
 
     /**
      * Compare two rationals
      *
-     * @param RationalType $a
-     * @param RationalType $b
+     * @param  RationalType $a
+     * @param  RationalType $b
      * @return int
      */
     protected function rationalCompare(RationalType $a, RationalType $b)

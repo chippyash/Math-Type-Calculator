@@ -1,10 +1,10 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
- * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @author    Ashley Kitson <akitson@zf4.biz>
+ * @copyright Copyright (c) 2014, Ashley Kitson, UK
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type;
 
@@ -28,7 +28,7 @@ class Comparator implements ComparatorEngineInterface
 
     /**
      * Comparator engine
-     * @var Chippyash\Math\Type\Comparator\ComparatorEngineInterface
+     * @var ComparatorEngineInterface
      */
     protected $compEngine;
 
@@ -43,7 +43,7 @@ class Comparator implements ComparatorEngineInterface
      * Constructor
      * Set up the comparator engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|Chippyash\Math\Type\Comparator\ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
+     * @param  int|ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
      * @throws \InvalidArgumentException
      */
     public function __construct($compEngine = null)
@@ -69,8 +69,8 @@ class Comparator implements ComparatorEngineInterface
      * a < b = -1
      * a > b = 1
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NumericTypeInterface $a
+     * @param NumericTypeInterface $b
      *
      * @return int
      */
@@ -84,7 +84,7 @@ class Comparator implements ComparatorEngineInterface
      * Allows you to call ->eq(), ->lt() etc.
      *
      * @param string $name
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return boolean
      *
