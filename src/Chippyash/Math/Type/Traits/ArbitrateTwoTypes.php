@@ -21,9 +21,9 @@ trait ArbitrateTwoTypes
      *
      * @param NumericTypeInterface $a first type
      * @param NumericTypeInterface $b second type
-     * 
+     *
      * @return string
-     * 
+     *
      * @noinspection PhpInconsistentReturnPointsInspection
      */
     protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)
@@ -57,18 +57,23 @@ trait ArbitrateTwoTypes
 
     /**
      * Work out the type of the number pairs
-     * 
+     *
      * @param NumericTypeInterface $a first operand
      * @param NumericTypeInterface $b second operand
-     * 
+     *
      * @return string
      */
     private function getTypePairing(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        $search = ['Chippyash\Type\Number\Rational\\','Chippyash\Type\Number\Complex\\','Chippyash\Type\Number\\', 'Type'];
-        $replace = ['','','',''];
+        $search = [
+            'Chippyash\Type\Number\Rational\\',
+            'Chippyash\Type\Number\Complex\\',
+            'Chippyash\Type\Number\\',
+            'Type'
+        ];
+        $replace = ['', '', '', ''];
         $tA = strtolower(str_replace($search, $replace, get_class($a)));
-        $tB =  strtolower(str_replace($search, $replace, get_class($b)));
+        $tB = strtolower(str_replace($search, $replace, get_class($b)));
 
         return "{$tA}:{$tB}";
     }

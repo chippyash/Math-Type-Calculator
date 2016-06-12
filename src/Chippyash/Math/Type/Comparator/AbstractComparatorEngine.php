@@ -40,6 +40,18 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     }
 
     /**
+     * a == b = 0
+     * a < b = -1
+     * a > b = 1
+     *
+     * @param NI $a first operand
+     * @param NI $b second operand
+     *
+     * @return int
+     */
+    abstract public function compare(NI $a, NI $b);
+
+    /**
      * a != b
      *
      * @param NI $a first operand
@@ -104,18 +116,4 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     {
         return ($this->compare($a, $b) != -1);
     }
-
-
-    /**
-     * a == b = 0
-     * a < b = -1
-     * a > b = 1
-     *
-     * @param NI $a first operand
-     * @param NI $b second operand
-     *
-     * @return int
-     */
-    abstract public function compare(NI $a, NI $b);
-
 }

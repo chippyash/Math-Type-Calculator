@@ -10,11 +10,11 @@ namespace Chippyash\Math\Type\Calculator;
 
 use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
 use Chippyash\Type\Number\Complex\ComplexType;
-use Chippyash\Type\Number\Rational\RationalType;
-use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\FloatType;
-use Chippyash\Type\Number\WholeIntType;
+use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\NaturalIntType;
+use Chippyash\Type\Number\Rational\RationalType;
+use Chippyash\Type\Number\WholeIntType;
 
 /**
  * Defines an interface that type calculator engines must conform to
@@ -26,7 +26,7 @@ interface CalculatorEngineInterface
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return IntType
      */
     public function intAdd(NI $a, NI $b);
@@ -60,33 +60,33 @@ interface CalculatorEngineInterface
      * @return RationalType
      */
     public function intDiv(NI $a, NI $b);
-    
+
     /**
      * Integer Pow - raise number to the exponent
-     * 
+     *
      * @param IntType $a operand
      * @param NI $exp exponent
-     * 
+     *
      * @return NI
      */
     public function intPow(IntType $a, NI $exp);
-    
+
     /**
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
-     * 
+     *
      * @param IntType $a operand
-     * 
+     *
      * @return IntType|RationalType result
      */
     public function intSqrt(IntType $a);
-    
+
     /**
      * Float addition
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return FloatType
      */
     public function floatAdd(NI $a, NI $b);
@@ -123,38 +123,38 @@ interface CalculatorEngineInterface
 
     /**
      * Float reciprocal i.e. 1/a
-     * 
+     *
      * @param NI $a operand
-     * 
+     *
      * @return FloatType
      */
     public function floatReciprocal(NI $a);
 
     /**
      * Float Pow - raise number to the exponent
-     * 
+     *
      * @param FloatType $a operand
-     * @param NI        $exp exponent
-     * 
+     * @param NI $exp exponent
+     *
      * @return NI
      */
     public function floatPow(FloatType $a, NI $exp);
-    
+
     /**
      * Float sqrt
-     * 
+     *
      * @param FloatType $a operand
-     * 
+     *
      * @return FloatType result
      */
     public function floatSqrt(FloatType $a);
-    
+
     /**
      * Whole number addition
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return WholeIntType
      */
     public function wholeAdd(NI $a, NI $b);
@@ -214,7 +214,7 @@ interface CalculatorEngineInterface
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalAdd(NI $a, NI $b);
@@ -224,7 +224,7 @@ interface CalculatorEngineInterface
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalSub(NI $a, NI $b);
@@ -234,7 +234,7 @@ interface CalculatorEngineInterface
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalMul(NI $a, NI $b);
@@ -244,7 +244,7 @@ interface CalculatorEngineInterface
      *
      * @param NI $a first operand
      * @param NI $b second operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalDiv(NI $a, NI $b);
@@ -253,37 +253,37 @@ interface CalculatorEngineInterface
      * Rational number reciprocal: 1/r
      *
      * @param RationalType $a operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalReciprocal(RationalType $a);
 
     /**
      * Rational Pow - raise number to the exponent
-     * 
+     *
      * @param RationalType $a operand
-     * @param NI           $exp Exponent
-     * 
+     * @param NI $exp Exponent
+     *
      * @return NI
      */
     public function rationalPow(RationalType $a, NI $exp);
-    
+
     /**
      * Rational sqrt
-     * 
+     *
      * @param RationalType $a operand
-     * 
+     *
      * @return RationalType result
      */
     public function rationalSqrt(RationalType $a);
-    
+
 
     /**
      * Complex number addition
      *
      * @param ComplexType $a first operand
      * @param ComplexType $b second operand
-     * 
+     *
      * @return ComplexType
      */
     public function complexAdd(ComplexType $a, ComplexType $b);
@@ -293,7 +293,7 @@ interface CalculatorEngineInterface
      *
      * @param ComplexType $a first operand
      * @param ComplexType $b second operand
-     * 
+     *
      * @return ComplexType
      */
     public function complexSub(ComplexType $a, ComplexType $b);
@@ -303,7 +303,7 @@ interface CalculatorEngineInterface
      *
      * @param ComplexType $a first operand
      * @param ComplexType $b second operand
-     * 
+     *
      * @return ComplexType
      */
     public function complexMul(ComplexType $a, ComplexType $b);
@@ -313,9 +313,9 @@ interface CalculatorEngineInterface
      *
      * @param ComplexType $a first operand
      * @param ComplexType $b second operand
-     * 
+     *
      * @return ComplexType
-     * 
+     *
      * @throws \BadMethodCallException
      */
     public function complexDiv(ComplexType $a, ComplexType $b);
@@ -324,37 +324,37 @@ interface CalculatorEngineInterface
      * Complex number reciprocal: 1/a+bi
      *
      * @param  ComplexType $a operand
-     * 
+     *
      * @return ComplexType
-     * 
+     *
      * @throws \BadMethodCallException
      */
     public function complexReciprocal(ComplexType $a);
 
     /**
      * Complex Pow - raise number to the exponent
-     * 
+     *
      * @param ComplexType $a operand
-     * @param NI          $exp exponent
-     * 
+     * @param NI $exp exponent
+     *
      * @return ComplexType
      */
     public function complexPow(ComplexType $a, NI $exp);
 
     /**
      * Complex sqrt
-     * 
+     *
      * @param ComplexType $a operand
-     * 
+     *
      * @return ComplexType result
      */
     public function complexSqrt(ComplexType $a);
-    
+
     /**
      * Convert float or int into relevant strong type
      *
      * @param float|int $num operand
-     * 
+     *
      * @return IntType
      */
     public function convertNumeric($num);

@@ -48,7 +48,7 @@ class Native implements CalculatorEngineInterface
      *
      * @param  NI $a first operand
      * @param  NI $b second operand
-     * 
+     *
      * @return IntType
      */
     public function intAdd(NI $a, NI $b)
@@ -102,14 +102,14 @@ class Native implements CalculatorEngineInterface
         $rb = RationalTypeFactory::create($b);
         return $this->rationalDiv($ra, $rb);
     }
-    
+
     /**
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
-     * 
+     *
      * @param IntType $a operand
-     * @param NI      $exp Exponent
-     * 
+     * @param NI $exp Exponent
+     *
      * @return NI
      */
     public function intPow(IntType $a, NI $exp)
@@ -118,26 +118,26 @@ class Native implements CalculatorEngineInterface
             $b = new RationalType(clone $a, new IntType(1));
             return $this->rationalPow($b, $exp);
         }
-        
+
         if ($exp instanceof ComplexType) {
             return $this->intComplexPow($a(), $exp);
         }
-        
+
         //int and float types
         $p = pow($a(), $exp());
         if (($p - intval($p)) === 0) {
             return new IntType($p);
         }
-        
+
         return RationalTypeFactory::fromFloat($p);
     }
-    
+
     /**
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
-     * 
+     *
      * @param IntType $a operand
-     * 
+     *
      * @return IntType|RationalType result
      */
     public function intSqrt(IntType $a)
@@ -149,7 +149,7 @@ class Native implements CalculatorEngineInterface
 
         return $res;
     }
-    
+
     /**
      * Float addition
      *
@@ -208,9 +208,9 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Float reciprocal i.e. 1/a
-     * 
+     *
      * @param NI $a operand
-     * 
+     *
      * @return FloatType
      */
     public function floatReciprocal(NI $a)
@@ -221,10 +221,10 @@ class Native implements CalculatorEngineInterface
     /**
      * Float Pow - raise number to the exponent
      * Will return a float type
-     * 
+     *
      * @param FloatType $a operand
-     * @param NI        $exp Exponent
-     * 
+     * @param NI $exp Exponent
+     *
      * @return FloatType
      */
     public function floatPow(FloatType $a, NI $exp)
@@ -233,22 +233,22 @@ class Native implements CalculatorEngineInterface
             $b = RationalTypeFactory::fromFloat($a());
             return $this->rationalPow($b, $exp)->asFloatType();
         }
-        
+
         if ($exp instanceof ComplexType) {
             return $this->floatComplexPow($a(), $exp);
         }
-        
+
         //int and float types
         $p = pow($a(), $exp());
-        
+
         return new FloatType($p);
     }
-    
+
     /**
      * Float sqrt
-     * 
+     *
      * @param FloatType $a operand
-     * 
+     *
      * @return FloatType result
      */
     public function floatSqrt(FloatType $a)
@@ -422,21 +422,21 @@ class Native implements CalculatorEngineInterface
      * Rational number reciprocal: 1/r
      *
      * @param RationalType $a operand
-     * 
+     *
      * @return RationalType
      */
     public function rationalReciprocal(RationalType $a)
     {
         return RationalTypeFactory::create($a->denominator(), $a->numerator());
     }
-    
+
     /**
      * Rational Pow - raise number to the exponent
      * Will return a RationalType
-     * 
+     *
      * @param RationalType $a operand
-     * @param NI           $exp exponent
-     * 
+     * @param NI $exp exponent
+     *
      * @return NI
      */
     public function rationalPow(RationalType $a, NI $exp)
@@ -454,15 +454,15 @@ class Native implements CalculatorEngineInterface
         $denF = pow($a->denominator()->get(), $exp2);
         $numR = RationalTypeFactory::fromFloat($numF);
         $denR = RationalTypeFactory::fromFloat($denF);
-        
+
         return $this->rationalDiv($numR, $denR);
     }
-    
+
     /**
      * Rational sqrt
-     * 
+     *
      * @param  RationalType $a operand
-     * 
+     *
      * @return RationalType result
      */
     public function rationalSqrt(RationalType $a)
@@ -470,18 +470,18 @@ class Native implements CalculatorEngineInterface
         $num = sqrt($a->numerator()->get());
         $den = sqrt($a->denominator()->get());
         return $this->rationalDiv(
-            RationalTypeFactory::fromFloat($num), 
+            RationalTypeFactory::fromFloat($num),
             RationalTypeFactory::fromFloat($den)
         );
     }
-    
+
 
     /**
      * Complex number addition
      *
      * @param ComplexType $a first operand
      * @param ComplexType $b second operand
-     * 
+     *
      * @return ComplexType
      */
     public function complexAdd(ComplexType $a, ComplexType $b)
@@ -516,8 +516,14 @@ class Native implements CalculatorEngineInterface
      */
     public function complexMul(ComplexType $a, ComplexType $b)
     {
-        $r = $this->rationalSub($this->rationalMul($a->r(), $b->r()), $this->rationalMul($a->i(), $b->i()));
-        $i = $this->rationalAdd($this->rationalMul($a->i(), $b->r()), $this->rationalMul($a->r(), $b->i()));
+        $r = $this->rationalSub(
+            $this->rationalMul($a->r(), $b->r()),
+            $this->rationalMul($a->i(), $b->i())
+        );
+        $i = $this->rationalAdd(
+            $this->rationalMul($a->i(), $b->r()),
+            $this->rationalMul($a->r(), $b->i())
+        );
         return ComplexTypeFactory::create($r, $i);
     }
 
@@ -528,7 +534,7 @@ class Native implements CalculatorEngineInterface
      * @param ComplexType $b second operand
      *
      * @return ComplexType
-     * 
+     *
      * @throws \BadMethodCallException
      */
     public function complexDiv(ComplexType $a, ComplexType $b)
@@ -537,11 +543,26 @@ class Native implements CalculatorEngineInterface
             throw new \BadMethodCallException('Cannot divide complex number by zero complex number');
         }
         //div = br^2 + bi^2
-        $div = $this->rationalAdd($this->rationalMul($b->r(), $b->r()), $this->rationalMul($b->i(), $b->i()));
+        $div = $this->rationalAdd(
+            $this->rationalMul($b->r(), $b->r()),
+            $this->rationalMul($b->i(), $b->i())
+        );
         //r = ((ar * br) + (ai * bi))/div
-        $r = $this->rationalDiv($this->rationalAdd($this->rationalMul($a->r(), $b->r()), $this->rationalMul($a->i(), $b->i())), $div);
+        $r = $this->rationalDiv(
+            $this->rationalAdd(
+                $this->rationalMul($a->r(), $b->r()),
+                $this->rationalMul($a->i(), $b->i())
+            ),
+            $div
+        );
         //i = ((ai * br) - (ar * bi)) / div
-        $i = $this->rationalDiv($this->rationalSub($this->rationalMul($a->i(), $b->r()), $this->rationalMul($a->r(), $b->i())), $div);
+        $i = $this->rationalDiv(
+            $this->rationalSub(
+                $this->rationalMul($a->i(), $b->r()),
+                $this->rationalMul($a->r(), $b->i())
+            ),
+            $div
+        );
 
         return ComplexTypeFactory::create($r, $i);
     }
@@ -552,7 +573,7 @@ class Native implements CalculatorEngineInterface
      * @param ComplexType $a operand
      *
      * @return ComplexType
-     * 
+     *
      * @throws \BadMethodCallException
      */
     public function complexReciprocal(ComplexType $a)
@@ -574,12 +595,12 @@ class Native implements CalculatorEngineInterface
      * Complex Pow - raise number to the exponent
      * Will return a ComplexType
      * Exponent must be non complex
-     * 
+     *
      * @param ComplexType $a operand
-     * @param NI          $exp Exponent
-     * 
+     * @param NI $exp Exponent
+     *
      * @return ComplexType
-     * 
+     *
      * @throws \InvalidArgumentException If exponent is complex
      */
     public function complexPow(ComplexType $a, NI $exp)
@@ -597,7 +618,7 @@ class Native implements CalculatorEngineInterface
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
             );
-        } 
+        }
         //non complex
         //de moivres theorum
         //z^n = r^n(cos(n.theta) + sin(n.theta)i)
@@ -607,17 +628,17 @@ class Native implements CalculatorEngineInterface
         $pow = pow($a->modulus()->get(), $n);
         $real = cos($nTheta) * $pow;
         $imaginary = sin($nTheta) * $pow;
-        
+
         return new ComplexType(
             RationalTypeFactory::fromFloat($real),
             RationalTypeFactory::fromFloat($imaginary)
-        );        
+        );
     }
 
     /**
      * @param ComplexType $a first operand
      * @param ComplexType $exp second operand
-     * 
+     *
      * @return array [real, imaginary]
      */
     protected function getPowExponentPartsFromPolar(ComplexType $a, ComplexType $exp)
@@ -634,9 +655,9 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Complex sqrt
-     * 
+     *
      * @param ComplexType $a operand
-     * 
+     *
      * @return ComplexType
      */
     public function complexSqrt(ComplexType $a)
@@ -646,10 +667,10 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Create Complex power from  an integer
-     * 
+     *
      * @param int $a operand
      * @param ComplexType $exp exponent
-     * 
+     *
      * @return NI|ComplexType|IntType
      */
     private function intComplexPow($a, ComplexType $exp)
@@ -657,15 +678,15 @@ class Native implements CalculatorEngineInterface
         if ($exp->isZero()) {
             return new IntType(1);
         }
-        return $this->complexExponent($a, $exp);        
+        return $this->complexExponent($a, $exp);
     }
 
     /**
      * Create complex power from a float
-     * 
+     *
      * @param float $a operand
      * @param ComplexType $exp exponent
-     * 
+     *
      * @return NI|ComplexType|FloatType
      */
     private function floatComplexPow($a, ComplexType $exp)
@@ -678,28 +699,28 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Create complex power from natural base and complex exponent
-     * 
+     *
      * @param int|float $base base
      * @param ComplexType $exp exponent
-     * 
+     *
      * @return NI|ComplexType
      */
     private function complexExponent($base, ComplexType $exp)
     {
         if ($exp->isReal()) {
             return $this->rationalPow(
-                RationalTypeFactory::fromFloat($base), 
+                RationalTypeFactory::fromFloat($base),
                 $exp->r()
             );
         }
-        
+
         //do the imaginary part
         //n^bi = cos(b.lg(n)) + i.sin(b.lg(n))
         $b = $exp->i()->get();
         $n = log($base);
         $r = cos($b * $n);
-        $i = sin($b * $n);     
-        
+        $i = sin($b * $n);
+
         //no real part
         if ($exp->r()->get() == 0) {
             return new ComplexType(
@@ -715,15 +736,15 @@ class Native implements CalculatorEngineInterface
         return new ComplexType(
             RationalTypeFactory::fromFloat($rr),
             RationalTypeFactory::fromFloat($ii)
-        ); 
+        );
     }
-    
+
     /**
      * Return Greatest Common Denominator of two numbers
      *
      * @param  int $a
      * @param  int $b
-     * 
+     *
      * @return int
      */
     private function gcd($a, $b)
@@ -733,10 +754,10 @@ class Native implements CalculatorEngineInterface
 
     /**
      * Return Least Common Multiple of two numbers
-     * 
+     *
      * @param int $a
      * @param int $b
-     * 
+     *
      * @return int
      */
     private function lcm($a, $b)

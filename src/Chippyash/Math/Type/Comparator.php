@@ -8,10 +8,10 @@
  */
 namespace Chippyash\Math\Type;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface;
-use Chippyash\Math\Type\Comparator\Native;
-use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
 use Chippyash\Math\Type\Comparator\AbstractComparatorEngine;
+use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
+use Chippyash\Math\Type\Comparator\Native;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
 
 /**
  * Generic comparator for strong type support
@@ -84,7 +84,7 @@ class Comparator implements ComparatorEngineInterface
      * Allows you to call ->eq(), ->lt() etc.
      *
      * @param string $name
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return boolean
      *
@@ -98,5 +98,4 @@ class Comparator implements ComparatorEngineInterface
 
         throw new \BadMethodCallException('Unsupported comparator method: ' . $name);
     }
-
 }

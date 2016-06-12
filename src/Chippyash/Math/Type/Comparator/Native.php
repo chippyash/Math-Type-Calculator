@@ -8,12 +8,12 @@
  */
 namespace Chippyash\Math\Type\Comparator;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use Chippyash\Type\Number\Rational\RationalType;
-use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\ComplexType;
 use Chippyash\Math\Type\Calculator\Native as Calc;
 use Chippyash\Math\Type\Traits\CheckRationalTypes;
+use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
+use Chippyash\Type\Number\Complex\ComplexType;
+use Chippyash\Type\Number\Rational\RationalType;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
 
 /**
  * PHP Native maths comparator
@@ -42,26 +42,26 @@ class Native extends AbstractComparatorEngine
      * @param NI $b second term
      *
      * @return int
-     * 
+     *
      * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function compare(NI $a, NI $b)
     {
         switch ($this->arbitrate($a, $b)) {
-        case 'int':
-        case 'whole':
-        case 'natural':
-        case 'float':
-            return $this->intFloatCompare($a, $b);
-        case 'rational':
-            list($a, $b) = $this->checkRationalTypes($a, $b);
-            return $this->rationalCompare($a, $b);
-        case 'complex':
-            return $this->complexCompare($a, $b);
-        case 'complex:numeric':
-            return $this->complexCompare($a, $b->asComplex());
-        case 'numeric:complex':
-            return $this->complexCompare($a->asComplex(), $b);
+            case 'int':
+            case 'whole':
+            case 'natural':
+            case 'float':
+                return $this->intFloatCompare($a, $b);
+            case 'rational':
+                list($a, $b) = $this->checkRationalTypes($a, $b);
+                return $this->rationalCompare($a, $b);
+            case 'complex':
+                return $this->complexCompare($a, $b);
+            case 'complex:numeric':
+                return $this->complexCompare($a, $b->asComplex());
+            case 'numeric:complex':
+                return $this->complexCompare($a->asComplex(), $b);
         }
     }
 
@@ -112,7 +112,7 @@ class Native extends AbstractComparatorEngine
      */
     protected function complexCompare(ComplexType $a, ComplexType $b)
     {
-        if ($a->isReal()  && $b->isReal()) {
+        if ($a->isReal() && $b->isReal()) {
             return $this->rationalCompare($a->r(), $b->r());
         }
 

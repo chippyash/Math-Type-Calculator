@@ -32,5 +32,4 @@ trait CheckRationalTypes
 
         return [$a1, $b1];
     }
-
 }

@@ -77,7 +77,7 @@ class Calculator
      * @param int|float|NumericTypeInterface $b second operand
      *
      * @return NumericTypeInterface
-     * 
+     *
      * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function add($a, $b)
@@ -86,22 +86,22 @@ class Calculator
         $b = $this->convert($b);
 
         switch ($this->arbitrate($a, $b)) {
-        case 'int':
-            return $this->calcEngine->intAdd($a, $b);
-        case 'float':
-            return $this->calcEngine->floatAdd($a, $b);
-        case 'whole':
-            return $this->calcEngine->wholeAdd($a, $b);
-        case 'natural':
-            return $this->calcEngine->naturalAdd($a, $b);
-        case 'rational':
-            return $this->calcEngine->rationalAdd($a, $b);
-        case 'complex':
-            return $this->calcEngine->complexAdd($a, $b);
-        case 'complex:numeric':
-            return $this->calcEngine->complexAdd($a, $b->asComplex());
-        case 'numeric:complex':
-            return $this->calcEngine->complexAdd($a->asComplex(), $b);
+            case 'int':
+                return $this->calcEngine->intAdd($a, $b);
+            case 'float':
+                return $this->calcEngine->floatAdd($a, $b);
+            case 'whole':
+                return $this->calcEngine->wholeAdd($a, $b);
+            case 'natural':
+                return $this->calcEngine->naturalAdd($a, $b);
+            case 'rational':
+                return $this->calcEngine->rationalAdd($a, $b);
+            case 'complex':
+                return $this->calcEngine->complexAdd($a, $b);
+            case 'complex:numeric':
+                return $this->calcEngine->complexAdd($a, $b->asComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexAdd($a->asComplex(), $b);
         }
     }
 
@@ -110,9 +110,9 @@ class Calculator
      *
      * @param int|float|NumericTypeInterface $a first operand
      * @param int|float|NumericTypeInterface $b second operand
-     * 
+     *
      * @return NumericTypeInterface
-     * 
+     *
      * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function sub($a, $b)
@@ -120,22 +120,22 @@ class Calculator
         $a = $this->convert($a);
         $b = $this->convert($b);
         switch ($this->arbitrate($a, $b)) {
-        case 'int':
-            return $this->calcEngine->intSub($a, $b);
-        case 'float':
-            return $this->calcEngine->floatSub($a, $b);
-        case 'whole':
-            return $this->calcEngine->wholeSub($a, $b);
-        case 'natural':
-            return $this->calcEngine->naturalSub($a, $b);
-        case 'rational':
-            return $this->calcEngine->rationalSub($a, $b);
-        case 'complex':
-            return $this->calcEngine->complexSub($a, $b);
-        case 'complex:numeric':
-            return $this->calcEngine->complexSub($a, $b->asComplex());
-        case 'numeric:complex':
-            return $this->calcEngine->complexSub($a->asComplex(), $b);
+            case 'int':
+                return $this->calcEngine->intSub($a, $b);
+            case 'float':
+                return $this->calcEngine->floatSub($a, $b);
+            case 'whole':
+                return $this->calcEngine->wholeSub($a, $b);
+            case 'natural':
+                return $this->calcEngine->naturalSub($a, $b);
+            case 'rational':
+                return $this->calcEngine->rationalSub($a, $b);
+            case 'complex':
+                return $this->calcEngine->complexSub($a, $b);
+            case 'complex:numeric':
+                return $this->calcEngine->complexSub($a, $b->asComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexSub($a->asComplex(), $b);
         }
     }
 
@@ -144,9 +144,9 @@ class Calculator
      *
      * @param int|float|NumericTypeInterface $a first operand
      * @param int|float|NumericTypeInterface $b second operand
-     * 
+     *
      * @return NumericTypeInterface
-     * 
+     *
      * @noinspection PhpInconsistentReturnPointsInspection
      */
     public function mul($a, $b)
@@ -154,22 +154,22 @@ class Calculator
         $a = $this->convert($a);
         $b = $this->convert($b);
         switch ($this->arbitrate($a, $b)) {
-        case 'int':
-            return $this->calcEngine->intMul($a, $b);
-        case 'float':
-            return $this->calcEngine->floatMul($a, $b);
-        case 'whole':
-            return $this->calcEngine->wholeMul($a, $b);
-        case 'natural':
-            return $this->calcEngine->naturalMul($a, $b);
-        case 'rational':
-            return $this->calcEngine->rationalMul($a, $b);
-        case 'complex':
-            return $this->calcEngine->complexMul($a, $b);
-        case 'complex:numeric':
-            return $this->calcEngine->complexMul($a, $b->asComplex());
-        case 'numeric:complex':
-            return $this->calcEngine->complexMul($a->asComplex(), $b);
+            case 'int':
+                return $this->calcEngine->intMul($a, $b);
+            case 'float':
+                return $this->calcEngine->floatMul($a, $b);
+            case 'whole':
+                return $this->calcEngine->wholeMul($a, $b);
+            case 'natural':
+                return $this->calcEngine->naturalMul($a, $b);
+            case 'rational':
+                return $this->calcEngine->rationalMul($a, $b);
+            case 'complex':
+                return $this->calcEngine->complexMul($a, $b);
+            case 'complex:numeric':
+                return $this->calcEngine->complexMul($a, $b->asComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexMul($a->asComplex(), $b);
         }
     }
 
@@ -178,7 +178,7 @@ class Calculator
      *
      * @param int|float|NumericTypeInterface $a first operand
      * @param int|float|NumericTypeInterface $b second operand
-     * 
+     *
      * @return NumericTypeInterface
      */
     public function div($a, $b)
@@ -186,20 +186,20 @@ class Calculator
         $a = $this->convert($a);
         $b = $this->convert($b);
         switch ($this->arbitrate($a, $b)) {
-        case 'int':
-        case 'whole':
-        case 'natural':
-            return $this->calcEngine->intDiv($a, $b);
-        case 'rational':
-            return $this->calcEngine->rationalDiv($a, $b);
-        case 'complex':
-            return $this->calcEngine->complexDiv($a, $b);
-        case 'complex:numeric':
-            return $this->calcEngine->complexDiv($a, $b->asComplex());
-        case 'numeric:complex':
-            return $this->calcEngine->complexDiv($a->asComplex(), $b);
-        default:
-            return $this->calcEngine->floatDiv($a, $b);
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intDiv($a, $b);
+            case 'rational':
+                return $this->calcEngine->rationalDiv($a, $b);
+            case 'complex':
+                return $this->calcEngine->complexDiv($a, $b);
+            case 'complex:numeric':
+                return $this->calcEngine->complexDiv($a, $b->asComplex());
+            case 'numeric:complex':
+                return $this->calcEngine->complexDiv($a->asComplex(), $b);
+            default:
+                return $this->calcEngine->floatDiv($a, $b);
         }
     }
 
@@ -213,18 +213,18 @@ class Calculator
     {
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
-        case 'rational':
-            return $this->calcEngine->rationalReciprocal($a);
-        case 'complex':
-            return $this->calcEngine->complexReciprocal($a);
-        default :
-            return $this->calcEngine->floatReciprocal($a);
+            case 'rational':
+                return $this->calcEngine->rationalReciprocal($a);
+            case 'complex':
+                return $this->calcEngine->complexReciprocal($a);
+            default:
+                return $this->calcEngine->floatReciprocal($a);
         }
     }
 
     /**
-     * 
-     * @param int|float|NumericTypeInterface              $a
+     *
+     * @param int|float|NumericTypeInterface $a
      * @param NumericTypeInterface $exp
      * @return NumericTypeInterface
      */
@@ -232,21 +232,21 @@ class Calculator
     {
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
-        case 'rational':
-            return $this->calcEngine->rationalPow($a, $exp);
-        case 'complex':
-            return $this->calcEngine->complexPow($a, $exp);
-        case 'int':
-        case 'whole':
-        case 'natural':
-            return $this->calcEngine->intPow($a, $exp);
-        default :
-            return $this->calcEngine->floatPow($a, $exp);
+            case 'rational':
+                return $this->calcEngine->rationalPow($a, $exp);
+            case 'complex':
+                return $this->calcEngine->complexPow($a, $exp);
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intPow($a, $exp);
+            default:
+                return $this->calcEngine->floatPow($a, $exp);
         }
     }
-    
+
     /**
-     * 
+     *
      * @param int|float|NumericTypeInterface $a
      * @return NumericTypeInterface
      */
@@ -254,24 +254,24 @@ class Calculator
     {
         $a = $this->convert($a);
         switch ($this->arbitrate($a, $a)) {
-        case 'rational':
-            return $this->calcEngine->rationalSqrt($a);
-        case 'complex':
-            return $this->calcEngine->complexSqrt($a);
-        case 'int':
-        case 'whole':
-        case 'natural':
-            return $this->calcEngine->intSqrt($a);
-        default :
-            return $this->calcEngine->floatSqrt($a);
+            case 'rational':
+                return $this->calcEngine->rationalSqrt($a);
+            case 'complex':
+                return $this->calcEngine->complexSqrt($a);
+            case 'int':
+            case 'whole':
+            case 'natural':
+                return $this->calcEngine->intSqrt($a);
+            default:
+                return $this->calcEngine->floatSqrt($a);
         }
     }
 
     /**
      * Convert into Strong Numeric Type
-     * 
+     *
      * @param int|float|NumericTypeInterface $num operand
-     * 
+     *
      * @return \Chippyash\Type\Number\IntType
      */
     protected function convert($num)
