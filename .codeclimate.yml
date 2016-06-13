@@ -23,5 +23,9 @@ engines:
         enabled: false
       Design/TooManyMethods:
         enabled: false
+    exclude_fingerprints:
+      - 5bac8dc1fbbdec10a35abd1a8acb1a83
+      - e3eca0b1eef6e233da6d2b1d34ece730
+      - 8ac0d29646d0f4e08759ff625b941b93
   phpcodesniffer:
     enabled: true
