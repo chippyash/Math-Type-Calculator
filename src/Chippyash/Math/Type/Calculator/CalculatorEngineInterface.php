@@ -1,20 +1,20 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Calculator;
 
+use Chippyash\Type\Interfaces\ComplexTypeInterface as CTI;
 use Chippyash\Type\Interfaces\NumericTypeInterface as NTI;
 use Chippyash\Type\Interfaces\RationalTypeInterface as RTI;
-use Chippyash\Type\Interfaces\ComplexTypeInterface as CTI;
-use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\FloatType;
-use Chippyash\Type\Number\WholeIntType;
+use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\NaturalIntType;
+use Chippyash\Type\Number\WholeIntType;
 
 /**
  * Defines an interface that type calculator engines must conform to
@@ -24,8 +24,8 @@ interface CalculatorEngineInterface
     /**
      * Integer addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return IntType
      */
     public function intAdd(NTI $a, NTI $b);
@@ -33,8 +33,8 @@ interface CalculatorEngineInterface
     /**
      * Integer subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return IntType
      */
     public function intSub(NTI $a, NTI $b);
@@ -42,44 +42,44 @@ interface CalculatorEngineInterface
     /**
      * Integer multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return IntType
      */
     public function intMul(NTI $a, NTI $b);
 
     /**
      * Integer division
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param  NTI $a
+     * @param  NTI $b
      * @return RTI
      */
     public function intDiv(NTI $a, NTI $b);
-    
+
     /**
      * Integer Pow - raise number to the exponent
-     * 
-     * @param IntType $a
-     * @param NTI $exp Exponent
+     *
+     * @param  IntType $a
+     * @param  NTI $exp Exponent
      * @return NTI
      */
     public function intPow(IntType $a, NTI $exp);
-    
+
     /**
      * Integer sqrt
      * Return IntType for perfect squares, else RationalType
-     * 
-     * @param IntType $a
+     *
+     * @param  IntType $a
      * @return NTI result
      */
     public function intSqrt(IntType $a);
-    
+
     /**
      * Float addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return FloatType
      */
     public function floatAdd(NTI $a, NTI $b);
@@ -87,8 +87,8 @@ interface CalculatorEngineInterface
     /**
      * Float subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return FloatType
      */
     public function floatSub(NTI $a, NTI $b);
@@ -96,8 +96,8 @@ interface CalculatorEngineInterface
     /**
      * Float multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return FloatType
      */
     public function floatMul(NTI $a, NTI $b);
@@ -105,8 +105,8 @@ interface CalculatorEngineInterface
     /**
      * Float division
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return FloatType
      */
     public function floatDiv(NTI $a, NTI $b);
@@ -120,26 +120,26 @@ interface CalculatorEngineInterface
 
     /**
      * Float Pow - raise number to the exponent
-     * 
-     * @param FloatType $a
-     * @param NTI $exp Exponent
+     *
+     * @param  FloatType $a
+     * @param  NTI $exp Exponent
      * @return FloatType
      */
     public function floatPow(FloatType $a, NTI $exp);
-    
+
     /**
      * Float sqrt
-     * 
-     * @param FloatType $a
+     *
+     * @param  FloatType $a
      * @return FloatType result
      */
     public function floatSqrt(FloatType $a);
-    
+
     /**
      * Whole number addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return WholeIntType
      */
     public function wholeAdd(NTI $a, NTI $b);
@@ -147,8 +147,8 @@ interface CalculatorEngineInterface
     /**
      * Whole number subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return WholeIntType
      */
     public function wholeSub(NTI $a, NTI $b);
@@ -156,8 +156,8 @@ interface CalculatorEngineInterface
     /**
      * Whole number multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return WholeIntType
      */
     public function wholeMul(NTI $a, NTI $b);
@@ -165,8 +165,8 @@ interface CalculatorEngineInterface
     /**
      * Natural number addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return NaturalIntType
      */
     public function naturalAdd(NTI $a, NTI $b);
@@ -174,8 +174,8 @@ interface CalculatorEngineInterface
     /**
      * Natural number subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return NaturalIntType
      */
     public function naturalSub(NTI $a, NTI $b);
@@ -183,8 +183,8 @@ interface CalculatorEngineInterface
     /**
      * Natural number multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param  NTI $a
+     * @param  NTI $b
      * @return NaturalIntType
      */
     public function naturalMul(NTI $a, NTI $b);
@@ -192,8 +192,8 @@ interface CalculatorEngineInterface
     /**
      * Rational number addition
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param  RTI $a
+     * @param  RTI $b
      * @return RTI
      */
     public function rationalAdd(RTI $a, RTI $b);
@@ -201,8 +201,8 @@ interface CalculatorEngineInterface
     /**
      * Rational number subtraction
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param  RTI $a
+     * @param  RTI $b
      * @return RTI
      */
     public function rationalSub(RTI $a, RTI $b);
@@ -210,8 +210,8 @@ interface CalculatorEngineInterface
     /**
      * Rational number multiplication
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param  RTI $a
+     * @param  RTI $b
      * @return RTI
      */
     public function rationalMul(RTI $a, RTI $b);
@@ -219,8 +219,8 @@ interface CalculatorEngineInterface
     /**
      * Rational number division
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param  RTI $a
+     * @param  RTI $b
      * @return RTI
      */
     public function rationalDiv(RTI $a, RTI $b);
@@ -228,34 +228,34 @@ interface CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param RTI $a
+     * @param  RTI $a
      * @return RTI
      */
     public function rationalReciprocal(RTI $a);
 
     /**
      * Rational Pow - raise number to the exponent
-     * 
-     * @param RTI $a
-     * @param NTI $exp Exponent
+     *
+     * @param  RTI $a
+     * @param  NTI $exp Exponent
      * @return RTI
      */
     public function rationalPow(RTI $a, NTI $exp);
-    
+
     /**
      * Rational sqrt
-     * 
-     * @param RTI $a
+     *
+     * @param  RTI $a
      * @return RTI result
      */
     public function rationalSqrt(RTI $a);
-    
+
 
     /**
      * Complex number addition
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param  CTI $a
+     * @param  CTI $b
      * @return CTI
      */
     public function complexAdd(CTI $a, CTI $b);
@@ -263,8 +263,8 @@ interface CalculatorEngineInterface
     /**
      * Complex number subtraction
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param  CTI $a
+     * @param  CTI $b
      * @return CTI
      */
     public function complexSub(CTI $a, CTI $b);
@@ -272,8 +272,8 @@ interface CalculatorEngineInterface
     /**
      * Complex number multiplication
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param  CTI $a
+     * @param  CTI $b
      * @return CTI
      */
     public function complexMul(CTI $a, CTI $b);
@@ -281,8 +281,8 @@ interface CalculatorEngineInterface
     /**
      * Complex number division
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param  CTI $a
+     * @param  CTI $b
      * @return CTI
      * @throws \BadMethodCallException
      */
@@ -291,7 +291,7 @@ interface CalculatorEngineInterface
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param CTI $a
+     * @param  CTI $a
      * @return CTI
      * @throws \BadMethodCallException
      */
@@ -299,17 +299,17 @@ interface CalculatorEngineInterface
 
     /**
      * Complex Pow - raise number to the exponent
-     * 
-     * @param CTI $a
-     * @param NTI $exp Exponent
+     *
+     * @param  CTI $a
+     * @param  NTI $exp Exponent
      * @return CTI
      */
     public function complexPow(CTI $a, NTI $exp);
 
     /**
      * Complex sqrt
-     * 
-     * @param CTI $a
+     *
+     * @param  CTI $a
      * @return CTI result
      */
     public function complexSqrt(CTI $a);
@@ -318,7 +318,7 @@ interface CalculatorEngineInterface
      * In place increment an IntType
      *
      * @param NTI $a
-     * @param numeric|NTI $inc
+     * @param int|float|NTI $inc
      */
     public function incInt(NTI $a, $inc = 1);
 
@@ -326,7 +326,7 @@ interface CalculatorEngineInterface
      * In place increment a FloatType
      *
      * @param NTI $a
-     * @param numeric|NTI $inc
+     * @param int|float|NTI $inc
      */
     public function incFloat(NTI $a, $inc = 1);
 
@@ -334,7 +334,7 @@ interface CalculatorEngineInterface
      * In place increment a RationalType
      *
      * @param RTI $a
-     * @param numeric|NTI $inc
+     * @param int|float|NTI $inc
      */
     public function incRational(RTI $a, $inc = 1);
 
@@ -342,7 +342,7 @@ interface CalculatorEngineInterface
      * In place increment a ComplexType
      *
      * @param CTI $a
-     * @param numeric|NTI $inc
+     * @param int|float|NTI $inc
      */
     public function incComplex(CTI $a, $inc = 1);
 
@@ -350,7 +350,7 @@ interface CalculatorEngineInterface
      * In place decrement an IntType
      *
      * @param NTI $a
-     * @param numeric|NTI $dec
+     * @param int|float|NTI $dec
      */
     public function decInt(NTI $a, $dec = 1);
 
@@ -358,7 +358,7 @@ interface CalculatorEngineInterface
      * In place decrement a FloatType
      *
      * @param NTI $a
-     * @param numeric|NTI $dec
+     * @param int|float|NTI $dec
      */
     public function decFloat(NTI $a, $dec = 1);
 
@@ -366,7 +366,7 @@ interface CalculatorEngineInterface
      * In place decrement a RationalType
      *
      * @param RTI $a
-     * @param numeric|NTI $dec
+     * @param int|float|NTI $dec
      */
     public function decRational(RTI $a, $dec = 1);
 
@@ -374,7 +374,7 @@ interface CalculatorEngineInterface
      * In place decrement a ComplexType
      *
      * @param CTI $a
-     * @param numeric|NTI $dec
+     * @param int|float|NTI $dec
      */
     public function decComplex(CTI $a, $dec = 1);
 
@@ -407,7 +407,7 @@ interface CalculatorEngineInterface
      *
      * @param RTI $a
      *
-     * @return RationalType
+     * @return RTI
      */
     public function rationalNatLog(RTI $a);
 
@@ -420,14 +420,14 @@ interface CalculatorEngineInterface
      *
      * @param CTI $a
      *
-     * @return RationalType
+     * @return RTI
      */
     public function complexNatLog(CTI $a);
-    
+
     /**
      * Convert float or int into relevant strong type
      *
-     * @param numeric $num
+     * @param  int|float $num
      * @return FloatType|IntType
      */
     public function convertNumeric($num);

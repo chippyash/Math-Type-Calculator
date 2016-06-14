@@ -1,24 +1,22 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Comparator;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use Chippyash\Type\Interfaces\NumericTypeInterface;
-use Chippyash\Type\Number\Rational\GMPRationalType;
-use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\GMPComplexType;
 use Chippyash\Math\Type\Calculator\GmpEngine as Calc;
 use Chippyash\Math\Type\Traits\CheckGmpRationalTypes;
+use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
+use Chippyash\Type\Number\Complex\GMPComplexType;
+use Chippyash\Type\Number\Rational\GMPRationalType;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
 
 /**
  * PHP Native maths comparator
- *
  */
 class GmpEngine extends AbstractComparatorEngine
 {
@@ -70,33 +68,24 @@ class GmpEngine extends AbstractComparatorEngine
      * @param GMPRationalType $a
      * @param GMPRationalType $b
      * @param NI $tolerance
-     * 
+     *
      * @return int
      */
     protected function rationalCompare(GMPRationalType $a, GMPRationalType $b, NI $tolerance = null)
     {
-        $aa = $a->asFloatType()->get();
-        $bb = $b->asFloatType()->get();
-        $cc = $aa - $bb;
         $res = $this->calculator->rationalSub($a, $b);
-        $rr = $res->asFloatType()->get();
-        $sr = (string) $res;
         if (is_null($tolerance)) {
             //no tolerance so return sign()
-            $s = $res->sign();
-            $v = $res->asFloatType()->get();
             return $res->sign();
         }
         //working to an equality tolerance
         $aRes = $res->abs();
-        $va = $aRes->asFloatType()->get();
-        $tt = $tolerance->asFloatType()->get();
         if ($this->rationalCompare($aRes, RationalTypeFactory::create(0)) >= 0
-            && $this->rationalCompare($aRes, $this->checkRationalType($tolerance)) <= 0)
-        {
+            && $this->rationalCompare($aRes, $this->checkRationalType($tolerance)) <= 0
+        ) {
             return 0;
         }
-        
+
         return $res->sign();
     }
 
@@ -113,7 +102,7 @@ class GmpEngine extends AbstractComparatorEngine
      */
     protected function complexCompare(GMPComplexType $a, GMPComplexType $b, NI $tolerance = null)
     {
-        if ($a->isReal()  && $b->isReal()) {
+        if ($a->isReal() && $b->isReal()) {
             return $this->rationalCompare($a->r(), $b->r(), $tolerance);
         }
 

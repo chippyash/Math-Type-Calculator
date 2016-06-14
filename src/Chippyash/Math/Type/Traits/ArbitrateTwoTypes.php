@@ -1,10 +1,10 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
- * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @author    Ashley Kitson <akitson@zf4.biz>
+ * @copyright Copyright (c) 2014, Ashley Kitson, UK
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Traits;
 
@@ -19,9 +19,12 @@ trait ArbitrateTwoTypes
     /**
      * Arbitrate the return type from the operation
      *
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $a
-     * @param Chippyash\Type\Interfaces\NumericTypeInterface $b
+     * @param NumericTypeInterface $a first type
+     * @param NumericTypeInterface $b second type
+     *
      * @return string
+     *
+     * @noinspection PhpInconsistentReturnPointsInspection
      */
     protected function arbitrate(NumericTypeInterface $a, NumericTypeInterface $b)
     {
@@ -46,12 +49,25 @@ trait ArbitrateTwoTypes
         }
     }
 
+    /**
+     * Work out the type of the number pairs
+     *
+     * @param NumericTypeInterface $a first operand
+     * @param NumericTypeInterface $b second operand
+     *
+     * @return string
+     */
     private function getTypePairing(NumericTypeInterface $a, NumericTypeInterface $b)
     {
-        $search = ['Chippyash\Type\Number\Rational\\','Chippyash\Type\Number\Complex\\','Chippyash\Type\Number\\', 'Type'];
-        $replace = ['','','',''];
+        $search = [
+            'Chippyash\Type\Number\Rational\\',
+            'Chippyash\Type\Number\Complex\\',
+            'Chippyash\Type\Number\\',
+            'Type'
+        ];
+        $replace = ['', '', '', ''];
         $tA = strtolower(str_replace($search, $replace, get_class($a)));
-        $tB =  strtolower(str_replace($search, $replace, get_class($b)));
+        $tB = strtolower(str_replace($search, $replace, get_class($b)));
 
         return str_replace('gmp', '', "{$tA}:{$tB}");
     }

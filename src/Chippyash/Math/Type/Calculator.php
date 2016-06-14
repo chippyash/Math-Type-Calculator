@@ -1,16 +1,16 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface;
 use Chippyash\Math\Type\Calculator\CalculatorEngineInterface;
 use Chippyash\Math\Type\Traits\ArbitrateTwoTypes;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
 use Chippyash\Type\RequiredType;
 
 /**
@@ -58,7 +58,7 @@ class Calculator
      * Constructor
      * Set up the calculation engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|CalculatorEngineInterface $calcEngine Calculation engine to use - default == Auto
+     * @param  int|CalculatorEngineInterface $calcEngine Calculation engine to use - default == Auto
      * @throws \InvalidArgumentException
      */
     public function __construct($calcEngine = null)
@@ -81,10 +81,8 @@ class Calculator
     /**
      * Return addition of two types: a + b
      *
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $b
-     *
-     *
+     * @param int|float|NumericTypeInterface $a
+     * @param int|float|NumericTypeInterface $b
      *
      * @return NumericTypeInterface
      */
@@ -118,8 +116,8 @@ class Calculator
     /**
      * Return subtraction of two types: a - b
      *
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $b
+     * @param  int|float|NumericTypeInterface $a
+     * @param  int|float|NumericTypeInterface $b
      * @return NumericTypeInterface
      */
     public function sub($a, $b)
@@ -151,8 +149,8 @@ class Calculator
     /**
      * Return multiplication of two types: a * b
      *
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $b
+     * @param  int|float|NumericTypeInterface $a
+     * @param  int|float|NumericTypeInterface $b
      * @return NumericTypeInterface
      */
     public function mul($a, $b)
@@ -184,8 +182,8 @@ class Calculator
     /**
      * Return division of two types: a / b
      *
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $b
+     * @param  int|float|NumericTypeInterface $a
+     * @param  int|float|NumericTypeInterface $b
      * @return NumericTypeInterface
      */
     public function div($a, $b)
@@ -215,7 +213,7 @@ class Calculator
     /**
      * Return reciprocal of the type: 1/a
      *
-     * @param numeric|NumericTypeInterface $a
+     * @param  int|float|NumericTypeInterface $a
      * @return NumericTypeInterface
      */
     public function reciprocal($a)
@@ -232,15 +230,15 @@ class Calculator
                     return $this->calcEngine->complexReciprocal($a);
                 }
                 return $this->calcEngine->complexReciprocal($a->asGMPComplex());
-            default :
+            default:
                 return $this->calcEngine->floatReciprocal($a);
         }
     }
 
     /**
-     * 
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $exp
+     *
+     * @param int|float|NumericTypeInterface $a
+     * @param int|float|NumericTypeInterface $exp
      * @return NumericTypeInterface
      */
     public function pow($a, $exp)
@@ -261,14 +259,14 @@ class Calculator
             case 'whole':
             case 'natural':
                 return $this->calcEngine->intPow($a, $exp);
-            default :
+            default:
                 return $this->calcEngine->floatPow($a, $exp);
         }
     }
-    
+
     /**
-     * 
-     * @param numeric|NumericTypeInterface $a
+     *
+     * @param int|float|NumericTypeInterface $a
      * @return NumericTypeInterface
      */
     public function sqrt($a)
@@ -289,17 +287,17 @@ class Calculator
             case 'whole':
             case 'natural':
                 return $this->calcEngine->intSqrt($a);
-            default :
+            default:
                 return $this->calcEngine->floatSqrt($a);
         }
     }
-    
+
     /**
      * Return the natural logarithm (base e) of the number
-     * 
-     * @param numeric|NumericTypeInterface $a
-     * 
-     * @return NTI
+     *
+     * @param int|float|NumericTypeInterface $a
+     *
+     * @return NumericTypeInterface
      */
     public function natLog($a)
     {
@@ -319,16 +317,16 @@ class Calculator
             case 'whole':
             case 'natural':
                 return $this->calcEngine->intNatLog($a);
-            default :
+            default:
                 return $this->calcEngine->intNatLog($a);
         }
     }
-    
+
     /**
      * In place incrementor
-     * 
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $inc Default == 1
+     *
+     * @param int|float|NumericTypeInterface $a
+     * @param int|float|NumericTypeInterface $inc Default == 1
      */
     public function inc($a, $inc = 1)
     {
@@ -344,7 +342,7 @@ class Calculator
             case 'natural':
                 $this->calcEngine->incInt($a, $inc);
                 break;
-            default :
+            default:
                 $this->calcEngine->incFloat($a, $inc);
         }
     }
@@ -352,8 +350,8 @@ class Calculator
     /**
      * In place decrementor
      *
-     * @param numeric|NumericTypeInterface $a
-     * @param numeric|NumericTypeInterface $dec Default == 1
+     * @param int|float|NumericTypeInterface $a
+     * @param int|float|NumericTypeInterface $dec Default == 1
      */
     public function dec($a, $dec = 1)
     {
@@ -369,11 +367,16 @@ class Calculator
             case 'natural':
                 $this->calcEngine->decInt($a, $dec);
                 break;
-            default :
+            default:
                 $this->calcEngine->decFloat($a, $dec);
         }
     }
-    
+
+    /**
+     * @param int|float|NumericTypeInterface $num number
+     *
+     * @return \Chippyash\Type\Number\FloatType|\Chippyash\Type\Number\IntType
+     */
     protected function convert($num)
     {
         if ($num instanceof NumericTypeInterface) {
@@ -397,14 +400,16 @@ class Calculator
         return RequiredType::getInstance()->get();
     }
 
+    /**
+     * @return CalculatorEngineInterface
+     */
     protected function getDefaultEngine()
     {
-        if ($this->getRequiredType() == RequiredType::TYPE_NATIVE) {
-            $class = $this->supportedEngines[self::TYPE_NATIVE];
-        } else {
-            $class = $this->supportedEngines[self::TYPE_GMP];
-        }
-
+        $class = (
+        $this->getRequiredType() == RequiredType::TYPE_NATIVE
+            ? $this->supportedEngines[self::TYPE_NATIVE]
+            : $this->supportedEngines[self::TYPE_GMP]
+        );
         $className = self::NS . $class;
 
         return new $className();

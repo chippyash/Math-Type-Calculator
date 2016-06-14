@@ -1,31 +1,31 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Calculator;
 
-use Chippyash\Type\TypeFactory;
+use Chippyash\Math\Type\Comparator;
+use Chippyash\Math\Type\Traits\CheckGmpComplexTypes;
+use Chippyash\Math\Type\Traits\CheckGmpFloatTypes;
+use Chippyash\Math\Type\Traits\CheckGmpIntTypes;
+use Chippyash\Math\Type\Traits\CheckGmpRationalTypes;
+use Chippyash\Math\Type\Traits\GmpConvertNumeric;
+use Chippyash\Type\Interfaces\ComplexTypeInterface as CTI;
 use Chippyash\Type\Interfaces\NumericTypeInterface as NTI;
 use Chippyash\Type\Interfaces\RationalTypeInterface as RTI;
-use Chippyash\Type\Interfaces\ComplexTypeInterface as CTI;
-use Chippyash\Type\Number\IntType;
+use Chippyash\Type\Number\Complex\AbstractComplexType;
+use Chippyash\Type\Number\Complex\ComplexTypeFactory;
+use Chippyash\Type\Number\Complex\GMPComplexType;
 use Chippyash\Type\Number\FloatType;
 use Chippyash\Type\Number\GMPIntType;
+use Chippyash\Type\Number\IntType;
 use Chippyash\Type\Number\Rational\GMPRationalType;
 use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\AbstractComplexType;
-use Chippyash\Type\Number\Complex\GMPComplexType;
-use Chippyash\Type\Number\Complex\ComplexTypeFactory;
-use Chippyash\Math\Type\Traits\GmpConvertNumeric;
-use Chippyash\Math\Type\Traits\CheckGmpRationalTypes;
-use Chippyash\Math\Type\Traits\CheckGmpIntTypes;
-use Chippyash\Math\Type\Traits\CheckGmpFloatTypes;
-use Chippyash\Math\Type\Traits\CheckGmpComplexTypes;
-use Chippyash\Math\Type\Comparator;
+use Chippyash\Type\TypeFactory;
 
 /**
  * GMP calculation
@@ -43,12 +43,13 @@ class GmpEngine implements CalculatorEngineInterface
      * @see natLog()
      */
     const NATLOG_EPSILON = 1e-20;
-    
+
     /**
      * Integer type addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GMPIntType
      */
     public function intAdd(NTI $a, NTI $b)
@@ -61,8 +62,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Integer type subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GMPIntType
      */
     public function intSub(NTI $a, NTI $b)
@@ -75,8 +77,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Integer type multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GMPIntType
      */
     public function intMul(NTI $a, NTI $b)
@@ -91,23 +94,27 @@ class GmpEngine implements CalculatorEngineInterface
      * Integer division is simply a case of creating a rational
      * number i.e. a/b
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\Rational\RationalType
      */
     public function intDiv(NTI $a, NTI $b)
     {
         list($a, $b) = $this->checkIntTypes($a, $b);
+
         return RationalTypeFactory::create($a, $b);
     }
-    
+
     /**
      * Integer Pow - raise number to the exponent
      * Will return an IntType, RationalType or ComplexType
-     * 
+     *
      * @todo Implement taylor series POW method
-     * @param IntType $a
-     * @param NTI $exp Exponent
+     *
+     * @param IntType $a base
+     * @param NTI $exp exponent
+     *
      * @return NTI
      */
     public function intPow(IntType $a, NTI $exp)
@@ -115,25 +122,26 @@ class GmpEngine implements CalculatorEngineInterface
         if ($exp instanceof GMPRationalType) {
             return $this->rationalPow(RationalTypeFactory::create(clone $a), $exp);
         }
-        
+
         if ($exp instanceof GMPComplexType) {
             return $this->intComplexPow($a, $exp);
         }
-        
+
         //int and float types
         $p = pow($a(), $exp());
         if (($p - intval($p)) === 0) {
             return new GMPIntType($p);
         }
-        
+
         return RationalTypeFactory::fromFloat($p);
     }
-    
+
     /**
      * Integer sqrt
      * Return GmpIntType for perfect squares, else GMPRationalType
-     * 
-     * @param IntType $a
+     *
+     * @param IntType $a operand
+     *
      * @return GmpIntType|GMPRationalType result
      */
     public function intSqrt(IntType $a)
@@ -141,70 +149,76 @@ class GmpEngine implements CalculatorEngineInterface
         $res = $this->rationalSqrt(RationalTypeFactory::create($a));
         if ($res->isInteger()) {
             return $res->numerator();
-        } else {
-            return $res;
         }
+
+        return $res;
     }
-    
+
     /**
      * Float addition
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatAdd(NTI $a, NTI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        
+
         return $this->rationalAdd($a, $b);
     }
 
     /**
      * Float subtraction
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatSub(NTI $a, NTI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        
+
         return $this->rationalSub($a, $b);
     }
 
     /**
      * Float multiplication
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatMul(NTI $a, NTI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        
+
         return $this->rationalMul($a, $b);
     }
 
     /**
      * Float division
      *
-     * @param NTI $a
-     * @param NTI $b
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatDiv(NTI $a, NTI $b)
     {
         list($a, $b) = $this->checkFloatTypes($a, $b);
-        
+
         return $this->rationalDiv($a, $b);
     }
 
     /**
      * Float reciprocal i.e. 1/a
-     * @param NTI $a
+     *
+     * @param NTI $a operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatReciprocal(NTI $a)
@@ -215,20 +229,22 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Float Pow - raise number to the exponent
      * Will return a float type
-     * 
-     * @param FloatType $a
+     *
+     * @param FloatType $a base
      * @param NTI $exp Exponent
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatPow(FloatType $a, NTI $exp)
     {
         return $this->rationalPow($this->checkFloatType($a), $exp);
     }
-    
+
     /**
      * Float sqrt
-     * 
-     * @param FloatType $a
+     *
+     * @param FloatType $a operand
+     *
      * @return \Chippyash\Type\Number\Rational\GMPRationalType
      */
     public function floatSqrt(FloatType $a)
@@ -240,9 +256,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Whole number addition
      * Proxy to intAdd
      * NB you lose the protection of whole types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function wholeAdd(NTI $a, NTI $b)
@@ -254,9 +271,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Whole number subtraction
      * Proxy to intSub
      * NB you lose the protection of whole types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function wholeSub(NTI $a, NTI $b)
@@ -268,9 +286,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Whole number multiplication
      * Proxy to intMul
      * NB you lose the protection of whole types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function wholeMul(NTI $a, NTI $b)
@@ -282,9 +301,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Natural number addition
      * Proxy to IntAdd
      * NB you lose the protection of natural types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function naturalAdd(NTI $a, NTI $b)
@@ -296,9 +316,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Natural number subtraction
      * Proxy to intSub
      * NB you lose the protection of natural types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function naturalSub(NTI $a, NTI $b)
@@ -310,9 +331,10 @@ class GmpEngine implements CalculatorEngineInterface
      * Natural number multiplication
      * Proxy to intMul
      * NB you lose the protection of natural types
-     * 
-     * @param NTI $a
-     * @param NTI $b
+     *
+     * @param NTI $a first operand
+     * @param NTI $b second operand
+     *
      * @return \Chippyash\Type\Number\GmpIntType
      */
     public function naturalMul(NTI $a, NTI $b)
@@ -322,9 +344,10 @@ class GmpEngine implements CalculatorEngineInterface
 
     /**
      * Rational number addition
-     * 
-     * @param RTI $a
-     * @param RTI $b
+     *
+     * @param RTI $a first operand
+     * @param RTI $b second operand
+     *
      * @return GMPRationalType
      */
     public function rationalAdd(RTI $a, RTI $b)
@@ -333,27 +356,27 @@ class GmpEngine implements CalculatorEngineInterface
 
         $d = RationalTypeFactory::create(
             $this->lcm(
-                $a->denominator()->get(), 
+                $a->denominator()->get(),
                 $b->denominator()->get()
             )
         )->asGMPRational();
-        
+
         $nn = $this->rationalDiv(
             $this->rationalMul(
-                $a->numerator()->asGMPRational(), 
+                $a->numerator()->asGMPRational(),
                 $d
-            ), 
+            ),
             $a->denominator()->asGMPRational()
         )->get();
-        
+
         $nd = $this->rationalDiv(
             $this->rationalMul(
-                $b->numerator()->asGMPRational(), 
+                $b->numerator()->asGMPRational(),
                 $d
-            ), 
+            ),
             $b->denominator()->asGMPRational()
         )->get();
-        
+
         $n = $this->intAdd(TypeFactory::createInt($nn), TypeFactory::createInt($nd));
 
         return RationalTypeFactory::create($n, $d->numerator());
@@ -362,12 +385,13 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Rational number subtraction
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param RTI $a first operand
+     * @param RTI $b second operand
+     *
      * @return GMPRationalType
      */
     public function rationalSub(RTI $a, RTI $b)
-    { 
+    {
         list($a, $b) = $this->checkRationalTypes($a, $b);
         $d = RationalTypeFactory::create(
             $this->lcm(
@@ -394,18 +418,17 @@ class GmpEngine implements CalculatorEngineInterface
         )->get();
 
         $n = $this->intSub(TypeFactory::createInt($nn), TypeFactory::createInt($nd));
-        $aa = (string) $a; $bb = (string) $b; $dd = (string) $d;
-        $nnn = (string) $nn; $nnd = (string) $nd;
         $ret = RationalTypeFactory::create($n, $d->numerator());
-        
+
         return $ret;
     }
 
     /**
      * Rational number multiplication
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param RTI $a first operand
+     * @param RTI $b second operand
+     *
      * @return GMPRationalType
      */
     public function rationalMul(RTI $a, RTI $b)
@@ -420,8 +443,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Rational number division
      *
-     * @param RTI $a
-     * @param RTI $b
+     * @param RTI $a first operand
+     * @param RTI $b second operand
+     *
      * @return GMPRationalType
      */
     public function rationalDiv(RTI $a, RTI $b)
@@ -436,7 +460,8 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Rational number reciprocal: 1/r
      *
-     * @param RTI $a
+     * @param RTI $a operand
+     *
      * @return GMPRationalType
      */
     public function rationalReciprocal(RTI $a)
@@ -444,41 +469,41 @@ class GmpEngine implements CalculatorEngineInterface
         $a = $this->checkRationalType($a);
         return RationalTypeFactory::create($a->denominator(), $a->numerator());
     }
-    
+
     /**
      * Rational Pow - raise number to the exponent
      * Will return a GMPRationalType
-     * 
-     * @param RTI $a
-     * @param NTI $exp Exponent
+     *
+     * @param RTI $a base
+     * @param NTI $exp exponent
+     *
      * @return GMPRationalType
      */
     public function rationalPow(RTI $a, NTI $exp)
     {
         $a = $this->checkRationalType($a);
-        if ($exp instanceof \Chippyash\Type\Number\Complex\GMPComplexType) {
+        if ($exp instanceof GMPComplexType) {
             $r = $this->floatComplexPow($a(), $exp);
             if ($r instanceof FloatType) {
                 return RationalTypeFactory::fromFloat($r());
-            } else {
-                return $r;
             }
-        } else {
-            $exp2 = $exp->get();
+            return $r;
         }
-        
+
+        $exp2 = $exp->get();
         $numF = pow($a->numerator()->get(), $exp2);
         $denF = pow($a->denominator()->get(), $exp2);
         $numR = RationalTypeFactory::fromFloat($numF);
         $denR = RationalTypeFactory::fromFloat($denF);
-        return $this->rationalDiv($numR, $denR);
         
+        return $this->rationalDiv($numR, $denR);
     }
-    
+
     /**
      * Rational sqrt
-     * 
-     * @param RTI $a
+     *
+     * @param RTI $a operand
+     *
      * @return GMPRationalType result
      */
     public function rationalSqrt(RTI $a)
@@ -486,13 +511,14 @@ class GmpEngine implements CalculatorEngineInterface
         $exp = RationalTypeFactory::create(1, 2);
         return $this->rationalPow($a, $exp);
     }
-    
+
 
     /**
      * Complex number addition
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param CTI $a first operand
+     * @param CTI $b second operand
+     *
      * @return GMPComplexType
      */
     public function complexAdd(CTI $a, CTI $b)
@@ -505,8 +531,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number subtraction
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param CTI $a first operand
+     * @param CTI $b second operand
+     *
      * @return GMPComplexType
      */
     public function complexSub(CTI $a, CTI $b)
@@ -519,8 +546,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number multiplication
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param CTI $a first operand
+     * @param CTI $b second operand
+     *
      * @return GMPComplexType
      */
     public function complexMul(CTI $a, CTI $b)
@@ -533,9 +561,11 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number division
      *
-     * @param CTI $a
-     * @param CTI $b
+     * @param CTI $a first operand
+     * @param CTI $b second operand
+     *
      * @return GMPComplexType
+     *
      * @throws \BadMethodCallException
      */
     public function complexDiv(CTI $a, CTI $b)
@@ -546,9 +576,21 @@ class GmpEngine implements CalculatorEngineInterface
         //div = br^2 + bi^2
         $div = $this->rationalAdd($this->rationalMul($b->r(), $b->r()), $this->rationalMul($b->i(), $b->i()));
         //r = ((ar * br) + (ai * bi))/div
-        $r = $this->rationalDiv($this->rationalAdd($this->rationalMul($a->r(), $b->r()), $this->rationalMul($a->i(), $b->i())), $div);
+        $r = $this->rationalDiv(
+            $this->rationalAdd(
+                $this->rationalMul($a->r(), $b->r()),
+                $this->rationalMul($a->i(), $b->i())
+            ),
+            $div
+        );
         //i = ((ai * br) - (ar * bi)) / div
-        $i = $this->rationalDiv($this->rationalSub($this->rationalMul($a->i(), $b->r()), $this->rationalMul($a->r(), $b->i())), $div);
+        $i = $this->rationalDiv(
+            $this->rationalSub(
+                $this->rationalMul($a->i(), $b->r()),
+                $this->rationalMul($a->r(), $b->i())
+            ),
+            $div
+        );
 
         return ComplexTypeFactory::create($r, $i);
     }
@@ -556,8 +598,10 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Complex number reciprocal: 1/a+bi
      *
-     * @param CTI $a
+     * @param CTI $a operand
+     *
      * @return GMPComplexType
+     *
      * @throws \BadMethodCallException
      */
     public function complexReciprocal(CTI $a)
@@ -579,12 +623,12 @@ class GmpEngine implements CalculatorEngineInterface
      * Complex Pow - raise number to the exponent
      * Will return a ComplexType
      * Exponent must be non complex
-     * 
-     * @param CTI $a
-     * @param NTI $exp Exponent
-     * 
+     *
+     * @param CTI $a base
+     * @param NTI $exp exponent
+     *
      * @return GMPComplexType
-     * 
+     *
      * @throws \InvalidArgumentException If exponent is complex
      */
     public function complexPow(CTI $a, NTI $exp)
@@ -594,13 +638,11 @@ class GmpEngine implements CalculatorEngineInterface
             $exp = $this->checkGmpComplexType($exp);
             $comp = new Comparator();
             $zero = new GMPIntType(0);
-            if ($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero)) {
-                $real = 0;
-                $imaginary = 0;
-            } else {
+            $real = 0;
+            $imaginary = 0;
+            if (!($comp->eq($a->r(), $zero) && $comp->eq($a->i(), $zero))) {
                 $er = $exp->r()->get();
                 $ei = $exp->i()->get();
-                
                 $logr = log($a->modulus()->get());
                 $theta = $a->theta()->get();
                 $rho = exp($logr * $er - $ei * $theta);
@@ -608,39 +650,46 @@ class GmpEngine implements CalculatorEngineInterface
                 $real = $rho * cos($beta);
                 $imaginary = $rho * sin($beta);
             }
-        } else {
-            //non complex
-            //de moivres theorum
-            //z^n = r^n(cos(n.theta) + sin(n.theta)i)
-            //where z is a complex number, r is the radius
-            $n = $exp();
-            $nTheta = $n * $a->theta()->get();
-            $pow = pow($a->modulus()->get(), $n);
-            $real = cos($nTheta) * $pow;
-            $imaginary = sin($nTheta) * $pow;
-        }
-        
-        return ComplexTypeFactory::create(
+            
+            return ComplexTypeFactory::create(
                 RationalTypeFactory::fromFloat($real),
                 RationalTypeFactory::fromFloat($imaginary)
-                );        
+            );
+        }
+        
+        //non complex
+        //de moivres theorum
+        //z^n = r^n(cos(n.theta) + sin(n.theta)i)
+        //where z is a complex number, r is the radius
+        $n = $exp();
+        $nTheta = $n * $a->theta()->get();
+        $pow = pow($a->modulus()->get(), $n);
+        $real = cos($nTheta) * $pow;
+        $imaginary = sin($nTheta) * $pow;
+
+        return ComplexTypeFactory::create(
+            RationalTypeFactory::fromFloat($real),
+            RationalTypeFactory::fromFloat($imaginary)
+        );
     }
-    
+
     /**
      * Complex sqrt
-     * 
-     * @param CTI $a
+     *
+     * @param CTI $a operand
+     *
      * @return GMPComplexType
      */
     public function complexSqrt(CTI $a)
     {
         return $this->complexPow($a, RationalTypeFactory::create(1, 2));
     }
-    
-    
+
+
     /**
-     * @param NTI $a
-     * @param numeric|NTI|int $inc
+     * @param NTI $a operand
+     * @param int|float|NTI|int $inc increment
+     *
      * @return mixed
      */
     public function incInt(NTI $a, $inc = 1)
@@ -650,9 +699,11 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param NTI $a
-     * @param numeric|NTI|int $inc
+     * @param NTI $a operand
+     * @param int|float|NTI|int $inc increment
+     *
      * @return mixed
+     *
      * @throws \BadMethodCallException
      */
     public function incFloat(NTI $a, $inc = 1)
@@ -661,8 +712,9 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param RTI $a
-     * @param numeric|NTI|int $inc
+     * @param RTI $a operand
+     * @param int|float|NTI|int $inc increment
+     *
      * @return mixed
      */
     public function incRational(RTI $a, $inc = 1)
@@ -671,8 +723,9 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param CTI $a
-     * @param numeric|NTI|int $inc
+     * @param CTI $a operand
+     * @param int|float|NTI|int $inc increment
+     *
      * @return mixed
      */
     public function incComplex(CTI $a, $inc = 1)
@@ -681,8 +734,9 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param NTI $a
-     * @param numeric|NTI|int $dec
+     * @param NTI $a operand
+     * @param int|float|NTI|int $dec decrement
+     *
      * @return mixed
      */
     public function decInt(NTI $a, $dec = 1)
@@ -692,9 +746,11 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param NTI $a
-     * @param numeric|NTI|int $dec
+     * @param NTI $a operand
+     * @param int|float|NTI|int $dec decrement
+     *
      * @return mixed
+     *
      * @throws \BadMethodCallException
      */
     public function decFloat(NTI $a, $dec = 1)
@@ -703,8 +759,9 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param RTI $a
-     * @param numeric|NTI|int $dec
+     * @param RTI $a operand
+     * @param int|float|NTI|int $dec decrement
+     *
      * @return mixed
      */
     public function decRational(RTI $a, $dec = 1)
@@ -713,8 +770,9 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param CTI $a
-     * @param numeric|NTI|int $dec
+     * @param CTI $a operand
+     * @param int|float|NTI|int $dec decrement
+     *
      * @return mixed
      */
     public function decComplex(CTI $a, $dec = 1)
@@ -723,7 +781,8 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param NTI $a
+     * @param NTI $a operand
+     *
      * @return RTI
      */
     public function intNatLog(NTI $a)
@@ -732,8 +791,10 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param NTI $a
+     * @param NTI $a operand
+     *
      * @return mixed
+     *
      * @throws \BadMethodCallException
      */
     public function floatNatLog(NTI $a)
@@ -742,7 +803,8 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param RTI $a
+     * @param RTI $a operand
+     *
      * @return RTI
      */
     public function rationalNatLog(RTI $a)
@@ -751,21 +813,17 @@ class GmpEngine implements CalculatorEngineInterface
     }
 
     /**
-     * @param CTI $a
+     * @param CTI $a operand
+     *
      * @return RTI
      */
     public function complexNatLog(CTI $a)
     {
+        $y = $a;
         if ($a instanceof GMPComplexType) {
-            if($a->isReal()) {
-                $y = $a->r();
-            } else {
-                $y = $a->modulus();
-            }
-        } else {
-            $y = $a;
+            $y = ($a->isReal() ? $a->r() : $a->modulus());
         }
-        
+
         return $this->natLog2($y);
     }
 
@@ -774,7 +832,7 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * This function will use a Taylor Series algorithm to compute the log
      *
-     * @param GMPRationalType $y
+     * @param GMPRationalType $y operand
      *
      * @return GMPRationalType
      */
@@ -784,17 +842,17 @@ class GmpEngine implements CalculatorEngineInterface
         $comp = new Comparator();
         $one = RationalTypeFactory::create(1);
         $two = RationalTypeFactory::create(2);
-        
+
         //x = (y-1)/(y+1)
         $x = $this->rationalDiv($this->rationalSub($y, $one), $this->rationalAdd($y, $one));
         //z = x^2
         $z = $this->rationalMul($x, $x);
         //initial log value
         $L = RationalTypeFactory::create(0);
-        
+
 
         //run the Taylor Series until we meet the epsilon limiter
-        for ($k=$one; $comp->gt($x, $epsilon); $this->incRational($k, $two)) {
+        for ($k = $one; $comp->gt($x, $epsilon); $this->incRational($k, $two)) {
             $tx = $x->get();
 
             //$L += 2 * $x / $k;
@@ -819,7 +877,7 @@ class GmpEngine implements CalculatorEngineInterface
      *
      * @link https://en.wikipedia.org/wiki/Natural_logarithm
      *
-     * @param GMPRationalType $x
+     * @param GMPRationalType $x operand
      *
      * @return GMPRationalType
      */
@@ -833,7 +891,7 @@ class GmpEngine implements CalculatorEngineInterface
 
         //M
         $s4 = $this->rationalDiv(RationalTypeFactory::create(4), $s);
-        $precision = RationalTypeFactory::create(1,1000000000000000000);
+        $precision = RationalTypeFactory::create(1, 1000000000000000000);
         $M = $this->agm(RationalTypeFactory::create(1), $s4, $precision);
 
         //pi
@@ -845,7 +903,7 @@ class GmpEngine implements CalculatorEngineInterface
             $this->rationalDiv($pi, $this->rationalMul($two, $M)),
             $this->rationalMul($m, $ln2)
         );
-        echo  sprintf("ln(%s) = %s\n\n", (string) $x, (string) $ret);
+        echo sprintf("ln(%s) = %s\n\n", (string)$x, (string)$ret);
         return $ret;
     }
 
@@ -857,27 +915,28 @@ class GmpEngine implements CalculatorEngineInterface
      * a1 = (a+g)/2
      * g1 = sqrt(ag)
      * until precision
-     * 
-     * @param GMPRationalType $a
-     * @param GMPRationalType $g
-     * @param GMPRationalType $precision
-     * 
+     *
+     * @param GMPRationalType $a first operand
+     * @param GMPRationalType $g second operand
+     * @param GMPRationalType $precision precision required
+     *
      * @return GMPRationalType
      */
     private function agm(GMPRationalType $a, GMPRationalType $g, GMPRationalType $precision)
     {
-        echo sprintf("initial a: %s, g; %s", (string) $a, (string) $g) . PHP_EOL;
+        echo sprintf("initial a: %s, g; %s", (string)$a, (string)$g) . PHP_EOL;
         $comp = new Comparator();
         $two = RationalTypeFactory::create(2);
         //have we reached precision?
         //diff(a,b) <= precision
         do {
-            echo sprintf("diff: %s", (string) $this->rationalSub($a, $g)->abs()) . PHP_EOL;
+            echo sprintf("diff: %s", (string)$this->rationalSub($a, $g)->abs()) . PHP_EOL;
             $ai = $this->rationalDiv($this->rationalAdd($a, $g), $two);
             $gi = $this->rationalSqrt($this->rationalMul($a, $g));
-            echo sprintf("a: %s, g: %s, p: %s", (string) $ai, (string) $gi, (string) $precision) . PHP_EOL;
+            echo sprintf("a: %s, g: %s, p: %s", (string)$ai, (string)$gi, (string)$precision) . PHP_EOL;
             unset($a, $g);
-            $a = clone $ai; $g = clone $gi;
+            $a = clone $ai;
+            $g = clone $gi;
             unset ($ai, $gi);
             echo sprintf("aeq = %s", $comp->aeq($a, $g, $precision) ? 'true' : 'false') . PHP_EOL;
         } while (false === $comp->aeq($a, $g, $precision));
@@ -887,8 +946,14 @@ class GmpEngine implements CalculatorEngineInterface
         $ret = $this->rationalDiv($this->rationalAdd($a, $g), $two);
         return $ret;
     }
-    
-    private function intComplexPow($a, ComplexType $exp)
+
+    /**
+     * @param int|float|NTI $a base
+     * @param CTI $exp
+     *
+     * @return CTI|IntType|GMPRationalType
+     */
+    private function intComplexPow($a, CTI $exp)
     {
         if ($exp->isZero()) {
             return new IntType(1);
@@ -896,12 +961,19 @@ class GmpEngine implements CalculatorEngineInterface
         return $this->complexExponent($a, $exp);
     }
 
-    private function complexExponent($base, ComplexType $exp)
+    /**
+     * @param int|float|NTI $base base
+     * @param CTI $exp exponent
+     *
+     * @return CTI|GMPRationalType
+     */
+    private function complexExponent($base, CTI $exp)
     {
         if ($exp->isReal()) {
             return $this->rationalPow(
                 RationalTypeFactory::fromFloat($base),
-                $exp->r());
+                $exp->r()
+            );
         }
 
         //do the imaginary part
@@ -913,16 +985,17 @@ class GmpEngine implements CalculatorEngineInterface
 
         //no real part
         if ($exp->r()->get() == 0) {
-            return new ComplexType(
+            return new GMPComplexType(
                 RationalTypeFactory::fromFloat($r),
-                RationalTypeFactory::fromFloat($i));
+                RationalTypeFactory::fromFloat($i)
+            );
         }
         //real and imaginary part
         //n^a+bi = n^a(cos(b.lg(n)) + i.sin(b.lg(n)))
         $na = pow($base, $exp->r()->get());
         $rr = $na * $r;
         $ii = $na * $i;
-        return new ComplexType(
+        return new GMPComplexType(
             RationalTypeFactory::fromFloat($rr),
             RationalTypeFactory::fromFloat($ii)
         );
@@ -931,8 +1004,9 @@ class GmpEngine implements CalculatorEngineInterface
     /**
      * Return Greatest Common Denominator of two numbers
      *
-     * @param int $a
-     * @param int $b
+     * @param int $a first operand
+     * @param int $b second operand
+     *
      * @return int
      */
     private function gcd($a, $b)
@@ -942,8 +1016,10 @@ class GmpEngine implements CalculatorEngineInterface
 
     /**
      * Return Least Common Multiple of two numbers
-     * @param int $a
-     * @param int $b
+     *
+     * @param int $a first operand
+     * @param int $b second operand
+     *
      * @return int
      */
     private function lcm($a, $b)

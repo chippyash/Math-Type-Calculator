@@ -1,23 +1,22 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Comparator;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
-use Chippyash\Type\Number\Rational\RationalType;
-use Chippyash\Type\Number\Rational\RationalTypeFactory;
-use Chippyash\Type\Number\Complex\ComplexType;
 use Chippyash\Math\Type\Calculator\NativeEngine as Calc;
 use Chippyash\Math\Type\Traits\CheckRationalTypes;
+use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
+use Chippyash\Type\Number\Complex\ComplexType;
+use Chippyash\Type\Number\Rational\RationalType;
+use Chippyash\Type\Number\Rational\RationalTypeFactory;
 
 /**
  * PHP Native maths comparator
- *
  */
 class NativeEngine extends AbstractComparatorEngine
 {
@@ -67,9 +66,9 @@ class NativeEngine extends AbstractComparatorEngine
     /**
      * Compare int and float types
      *
-     * @param NI $a
-     * @param NI $b
-     * @param NI $tolerance
+     * @param  NI $a
+     * @param  NI $b
+     * @param  NI $tolerance
      * @return int
      */
     protected function intFloatCompare(NI $a, NI $b, NI $tolerance = null)
@@ -84,9 +83,9 @@ class NativeEngine extends AbstractComparatorEngine
     /**
      * Compare two rationals
      *
-     * @param RationalType $a
-     * @param RationalType $b
-     * @param NI $tolerance
+     * @param  RationalType $a
+     * @param  RationalType $b
+     * @param  NI $tolerance
      * @return int
      */
     protected function rationalCompare(RationalType $a, RationalType $b, NI $tolerance = null)

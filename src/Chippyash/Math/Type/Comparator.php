@@ -1,23 +1,20 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type;
 
-use Chippyash\Type\Interfaces\NumericTypeInterface;
-use Chippyash\Math\Type\Comparator\Native;
 use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
-use Chippyash\Math\Type\Comparator\AbstractComparatorEngine;
+use Chippyash\Type\Interfaces\NumericTypeInterface;
 use Chippyash\Type\RequiredType;
-
 
 /**
  * Generic comparator for strong type support
- * 
+ *
  * NB - this uses the Calculator to determine correct base types
  */
 class Comparator implements ComparatorEngineInterface
@@ -46,7 +43,7 @@ class Comparator implements ComparatorEngineInterface
      * Constructor
      * Set up the comparator engine. In due course this will support gmp, bcmath etc
      *
-     * @param int|ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
+     * @param  int|ComparatorEngineInterface $compEngine Comparator engine to use - default == Native
      * @throws \InvalidArgumentException
      */
     public function __construct($compEngine = null)
@@ -59,7 +56,7 @@ class Comparator implements ComparatorEngineInterface
             $this->compEngine = new $className();
             return;
         } elseif ($compEngine instanceof ComparatorEngineInterface) {
-            $this->calcEngine = $compEngine;
+            $this->compEngine = $compEngine;
             return;
         }
 
@@ -112,17 +109,19 @@ class Comparator implements ComparatorEngineInterface
         return RequiredType::getInstance()->get();
     }
 
+    /**
+     * @return ComparatorEngineInterface
+     */
     protected function getDefaultEngine()
     {
-        if ($this->getRequiredType() == RequiredType::TYPE_NATIVE) {
-            $class = $this->supportedEngines[self::TYPE_NATIVE];
-        } else {
-            $class = $this->supportedEngines[self::TYPE_GMP];
-        }
+        $class = (
+        $this->getRequiredType() == RequiredType::TYPE_NATIVE
+            ? $this->supportedEngines[self::TYPE_NATIVE]
+            : $this->supportedEngines[self::TYPE_GMP]
+        );
 
         $className = self::NS . $class;
 
         return new $className();
     }
-    
 }

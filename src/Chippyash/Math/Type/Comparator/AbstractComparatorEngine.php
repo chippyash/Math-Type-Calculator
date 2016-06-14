@@ -1,14 +1,13 @@
 <?php
-/*
+/**
  * Arithmetic calculation support for Chippyash Strong Types
  *
- * @author Ashley Kitson <akitson@zf4.biz>
+ * @author    Ashley Kitson <akitson@zf4.biz>
  * @copyright Ashley Kitson, UK, 2014
- * @licence GPL V3 or later : http://www.gnu.org/licenses/gpl.html
+ * @licence   GPL V3 or later : http://www.gnu.org/licenses/gpl.html
  */
 namespace Chippyash\Math\Type\Comparator;
 
-use Chippyash\Math\Type\Comparator\ComparatorEngineInterface;
 use Chippyash\Math\Type\Traits\ArbitrateTwoTypes;
 use Chippyash\Type\Interfaces\NumericTypeInterface as NI;
 
@@ -41,6 +40,22 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     }
 
     /**
+     * a == b = 0 (or a ≈ b)
+     * a < b = -1
+     * a > b = 1
+     *
+     * if tolerance is supplied, then equality is determined within a tolerance limit
+     * 0 <= abs(diff(a-b)) <= tolerance
+     *
+     * @param NI $a
+     * @param NI $b
+     * @param NI $tolerance default = exact
+     *
+     * @return int
+     */
+    abstract public function compare(NI $a, NI $b, NI $tolerance = null);
+
+    /**
      * a != b
      *
      * @param NI $a
@@ -58,11 +73,11 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
      * Approximately equal
      * a ≈ b
      * 0 <= abs(a-b) <= tolerance
-     * 
+     *
      * @param NI $a
      * @param NI $b
      * @param NI $tolerance
-     * 
+     *
      * @return boolean
      */
     public function aeq(NI $a, NI $b, NI $tolerance)
@@ -121,21 +136,4 @@ abstract class AbstractComparatorEngine implements ComparatorEngineInterface
     {
         return ($this->compare($a, $b) != -1);
     }
-
-    /**
-     * a == b = 0 (or a ≈ b)
-     * a < b = -1
-     * a > b = 1
-     *
-     * if tolerance is supplied, then equality is determined within a tolerance limit
-     * 0 <= abs(diff(a-b)) <= tolerance
-     *
-     * @param NI $a
-     * @param NI $b
-     * @param NI $tolerance default = exact
-     *
-     * @return int
-     */
-    abstract public function compare(NI $a, NI $b, NI $tolerance = null);
-
 }
