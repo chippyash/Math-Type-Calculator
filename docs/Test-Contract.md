@@ -1,15 +1,11 @@
 # Chippyash Strong Type Calculator
 
-## 
-      Chippyash\Test\Math\Type\Calculator\Native
-    
+## Chippyash\Test\Math\Type\Calculator\Native
 
 *  Int add with non int types computes result
 *  Int pow returns rational or int or complex types
 
-## 
-      Chippyash\Test\Math\Type\CalculatorAdd
-    
+## Chippyash\Test\Math\Type\CalculatorAdd
 
 *  Add two ints returns int type
 *  Add int and float returns float type
@@ -43,9 +39,7 @@
 *  Addition is associative
 *  Addition gives correct results
 
-## 
-      Chippyash\Test\Math\Type\CalculatorDiv
-    
+## Chippyash\Test\Math\Type\CalculatorDiv
 
 *  Div two ints returns rational type
 *  Div two int types returns rational type
@@ -77,9 +71,7 @@
 *  Division is not commutative
 *  Division is not associative
 
-## 
-      Chippyash\Test\Math\Type\CalculatorMul
-    
+## Chippyash\Test\Math\Type\CalculatorMul
 
 *  Mul two ints returns int type
 *  Mul int and float returns float type
@@ -114,9 +106,7 @@
 *  Multiplication is distributive over addition
 *  Multiplication is distributive over subtraction
 
-## 
-      Chippyash\Test\Math\Type\CalculatorPow
-    
+## Chippyash\Test\Math\Type\CalculatorPow
 
 *  Pow with integer base and integer exponent returns int type
 *  Pow with integer base and float exponent returns rational type
@@ -131,9 +121,7 @@
 *  Pow with zero complex base and complex exponent returns zero complex
 *  Can compute roots using pow
 
-## 
-      Chippyash\Test\Math\Type\CalculatorReciprocal
-    
+## Chippyash\Test\Math\Type\CalculatorReciprocal
 
 *  Reciprocal of number types returns float type
 *  Reciprocal of rational type returns rational type
@@ -141,9 +129,7 @@
 *  Reciprocal of zero complex throws exception
 *  Reciprocal of unknow type throws exception
 
-## 
-      Chippyash\Test\Math\Type\CalculatorSqrt
-    
+## Chippyash\Test\Math\Type\CalculatorSqrt
 
 *  Sqrt int type returns int type for perfect squares
 *  Sqrt int type returns rational type for imperfect squares
@@ -151,9 +137,7 @@
 *  Sqrt float type returns float type
 *  Sqrt complex type returns complex type
 
-## 
-      Chippyash\Test\Math\Type\CalculatorSub
-    
+## Chippyash\Test\Math\Type\CalculatorSub
 
 *  Sub two ints returns int type
 *  Sub int and float returns float type
@@ -186,18 +170,14 @@
 *  Subtraction is not commutative
 *  Subtraction is not associative
 
-## 
-      Chippyash\Test\Math\Type\Calculator
-    
+## Chippyash\Test\Math\Type\Calculator
 
 *  Construct with no parameter returns calculator
 *  Construct with valid engine type returns calculator
 *  Construct with calculator engine interface type returns calculator
 *  Construct with invalid calculator engine throws exception
 
-## 
-      Chippyash\Test\Math\Type\Comparator\AbstractComparatorEngine
-    
+## Chippyash\Test\Math\Type\Comparator\AbstractComparatorEngine
 
 *  Eq returns boolean
 *  Neq returns boolean
@@ -206,9 +186,7 @@
 *  Gt returns boolean
 *  Gte returns boolean
 
-## 
-      Chippyash\Test\Math\Type\Comparator\Native
-    
+## Chippyash\Test\Math\Type\Comparator\Native
 
 *  Compare ints returns correct result
 *  Compare floats returns correct result
@@ -218,9 +196,7 @@
 *  Can mix complex and non complex types for comparison
 *  Can mix types for comparison
 
-## 
-      Chippyash\Test\Math\Type\Comparator
-    
+## Chippyash\Test\Math\Type\Comparator
 
 *  Construct with no parameter returns comparator
 *  Construct with valid engine type returns comparator
