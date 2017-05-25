@@ -301,3 +301,5 @@ V2.0.1 Add link to packages
 
 V2.0.2 Ensure compatibility with PHP7
 
+V2.0.3 Dependency update
+
