@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-PHPUnit configuration file to run chippyash\Matrix tests
+PHPUnit configuration file to run chippyash\math-type-calculator tests
 -->
 
 <!--
@@ -43,15 +43,22 @@ testSuiteLoaderFile="/path/to/StandardTestSuiteLoader.php"
      ! blacklist and whitelist for the code coverage reporting.
      !-->
     <filter>
-        <blacklist>
-            <directory>./vendor</directory>
-            <!-- don't cover interfaces -->
-            <file>./src/chippyash/Math/Type/Calculator/CalculatorEngineInterface.php</file>
-            <file>./src/Chippyash/Math/Type/Comparator/ComparatorEngineInterface.php</file>
-        </blacklist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>./src</directory>
+            <exclude>
+                <directory>./docs</directory>
+                <directory>./examples</directory>
+                <directory>./test</directory>
+                <directory>./vendor</directory>
+                <!-- don't cover interfaces -->
+                <file>./src/chippyash/Math/Type/Calculator/CalculatorEngineInterface.php</file>
+                <file>./src/Chippyash/Math/Type/Comparator/ComparatorEngineInterface.php</file>
+            </exclude>
+        </whitelist>
     </filter>
-
-
+    <logging>
+        <log type="coverage-clover" target="./build/logs/clover.xml"/>
+    </logging>
 </phpunit>
 
 
