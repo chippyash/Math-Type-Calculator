@@ -208,7 +208,7 @@ Install [Composer](https://getcomposer.org/)
 add
 
 <pre>
-    "chippyash/math-type-calculator": "~2"
+    "chippyash/math-type-calculator": ">=3,<4"
 </pre>
 
 to your composer.json "requires" section
