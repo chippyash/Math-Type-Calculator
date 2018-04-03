@@ -20,12 +20,8 @@ The above badges represent the current master branch.  As a rule, I don't push
  
 Current development branch is feature/gmp_support. Want to help? - that's where it is.
 
-### End of life notice
-
-In March 2018, developer support will be withdrawn from this library for PHP <5.6. Older
-versions of PHP are now in such little use that the added effort of maintaining 
-compatibility is not effort effective.  See [PHP Version Stats](https://seld.be/notes/php-versions-stats-2017-1-edition)
- for the numbers.
+Please note that developer support for PHP5.4 & 5.5 was withdrawn at version 3.0.0 of this library.
+If you need support for PHP 5.4 or 5.5, please use a version `>=2,<3`
  
 ## What?
 
@@ -309,4 +305,6 @@ V2.0.1 Add link to packages
 V2.0.2 Ensure compatibility with PHP7
 
 V2.0.3 Dependency update
+
+V3.0.0 BC Break. Withdraw support for old PHP versions
 
